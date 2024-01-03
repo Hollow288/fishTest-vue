@@ -1,0 +1,157 @@
+{
+  "AuthRedirect": {
+    "Authorizing": "正在授权..."
+  },
+  "DigitalAnimation": {
+    "DurationPlaceholder": "请输入动画时长",
+    "EndValuePlaceholder": "请输入结束值",
+    "StartValuePlaceholder": "请输入开始值"
+  },
+  "Header": {
+    "ChangePassword": "修改密码",
+    "ExitFullScreen": "退出全屏",
+    "FullScreen": "全屏",
+    "Language": "语言",
+    "LockScreen": "锁屏",
+    "Logout": "退出登录",
+    "Notification": "通知",
+    "Settings": "设置",
+    "SwitchTheme": "切换主题"
+  },
+  "Login": {
+    "AsAdmin": "以管理员登录",
+    "AsVisitor": "以访客登录",
+    "LoginWithGitHub": "GitHub 登录",
+    "LoginWithGoogle": "Google 登录",
+    "NeedAccount": "需要账号？",
+    "ThirdPartyLogin": "第三方登录"
+  },
+  "Logout": {
+    "LoginAgain": "用户身份状态已失效，请重新登录",
+    "Success": "登出成功"
+  },
+  "Message": {
+    "Copy": {
+      "Failed": "复制失败",
+      "Success": "复制成功"
+    },
+    "GenerateQRCode": {
+      "Failed": "二维码生成失败",
+      "Success": "二维码生成成功"
+    }
+  },
+  "Notification": {
+    "Desktop": {
+      "EnterSystem": "当前仍处于内测阶段，如有问题请反馈管理员。"
+    },
+    "RequestGeolocation": {
+      "Content": "为了给您提供更准确、更有个性化的服务，可能需要您提供部分位置信息，在浏览器地址栏可以授权应用开启位置信息。\n我们承诺尊重并保护所有用户的个人隐私权，提供更安全、可靠的服务。",
+      "Title": "温馨提示"
+    },
+    "System": {
+      "Content": "如果喜欢这个项目，请在 GitHub 上给它点个 ⭐ 吧！",
+      "Title": "🎉 欢迎来到 Dolphin Admin Vue！"
+    },
+    "Team": {
+      "From": "来自 Bit Ocean 团队"
+    }
+  },
+  "Print": {
+    "Angular": "Angular 是 Google 开发的一个构建 Web 应用的平台。它提供了创建单页应用程序的方式，并拥有强大的双向数据绑定、模块化、模板和依赖注入工具。",
+    "Astro": "Astro 是一个前端框架，让你可以用更少的客户端 JavaScript 构建更快、更现代的网站。Astro 让你用你最喜欢的 JavaScript 框架（如 React、Vue、Svelte）编写组件，但在构建时将它们渲染为静态 HTML 和 CSS。",
+    "DOM": "打印 DOM",
+    "Description": "简介",
+    "Docusaurus": "Docusaurus 是一个现代的静态网站生成器（SSG），帮助你轻松创建、维护和更新文档网站。它由 React 驱动，可以用你自己的 React 代码进行定制。",
+    "ExpireTip": "该数据截至 2023/07/17，数据来源于 GitHub",
+    "Framework": "框架",
+    "FrontendFrameworkLeaderboard": "前端框架排行榜",
+    "Gatsby": "Gatsby 是一个基于 React 的免费和开源框架，帮助开发者构建超快的网站和应用。它可以从任何地方（CMS，Markdown 文件，API 等）拉取数据，并生成静态网页，这些网页仍具有单页应用（SPA）的速度和功能。",
+    "HTMLStr": "打印 HTML 字符串",
+    "Icon": "图标",
+    "Nextjs": "Next.js 是 Vercel 开发的一个 React 框架，它允许对基于 React 的 Web 应用进行服务器端渲染和生成静态网站。它包括零配置、自动代码分割和基于文件系统的路由等特性。",
+    "Nuxtjs": "Nuxt.js 是一个用于创建 Vue.js 应用的框架，它允许进行服务器端渲染（SSR），单页应用（SPA），或静态生成的网站（SSG）。Nuxt.js 预设了所有配置，使你的 Vue.js 应用开发变得愉快。",
+    "React": "React 是 Facebook 开发的用于构建用户界面的 JavaScript 库，尤其适用于单页应用程序。它用于处理 Web 和移动应用的视图层。React 允许开发人员创建可以在不重新加载页面的情况下更改数据的大型 Web 应用程序。",
+    "Solidjs": "Solid 是一个用于构建用户界面的声明式 JavaScript 库。它不使用虚拟 DOM 差异算法，而是将模板编译到高度优化的细粒度反应系统中，使其效率极高。",
+    "Stars": "星数",
+    "Svelte": "Svelte 是一种构建用户界面的全新方法。与 React 和 Vue 这样的传统框架在浏览器中完成大部分工作不同，Svelte 将这些工作转移到了构建应用程序时的编译步骤中。",
+    "Vue": "Vue.js 是一个用于构建用户界面的 JavaScript 框架。核心库只关注视图层，易于学习并与其他库或现有项目集成。当与现代工具和支持库结合使用时，Vue 也能够驱动复杂的单页应用程序。"
+  },
+  "QRCode": {
+    "ContentPlaceholder": "请输入二维码内容",
+    "Generate": "生成二维码"
+  },
+  "Sidebar": {
+    "Hide": "隐藏侧边栏",
+    "Show": "显示侧边栏"
+  },
+  "Signup": {
+    "AlreadyHaveAccount": "已有账号？"
+  },
+  "Timeline": {
+    "WebDevRoadmap": "Web 开发学习路线"
+  },
+  "User": {
+    "Address": "地址",
+    "AuthType": "认证类型",
+    "Avatar": "头像",
+    "Biography": "简介",
+    "BirthDate": "生日",
+    "City": "城市",
+    "Country": "国家",
+    "Email": "邮箱",
+    "Female": "女",
+    "FirstName": "名",
+    "Gender": "性别",
+    "LastName": "姓",
+    "Male": "男",
+    "Name": "姓名",
+    "NickName": "昵称",
+    "Password": "密码",
+    "PhoneNumber": "电话号码",
+    "Province": "省份",
+    "Roles": "角色",
+    "Username": "用户名"
+  },
+  "UserInfo": {
+    "BasicInfo": "基本信息",
+    "PersonalInfo": "个人信息"
+  },
+  "UserManagement": {
+    "CreateUser": "新建用户",
+    "EditUser": "编辑用户",
+    "EnableOrNot": "是否启用",
+    "EnterTime": "进入系统时间",
+    "ResetPassword": "重置密码",
+    "VerifyOrNot": "是否验证"
+  },
+  "Validation": {
+    "Address": "请输入地址",
+    "Biography": "请输入简介",
+    "ConfirmPassword": "请输入确认密码",
+    "ConfirmPasswordNotMatch": "两次输入的密码不一致",
+    "Email": "请输入邮箱",
+    "EmailFormat": "请输入正确格式的邮箱",
+    "FileName": "请输入文件名",
+    "FirstName": "请输入名",
+    "LastName": "请输入姓",
+    "Name": "请输入姓名",
+    "OldPassword": "请输入旧密码",
+    "Password": "请输入密码",
+    "PasswordLength": "密码长度至少为 6 位",
+    "PhoneNumber": "请输入电话号码",
+    "PhoneNumberFormat": "请输入正确格式的手机号",
+    "QRCodeContent": "请输入二维码内容",
+    "Username": "请输入用户名"
+  },
+  "WebSocket": {
+    "ContentIsEmpty": "发送内容不能为空",
+    "Disconnect": "断开连接",
+    "Disconnected": "已断开连接",
+    "Establish": "建立连接",
+    "Established": "已建立连接",
+    "NotConnected": "未建立连接",
+    "SendMessage": "发送消息",
+    "SendSuccess": "发送成功",
+    "Tip": "打开新标签页，或打开新浏览器来体验此功能。点击建立连接，与服务器通信。发送消息后，服务端会向所有用户进行消息广播。"
+  }
+}
