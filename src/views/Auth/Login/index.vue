@@ -3,6 +3,7 @@ import type { MessageSchema } from '@/types'
 
 import { GitHubLogin, GoogleLogin } from './components'
 import type { RememberedAccountData } from './private'
+import {StatusCode} from "@/constants";
 
 const { t } = useI18n<{ message: MessageSchema }>()
 
@@ -72,25 +73,38 @@ const login = async () => {
   AuthAPI.login(formData)
     .then((res) => {
       debugger
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { access_token, refresh_token, user } = res.data ?? {}
-      AuthUtils.setAccessToken(access_token)
-      AuthUtils.setRefreshToken(refresh_token)
-      userStore.setUser(user)
-      if (res.message) {
-        NMessage.success(res.message)
-      }
-      if (rememberPassword.value) {
-        AuthUtils.setRememberedAccount(JSON.stringify(formData))
-      } else {
-        AuthUtils.clearRememberedAccount()
+      if(res.code === StatusCode.SUCCESS) {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { access_token, refresh_token, user } = res.data ?? {}
+        AuthUtils.setAccessToken(access_token)
+        AuthUtils.setRefreshToken(refresh_token)
+        let userObject
+        if (typeof user === 'string') {
+          userObject = JSON.parse(user)
+        } else {
+          userObject = user
+        }
+        userStore.setUser(userObject)
+        if (res.message) {
+          NMessage.success(res.message)
+        }
+        if (rememberPassword.value) {
+          AuthUtils.setRememberedAccount(JSON.stringify(formData))
+        } else {
+          AuthUtils.clearRememberedAccount()
+        }
+
+        if (redirectUrl.value) {
+          router.replace(redirectUrl.value)
+        } else {
+          router.replace('/')
+        }
+      }else {
+          NMessage.error(res.message || '登录失败')
+          submitLoadingDispatcher.loaded()
+          formData.password = ''
       }
 
-      if (redirectUrl.value) {
-        router.replace(redirectUrl.value)
-      } else {
-        router.replace('/')
-      }
     })
     .catch((err) => {
       if (err.message) {

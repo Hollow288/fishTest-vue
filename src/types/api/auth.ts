@@ -12,8 +12,8 @@ export interface SignupModel extends LoginModel {
 }
 
 export interface TokenResponse {
-  accessToken: string
-  refreshToken: string
+  access_token: string
+  refresh_token: string
 }
 
 export interface UserTokenResponse extends TokenResponse {
