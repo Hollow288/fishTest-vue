@@ -72,7 +72,8 @@
   "EachPage10": "每页10条",
   "EachPage20": "每页20条",
   "EachPage30": "每页30条",
-  "EachPage40": "每页40条",
-  "Create": "创建"
+  "EachPage50": "每页50条",
+  "Create": "创建",
+  "KeywordSearch": "用户名/邮箱"
 
 }

@@ -6,6 +6,7 @@ import type {
   PageResponse,
   User
 } from '@/types'
+import {ResponseResult} from "@/types";
 
 export class UserAPI {
   private static USER_API_PREFIX = `${GlobalEnvConfig.BASE_API_PREFIX}/users`
@@ -56,14 +57,14 @@ export class UserAPI {
    * 启用用户
    */
   static enable(id: number) {
-    return httpRequest.post<BaseResponse<User>>(`${this.USER_API_PREFIX}/${id}/enable`)
+    return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${id}/enable`)
   }
 
   /**
    * 禁用用户
    */
   static disable(id: number) {
-    return httpRequest.post<BaseResponse<User>>(`${this.USER_API_PREFIX}/${id}/disable`)
+    return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${id}/disable`)
   }
 
   /**

@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import type {Lang} from '@dolphin-admin/utils'
-import type {DataTableFilterState, DataTableSortState} from 'naive-ui'
+import { CashOutline as CashIcon,PersonAdd } from '@vicons/ionicons5'
+import type {
+  DataTableBaseColumn,
+  DataTableFilterState,
+  DataTableSortState,
+  FormInst,
+  FormItemRule,
+  FormRules, FormValidationError
+} from 'naive-ui'
+import { NIcon } from 'naive-ui'
 
 import type {MessageSchema, Sorter, User} from '@/types'
 import {AuthType, OrderType} from '@/types'
@@ -11,8 +20,6 @@ import ResetIcon from '~icons/ic/round-refresh'
 import ResetPasswordIcon from '~icons/ic/sharp-power-settings-new'
 import SearchIcon from '~icons/line-md/search'
 import GoogleIcon from '~icons/logos/google-icon'
-import { NIcon } from 'naive-ui'
-import { CashOutline as CashIcon } from '@vicons/ionicons5'
 
 import {UserFormModal} from './components'
 import {UserPageModel} from './private'
@@ -28,7 +35,15 @@ const idColumn: DataTableBaseColumn<User> = {
   sorter: true
 }
 
-const createdAtColumn: DataTableBaseColumn<User> = {
+const createdAtColumn: {
+  sorter: boolean;
+  width: number;
+  title: () => string;
+  align: string;
+  render: (row) => string;
+  key: string;
+  titleAlign: string
+} = {
   title: () => t('TEMP.UserManagement.EnterTime'),
   key: 'createdAt',
   width: 140,
@@ -192,11 +207,13 @@ const queryList = () => {
           // 创建新的User对象，将格式化后的日期赋值给createdTime属性
           return {
             ...user,
-            createTime: user.createTime.substring(0, 10)
+            createTime: user.createTime.substring(0, 10),
+            status : (user.status == 0)?true:false
           }
         }
           return {
-            ...user
+            ...user,
+            status : (user.status == 0)?true:false
           }
       })
       pagination.itemCount = total
@@ -306,9 +323,24 @@ const columns = ref<DataTableBaseColumn<User>[]>([
     fixed: !isMobile.value ? 'left' : undefined
   },
   {
+    title: () => t('TEMP.User.Name'),
+    key: 'name',
+    width: 60,
+    ellipsis: {
+      tooltip: true
+    }
+  },
+  {
+    title: () => t('TEMP.User.Gender'),
+    key: 'genderLabel',
+    width: 60,
+    titleAlign: 'center',
+    align: 'center'
+  },
+  {
     title: () => t('TEMP.User.PhoneNumber'),
     key: 'phoneNumber',
-    width: 120,
+    width: 80,
     ellipsis: {
       tooltip: true
     }
@@ -318,14 +350,6 @@ const columns = ref<DataTableBaseColumn<User>[]>([
     key: 'email',
     width: 100,
     resizable: true,
-    ellipsis: {
-      tooltip: true
-    }
-  },
-  {
-    title: () => t('TEMP.User.Name'),
-    key: 'name',
-    width: 100,
     ellipsis: {
       tooltip: true
     }
@@ -354,13 +378,6 @@ const columns = ref<DataTableBaseColumn<User>[]>([
     ellipsis: {
       tooltip: true
     }
-  },
-  {
-    title: () => t('TEMP.User.Gender'),
-    key: 'genderLabel',
-    width: 60,
-    titleAlign: 'center',
-    align: 'center'
   },
   {
     title: () => t('TEMP.User.BirthDate'),
@@ -422,12 +439,12 @@ const columns = ref<DataTableBaseColumn<User>[]>([
   // },
   {
     title: () => t('TEMP.UserManagement.EnableOrNot'),
-    key: 'enabled',
+    key: 'status',
     width: 100,
     titleAlign: 'center',
     align: 'center',
     render: (row) =>
-      row.enabled &&
+      row.status &&
       h(CheckIcon, {
         class: 'inline'
       })
@@ -501,8 +518,10 @@ const columns = ref<DataTableBaseColumn<User>[]>([
                 enableLoadingDispatcher.loading()
                 await UserAPI.enable(row.id)
                   .then((res) => {
-                    if (res.message) {
+                    if (res.code === 200 ) {
                       NMessage.success(res.message)
+                    }else {
+                      NMessage.error(res.message)
                     }
                     queryList()
                   })
@@ -544,8 +563,10 @@ const columns = ref<DataTableBaseColumn<User>[]>([
                 disableLoadingDispatcher.loading()
                 await UserAPI.disable(row.id)
                   .then((res) => {
-                    if (res.message) {
+                    if (res.code === 200 ) {
                       NMessage.success(res.message)
+                    }else {
+                      NMessage.error(res.message)
                     }
                     queryList()
                   })
@@ -701,16 +722,16 @@ onMounted(() => queryList())
             </template>
             {{ t('COMMON.Reset') }}
           </NTooltip>
-          <NButton
-            :size="isMobile ? 'small' : 'medium'"
-            @click="handleCreateUser"
-          >
-            {{ t('COMMON.Create') }}
-          </NButton>
+<!--          <NButton-->
+<!--            :size="isMobile ? 'small' : 'medium'"-->
+<!--            @click="handleCreateUser"-->
+<!--          >-->
+<!--            {{ t('COMMON.Create') }}-->
+<!--          </NButton>-->
           <n-button icon-placement="left" secondary strong     @click="handleCreateUser">
             <template #icon>
-              <n-icon>
-                <AddSharp-icon />
+              <n-icon :component="PersonAdd">
+<!--                <AddSharp-icon />-->
               </n-icon>
             </template>
             {{ t('COMMON.Create') }}
@@ -749,8 +770,8 @@ onMounted(() => queryList())
             value: 30
           },
           {
-            label: t('COMMON.EachPage40', { count: 40 }),
-            value: 40
+            label: t('COMMON.EachPage50', { count: 50 }),
+            value: 50
           }
         ],
         onUpdatePage: (page: number) => {

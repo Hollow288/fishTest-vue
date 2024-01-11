@@ -86,8 +86,6 @@ class Request {
                 const response = (await AuthAPI.refresh(currentRefreshToken)) ?? {}
                 // eslint-disable-next-line @typescript-eslint/naming-convention
                 const { refresh_token, access_token} = response.data ?? {}
-                console.log(response)
-                debugger
                 if(refresh_token && access_token){
                   AuthUtils.setAccessToken(access_token)
                   AuthUtils.setRefreshToken(refresh_token)
@@ -135,7 +133,6 @@ class Request {
         const { message } = data ?? {}
         // 当前接口是否是刷新令牌接口
         // const isRefreshTokenAPI = config?.url?.includes(AuthAPI.REFRESH_API_URL)
-        debugger
         // /**
         //  * 处理刷新令牌接口的认证失败
         //  * @description
@@ -200,10 +197,10 @@ class Request {
           //   NMessage.error(errorMessage)
           //   this.handleUnauthorized()
           //   break
-          // case StatusCode.FORBIDDEN:
-          //   NMessage.error(errorMessage)
-          //   router.replace('/403')
-          //   break
+          case StatusCode.FORBIDDEN:
+            NMessage.error(errorMessage)
+            router.replace('/403')
+            break
           case StatusCode.INTERNAL_SERVER_ERROR:
           case StatusCode.BAD_GATEWAY:
           case StatusCode.GATEWAY_TIMEOUT:

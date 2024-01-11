@@ -9,6 +9,14 @@ export interface BaseResponse<T = any> extends Response {
   data: T
 }
 
+// Me 响应类型
+
+export interface ResponseResult<T = any>{
+  code?: number
+  message?: string
+  data: T
+}
+
 // 响应类型（分页）
 export interface PageResponse<T = any> extends Response {
   data: T
