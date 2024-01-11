@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import type { DataTableFilterState, DataTableSortState } from 'naive-ui'
-
+import type { DataTableFilterState, DataTableSortState, DataTableBaseColumn } from 'naive-ui'
 import type { MessageSchema, Sorter, User } from '@/types'
 import { AuthType, OrderType } from '@/types'
 import GitHubIcon from '~icons/ant-design/github-outlined'

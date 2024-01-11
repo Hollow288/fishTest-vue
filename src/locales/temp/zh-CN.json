@@ -110,7 +110,9 @@
     "PhoneNumber": "电话号码",
     "Province": "省份",
     "Roles": "角色",
-    "Username": "用户名"
+    "Username": "用户名",
+
+    "CreateTime": "创建时间"
   },
   "UserInfo": {
     "BasicInfo": "基本信息",

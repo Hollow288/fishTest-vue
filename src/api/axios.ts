@@ -108,7 +108,7 @@ class Request {
                 }
               } catch {
                 // 处理刷新令牌认证失败的情况
-                this.handleUnauthorized()
+                // this.handleUnauthorized()
               }
             }else {
               // 如果正在刷新令牌，将当前的请求加入待请求队列
@@ -204,8 +204,6 @@ class Request {
           //   NMessage.error(errorMessage)
           //   router.replace('/403')
           //   break
-
-
           case StatusCode.INTERNAL_SERVER_ERROR:
           case StatusCode.BAD_GATEWAY:
           case StatusCode.GATEWAY_TIMEOUT:

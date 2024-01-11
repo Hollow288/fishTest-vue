@@ -20,7 +20,8 @@
     "types": ["unplugin-icons/types/vue", "naive-ui/volar"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@": ["src"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/**/*.json", "@types/**/*.d.ts"],

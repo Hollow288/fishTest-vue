@@ -58,5 +58,21 @@
   "UPLOAD": "上传",
   "VALUE": "值",
   "VERIFY": "验证",
-  "VERIFY.OR.NOT": "是否验证"
+  "VERIFY.OR.NOT": "是否验证",
+
+  "Operation": "操作",
+  "Edit": "修改",
+  "Confirm": "确认",
+  "Cancel": "取消",
+  "Enable": "启用",
+  "IsOrNot": "是否",
+  "Disable": "禁用",
+  "Search": "搜索",
+  "TotalPage": "页码",
+  "EachPage10": "每页10条",
+  "EachPage20": "每页20条",
+  "EachPage30": "每页30条",
+  "EachPage40": "每页40条",
+  "Create": "创建"
+
 }

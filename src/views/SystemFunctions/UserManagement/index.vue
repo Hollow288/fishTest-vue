@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { Lang } from '@dolphin-admin/utils'
-import type { DataTableFilterState, DataTableSortState } from 'naive-ui'
+import type {Lang} from '@dolphin-admin/utils'
+import type {DataTableFilterState, DataTableSortState} from 'naive-ui'
 
-import type { MessageSchema, Sorter, User } from '@/types'
-import { AuthType, OrderType } from '@/types'
+import type {MessageSchema, Sorter, User} from '@/types'
+import {AuthType, OrderType} from '@/types'
 import GitHubIcon from '~icons/ant-design/github-outlined'
 import UserAvatarIcon from '~icons/carbon/user-avatar-filled-alt'
 import CheckIcon from '~icons/ic/baseline-check'
@@ -11,9 +11,11 @@ import ResetIcon from '~icons/ic/round-refresh'
 import ResetPasswordIcon from '~icons/ic/sharp-power-settings-new'
 import SearchIcon from '~icons/line-md/search'
 import GoogleIcon from '~icons/logos/google-icon'
+import { NIcon } from 'naive-ui'
+import { CashOutline as CashIcon } from '@vicons/ionicons5'
 
-import { UserFormModal } from './components'
-import { UserPageModel } from './private'
+import {UserFormModal} from './components'
+import {UserPageModel} from './private'
 
 const { t, locale } = useI18n<{ message: MessageSchema }, Lang>({})
 
@@ -183,8 +185,20 @@ const queryList = () => {
 
   UserAPI.list(params)
     .then((res) => {
-      const { data, total } = res ?? {}
-      users.value = data
+      const { data, total } = res.data ?? {}
+      users.value = data.map(user => {
+        // 将Date对象格式化为 yyyy-MM-dd 格式的字符串
+        if (user.createTime != null && user.createTime !== '' && typeof user.createTime !== 'undefined'){
+          // 创建新的User对象，将格式化后的日期赋值给createdTime属性
+          return {
+            ...user,
+            createTime: user.createTime.substring(0, 10)
+          }
+        }
+          return {
+            ...user
+          }
+      })
       pagination.itemCount = total
     })
     .catch(() => {
@@ -228,6 +242,22 @@ const handleSorterChange = (options: DataTableSortState | null) => {
   queryList()
 }
 
+
+defineComponent({
+  components: {
+    CashIcon
+  },
+  setup () {
+    return {
+      renderIcon () {
+        return h(NIcon, null, {
+          default: () => h(CashIcon)
+        })
+      }
+    }
+  }
+})
+
 const handleFiltersChange = (filters: DataTableFilterState) => {
   const { authTypes } = filters
   if (authTypes && Array.isArray(authTypes) && authTypes.length > 0) {
@@ -268,8 +298,8 @@ const columns = ref<DataTableBaseColumn<User>[]>([
   },
   {
     title: () => t('TEMP.User.Username'),
-    key: 'username',
-    width: 120,
+    key: 'userName',
+    width: 100,
     ellipsis: {
       tooltip: true
     },
@@ -300,27 +330,27 @@ const columns = ref<DataTableBaseColumn<User>[]>([
       tooltip: true
     }
   },
-  {
-    title: () => t('TEMP.User.LastName'),
-    key: 'lastName',
-    width: 80,
-    ellipsis: {
-      tooltip: true
-    }
-  },
-  {
-    title: () => t('TEMP.User.FirstName'),
-    key: 'firstName',
-    width: 80,
-    ellipsis: {
-      tooltip: true
-    }
-  },
+  // {
+  //   title: () => t('TEMP.User.LastName'),
+  //   key: 'lastName',
+  //   width: 80,
+  //   ellipsis: {
+  //     tooltip: true
+  //   }
+  // },
+  // {
+  //   title: () => t('TEMP.User.FirstName'),
+  //   key: 'firstName',
+  //   width: 80,
+  //   ellipsis: {
+  //     tooltip: true
+  //   }
+  // },
   {
     title: () => t('TEMP.User.NickName'),
     key: 'nickName',
-    width: 120,
-    resizable: true,
+    width: 100,
+    // resizable: true,
     ellipsis: {
       tooltip: true
     }
@@ -356,6 +386,11 @@ const columns = ref<DataTableBaseColumn<User>[]>([
     width: 80
   },
   {
+    title: () => t('TEMP.User.CreateTime'),
+    key: 'createTime',
+    width: 80
+  },
+  {
     title: () => t('TEMP.User.Address'),
     key: 'address',
     width: 120,
@@ -364,27 +399,27 @@ const columns = ref<DataTableBaseColumn<User>[]>([
       tooltip: true
     }
   },
-  {
-    title: () => t('TEMP.User.Biography'),
-    key: 'biography',
-    width: 200,
-    resizable: true,
-    ellipsis: {
-      tooltip: true
-    }
-  },
-  {
-    title: () => t('TEMP.UserManagement.VerifyOrNot'),
-    key: 'verified',
-    width: 100,
-    titleAlign: 'center',
-    align: 'center',
-    render: (row) =>
-      row.verified &&
-      h(CheckIcon, {
-        class: 'inline'
-      })
-  },
+  // {
+  //   title: () => t('TEMP.User.Biography'),
+  //   key: 'biography',
+  //   width: 200,
+  //   resizable: true,
+  //   ellipsis: {
+  //     tooltip: true
+  //   }
+  // },
+  // {
+  //   title: () => t('TEMP.UserManagement.VerifyOrNot'),
+  //   key: 'verified',
+  //   width: 100,
+  //   titleAlign: 'center',
+  //   align: 'center',
+  //   render: (row) =>
+  //     row.verified &&
+  //     h(CheckIcon, {
+  //       class: 'inline'
+  //     })
+  // },
   {
     title: () => t('TEMP.UserManagement.EnableOrNot'),
     key: 'enabled',
@@ -397,8 +432,8 @@ const columns = ref<DataTableBaseColumn<User>[]>([
         class: 'inline'
       })
   },
-  createdAtColumn,
-  authTypeColumn,
+  // createdAtColumn,
+  // authTypeColumn,
   {
     title: () => t('TEMP.User.Roles'),
     key: 'roles',
@@ -423,7 +458,7 @@ const columns = ref<DataTableBaseColumn<User>[]>([
   {
     title: () => t('COMMON.Operation'),
     key: 'operation',
-    width: 320,
+    width: 180,
     titleAlign: 'center',
     align: 'center',
     fixed: !isMobile.value ? 'right' : undefined,
@@ -623,13 +658,7 @@ onMounted(() => queryList())
                 />
               </template>
             </NInput>
-            <NButton
-              type="primary"
-              size="small"
-              @click="queryList"
-            >
-              {{ t('COMMON.Search') }}
-            </NButton>
+
           </div>
           <NDatePicker
             v-model:value="queryParams.daterange"
@@ -639,6 +668,22 @@ onMounted(() => queryList())
             input-readonly
             @update:value="() => queryList()"
           />
+<!--          <NButton-->
+<!--            type="primary"-->
+<!--            size="small"-->
+<!--            @click="queryList"-->
+<!--          >-->
+<!--            {{ t('COMMON.Search') }}-->
+<!--          </NButton>-->
+
+          <n-button icon-placement="left" secondary strong round   @click="queryList">
+            <template #icon>
+              <n-icon>
+                <search-icon />
+              </n-icon>
+            </template>
+            {{ t('COMMON.Search') }}
+          </n-button>
         </div>
         <div class="flex w-full items-center justify-between space-x-3 sm:justify-end">
           <NTooltip>
@@ -662,6 +707,14 @@ onMounted(() => queryList())
           >
             {{ t('COMMON.Create') }}
           </NButton>
+          <n-button icon-placement="left" secondary strong     @click="handleCreateUser">
+            <template #icon>
+              <n-icon>
+                <AddSharp-icon />
+              </n-icon>
+            </template>
+            {{ t('COMMON.Create') }}
+          </n-button>
         </div>
       </div>
     </template>
@@ -669,6 +722,7 @@ onMounted(() => queryList())
     <NDataTable
       ref="tableRef"
       remote
+      striped
       flex-height
       size="small"
       :scroll-x="3000"
@@ -683,19 +737,19 @@ onMounted(() => queryList())
         pageSlot: 9,
         pageSizes: [
           {
-            label: t('COMMON.EachPage', { count: 10 }),
+            label: t('COMMON.EachPage10', { count: 10 }),
             value: 10
           },
           {
-            label: t('COMMON.EachPage', { count: 20 }),
+            label: t('COMMON.EachPage20', { count: 20 }),
             value: 20
           },
           {
-            label: t('COMMON.EachPage', { count: 30 }),
+            label: t('COMMON.EachPage30', { count: 30 }),
             value: 30
           },
           {
-            label: t('COMMON.EachPage', { count: 40 }),
+            label: t('COMMON.EachPage40', { count: 40 }),
             value: 40
           }
         ],

@@ -1,11 +1,11 @@
 export interface CreateUserModel {
-  username: string
-  password: string
+  userName: string
+  passWord: string
 }
 
 export interface User {
   id?: number
-  username?: string
+  userName?: string
   email?: string
   phoneNumber?: string
   name?: string
