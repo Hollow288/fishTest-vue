@@ -23,8 +23,8 @@ export class UserAPI {
   /**
    * 用户信息
    */
-  static detail(id: number) {
-    return httpRequest.get<BaseResponse<User>>(`${this.USER_API_PREFIX}/${id}`)
+  static detail(userId: number) {
+    return httpRequest.get<BaseResponse<User>>(`${this.USER_API_PREFIX}/${userId}`)
   }
 
   /**
@@ -47,8 +47,8 @@ export class UserAPI {
   /**
    * 更新用户
    */
-  static update(id: number, data: User) {
-    return httpRequest.patch<BaseResponse<User>>(`${this.USER_API_PREFIX}/${id}`, {
+  static update(userId: number, data: User) {
+    return httpRequest.patch<BaseResponse<User>>(`${this.USER_API_PREFIX}/${userId}`, {
       ...data
     })
   }
@@ -56,22 +56,22 @@ export class UserAPI {
   /**
    * 启用用户
    */
-  static enable(id: number) {
-    return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${id}/enable`)
+  static enable(userId: number) {
+    return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${userId}/enable`)
   }
 
   /**
    * 禁用用户
    */
-  static disable(id: number) {
-    return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${id}/disable`)
+  static disable(userId: number) {
+    return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${userId}/disable`)
   }
 
   /**
    * 重置密码
    */
-  static resetPassword(id: number, password: string) {
-    return httpRequest.post<BaseResponse<User>>(`${this.USER_API_PREFIX}/${id}/reset-password`, {
+  static resetPassword(userId: number, password: string) {
+    return httpRequest.post<BaseResponse<User>>(`${this.USER_API_PREFIX}/${userId}/reset-password`, {
       password
     })
   }
@@ -79,8 +79,8 @@ export class UserAPI {
   /**
    * 修改密码
    */
-  static changePassword(id: number, data: ChangePasswordModel) {
-    return httpRequest.post<BaseResponse<User>>(`${this.USER_API_PREFIX}/${id}/change-password`, {
+  static changePassword(userId: number, data: ChangePasswordModel) {
+    return httpRequest.post<BaseResponse<User>>(`${this.USER_API_PREFIX}/${userId}/change-password`, {
       ...data
     })
   }

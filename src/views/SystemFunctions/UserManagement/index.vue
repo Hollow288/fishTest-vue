@@ -28,7 +28,7 @@ const { t, locale } = useI18n<{ message: MessageSchema }, Lang>({})
 
 const idColumn: DataTableBaseColumn<User> = {
   title: 'ID',
-  key: 'id',
+  key: 'userId',
   width: 50,
   titleAlign: 'center',
   align: 'center',
@@ -200,21 +200,14 @@ const queryList = () => {
 
   UserAPI.list(params)
     .then((res) => {
+      debugger
       const { data, total } = res.data ?? {}
       users.value = data.map(user => {
         // 将Date对象格式化为 yyyy-MM-dd 格式的字符串
-        if (user.createTime != null && user.createTime !== '' && typeof user.createTime !== 'undefined'){
-          // 创建新的User对象，将格式化后的日期赋值给createdTime属性
-          return {
-            ...user,
-            createTime: user.createTime.substring(0, 10),
-            status : (user.status == 0)?true:false
-          }
+        return {
+          ...user,
+          status : (user.status == 0)?true:false
         }
-          return {
-            ...user,
-            status : (user.status == 0)?true:false
-          }
       })
       pagination.itemCount = total
     })
@@ -405,7 +398,10 @@ const columns = ref<DataTableBaseColumn<User>[]>([
   {
     title: () => t('TEMP.User.CreateTime'),
     key: 'createTime',
-    width: 80
+    width: 80,
+    titleAlign: 'center',
+    align: 'center',
+    render: (row) => (row.birthDate ? TimeUtils.formatTime(row.birthDate, 'YYYY/MM/DD') : '')
   },
   {
     title: () => t('TEMP.User.Address'),
@@ -512,11 +508,11 @@ const columns = ref<DataTableBaseColumn<User>[]>([
               positiveText: t('COMMON.Confirm'),
               negativeText: t('COMMON.Cancel'),
               onPositiveClick: async () => {
-                if (!row.id) {
+                if (!row.userId) {
                   return
                 }
                 enableLoadingDispatcher.loading()
-                await UserAPI.enable(row.id)
+                await UserAPI.enable(row.userId)
                   .then((res) => {
                     if (res.code === 200 ) {
                       NMessage.success(res.message)
@@ -557,11 +553,11 @@ const columns = ref<DataTableBaseColumn<User>[]>([
                 disabled: disableLoading.value
               },
               onPositiveClick: async () => {
-                if (!row.id) {
+                if (!row.userId) {
                   return
                 }
                 disableLoadingDispatcher.loading()
-                await UserAPI.disable(row.id)
+                await UserAPI.disable(row.userId)
                   .then((res) => {
                     if (res.code === 200 ) {
                       NMessage.success(res.message)
@@ -598,7 +594,7 @@ const columns = ref<DataTableBaseColumn<User>[]>([
               size: 'small',
               onClick: () => {
                 showResetPasswordDialog.value = true
-                currentId.value = row.id
+                currentId.value = row.userId
               }
             },
             {

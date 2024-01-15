@@ -12,7 +12,7 @@ export const useUserStore = defineStore('user', () => {
    * 判断当前用户是否存在
    * @description 判断依据：当前用户数据是否存在 ID
    */
-  const hasData = () => user.value.id
+  const hasData = () => user.value.userId
 
   /**
    * 设置当前用户数据
