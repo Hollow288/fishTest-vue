@@ -4,9 +4,8 @@ import type {
   ChangePasswordModel,
   CreateUserModel,
   PageResponse,
-  User
+ResponseResult,  User
 } from '@/types'
-import {ResponseResult} from "@/types";
 
 export class UserAPI {
   private static USER_API_PREFIX = `${GlobalEnvConfig.BASE_API_PREFIX}/users`

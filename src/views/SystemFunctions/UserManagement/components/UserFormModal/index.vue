@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type {FormInst, FormItemRule, FormRules, FormValidationError, UploadFileInfo, UploadInst} from 'naive-ui'
+
 import type { MessageSchema, User } from '@/types'
 import UserAvatarIcon from '~icons/carbon/user-avatar-filled-alt'
 import CreateIcon from '~icons/ic/sharp-add'
@@ -23,6 +25,7 @@ const [submitLoading, submitLoadingDispatcher] = useLoading()
 const formRef = ref<FormInst | null>(null)
 const uploadRef = ref<UploadInst | null>(null)
 const formData = ref<User>({})
+const tempUserData = ref<User>({})
 const createFormData = reactive({
   username: '',
   password: ''
@@ -39,22 +42,22 @@ const editRules: FormRules = {
       renderMessage: () => t('TEMP.Validation.Name')
     }
   ],
-  firstName: [
-    {
-      required: true,
-      trigger: ['blur', 'input'],
-      message: () => t('TEMP.Validation.FirstName'),
-      renderMessage: () => t('TEMP.Validation.FirstName')
-    }
-  ],
-  lastName: [
-    {
-      required: true,
-      trigger: ['blur', 'input'],
-      message: () => t('TEMP.Validation.LastName'),
-      renderMessage: () => t('TEMP.Validation.LastName')
-    }
-  ],
+  // firstName: [
+  //   {
+  //     required: true,
+  //     trigger: ['blur', 'input'],
+  //     message: () => t('TEMP.Validation.FirstName'),
+  //     renderMessage: () => t('TEMP.Validation.FirstName')
+  //   }
+  // ],
+  // lastName: [
+  //   {
+  //     required: true,
+  //     trigger: ['blur', 'input'],
+  //     message: () => t('TEMP.Validation.LastName'),
+  //     renderMessage: () => t('TEMP.Validation.LastName')
+  //   }
+  // ],
   email: [
     {
       key: 'edit',
@@ -145,7 +148,7 @@ const handleSubmit = async () => {
       }
     }
     try {
-      const { message } = await UserAPI.update(formData.value.id!, formData.value)
+      const { message } = await UserAPI.update(formData.value.userId!, formData.value)
       NMessage.success(message!)
       showModal.value = false
       emit('save')
@@ -175,7 +178,8 @@ const handleSubmit = async () => {
 
 const handleCancel = () => {
   showModal.value = false
-  formData.value = {}
+  // formData.value = {}
+  formData.value = tempUserData.value
 }
 
 /**
@@ -194,14 +198,24 @@ watch(
         ...newValue,
         ...(newValue.birthDate && {
           birthDate: TimeUtils.formatTime(newValue.birthDate, 'YYYY-MM-DD')
-        })
+        }),
+        gender : parseInt(newValue.gender,10)
+      }
+      tempUserData.value = {
+        ...newValue,
+        ...(newValue.birthDate && {
+          birthDate: TimeUtils.formatTime(newValue.birthDate, 'YYYY-MM-DD')
+        }),
+        gender : parseInt(newValue.gender,10)
       }
     } else {
       formData.value = {}
+      tempUserData.value = {}
     }
   },
   { immediate: true }
 )
+
 
 defineExpose({
   handleShowModal
@@ -279,30 +293,30 @@ defineExpose({
       </NFormItem>
 
       <NFormItem
-        path="firstName"
-        :label="t('TEMP.User.FirstName')"
+        path="nickName"
+        :label="t('TEMP.User.NickName')"
       >
         <NInput
-          v-model:value="formData.firstName"
-          :placeholder="t('TEMP.Validation.FirstName')"
+          v-model:value="formData.nickName"
+          :placeholder="t('TEMP.Validation.NickName')"
           maxlength="20"
           show-count
           clearable
         />
       </NFormItem>
 
-      <NFormItem
-        path="lastName"
-        :label="t('TEMP.User.LastName')"
-      >
-        <NInput
-          v-model:value="formData.lastName"
-          :placeholder="t('TEMP.Validation.LastName')"
-          maxlength="10"
-          show-count
-          clearable
-        />
-      </NFormItem>
+<!--      <NFormItem-->
+<!--        path="lastName"-->
+<!--        :label="t('TEMP.User.LastName')"-->
+<!--      >-->
+<!--        <NInput-->
+<!--          v-model:value="formData.lastName"-->
+<!--          :placeholder="t('TEMP.Validation.LastName')"-->
+<!--          maxlength="10"-->
+<!--          show-count-->
+<!--          clearable-->
+<!--        />-->
+<!--      </NFormItem>-->
 
       <NFormItem
         path="email"
@@ -311,12 +325,12 @@ defineExpose({
         <NInput
           v-model:value="formData.email"
           :placeholder="t('TEMP.Validation.Email')"
-          maxlength="20"
+          maxlength="30"
           show-count
           clearable
         />
       </NFormItem>
-
+<!--&#45;&#45;{{formData.gender}}-->
       <NFormItem
         path="gender"
         :label="t('TEMP.User.Gender')"
@@ -326,8 +340,9 @@ defineExpose({
           :name="t('TEMP.User.Gender')"
         >
           <NSpace>
-            <NRadio :value="1"> {{ t('TEMP.User.Male') }} </NRadio>
-            <NRadio :value="0"> {{ t('TEMP.User.Female') }} </NRadio>
+            <NRadio :value=1> {{ t('TEMP.User.Male') }} </NRadio>
+            <NRadio :value=0> {{ t('TEMP.User.Female') }} </NRadio>
+            <NRadio :value=2> {{ t('TEMP.User.Unknown') }} </NRadio>
           </NSpace>
         </NRadioGroup>
       </NFormItem>

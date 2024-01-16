@@ -112,7 +112,8 @@
     "Roles": "角色",
     "Username": "用户名",
 
-    "CreateTime": "创建时间"
+    "CreateTime": "创建时间",
+    "Unknown": "未知"
   },
   "UserInfo": {
     "BasicInfo": "基本信息",

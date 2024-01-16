@@ -122,6 +122,9 @@ class Request {
         }else if(res.data.code === 40001) {
           NMessage.error('用户登录信息已过期')
           this.handleUnauthorized()
+        }else if(res.data.code === 40003) {
+          NMessage.error('请求被理解但拒绝执行')
+          router.replace('/403')
         }
         // 将处理后的数据传递到 Promise 链的下一步
         return responseData

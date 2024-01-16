@@ -13,7 +13,7 @@ export interface User {
   lastName?: string
   nickName?: string
   avatarUrl?: string
-  gender?: Gender
+  gender?: string
   genderLabel?: string
   country?: string
   province?: string
@@ -31,7 +31,7 @@ export interface User {
 /**
  * 性别
  */
-export type Gender = 0 | 1
+// export type Gender = 0 | 1
 
 /**
  * 认证类型
