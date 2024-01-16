@@ -391,6 +391,7 @@ defineExpose({
           v-model:value="formData.biography"
           :placeholder="t('TEMP.Validation.Biography')"
           maxlength="300"
+          type="textarea"
           show-count
           clearable
         />

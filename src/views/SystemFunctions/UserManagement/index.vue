@@ -200,7 +200,7 @@ const queryList = () => {
 
   UserAPI.list(params)
     .then((res) => {
-      debugger
+      // debugger
       const { data, total } = res.data ?? {}
       users.value = data.map(user => {
         // 将Date对象格式化为 yyyy-MM-dd 格式的字符串
@@ -380,21 +380,21 @@ const columns = ref<DataTableBaseColumn<User>[]>([
     align: 'center',
     render: (row) => (row.birthDate ? TimeUtils.formatTime(row.birthDate, 'YYYY/MM/DD') : '')
   },
-  {
-    title: () => t('TEMP.User.Country'),
-    key: 'country',
-    width: 80
-  },
-  {
-    title: () => t('TEMP.User.Province'),
-    key: 'province',
-    width: 80
-  },
-  {
-    title: () => t('TEMP.User.City'),
-    key: 'city',
-    width: 80
-  },
+  // {
+  //   title: () => t('TEMP.User.Country'),
+  //   key: 'country',
+  //   width: 80
+  // },
+  // {
+  //   title: () => t('TEMP.User.Province'),
+  //   key: 'province',
+  //   width: 80
+  // },
+  // {
+  //   title: () => t('TEMP.User.City'),
+  //   key: 'city',
+  //   width: 80
+  // },
   {
     title: () => t('TEMP.User.CreateTime'),
     key: 'createTime',
