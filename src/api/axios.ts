@@ -94,16 +94,17 @@ class Request {
                   const originalRequest = res.config
 
                   // 重新发起本次请求
-                  await this.request<BaseResponse>(originalRequest)
+                  const resEnd =  await this.request<BaseResponse>(originalRequest)
 
                   // 重新发起上次失败的请求
                   if (this.pendingQueue.length > 0) {
                     this.pendingQueue.forEach((task) => task.resolve(this.request(task.config!)))
                     this.pendingQueue = []
                   }
-                }else {
-                  this.handleUnauthorized()
+
+                  return resEnd
                 }
+                  this.handleUnauthorized()
               } catch {
                 // 处理刷新令牌认证失败的情况
                 // this.handleUnauthorized()

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type {FormInst, FormRules, UploadFileInfo, UploadInst} from 'naive-ui'
+
 import type { MessageSchema, User } from '@/types'
 import UserAvatarIcon from '~icons/carbon/user-avatar-filled-alt'
 import NameIcon from '~icons/mdi/account-outline'
@@ -29,22 +31,22 @@ const rules: FormRules = {
       renderMessage: () => t('TEMP.Validation.Name')
     }
   ],
-  firstName: [
-    {
-      required: true,
-      trigger: ['blur', 'input'],
-      message: () => t('TEMP.Validation.FirstName'),
-      renderMessage: () => t('TEMP.Validation.FirstName')
-    }
-  ],
-  lastName: [
-    {
-      required: true,
-      trigger: ['blur', 'input'],
-      message: () => t('TEMP.Validation.LastName'),
-      renderMessage: () => t('TEMP.Validation.LastName')
-    }
-  ],
+  // firstName: [
+  //   {
+  //     required: true,
+  //     trigger: ['blur', 'input'],
+  //     message: () => t('TEMP.Validation.FirstName'),
+  //     renderMessage: () => t('TEMP.Validation.FirstName')
+  //   }
+  // ],
+  // lastName: [
+  //   {
+  //     required: true,
+  //     trigger: ['blur', 'input'],
+  //     message: () => t('TEMP.Validation.LastName'),
+  //     renderMessage: () => t('TEMP.Validation.LastName')
+  //   }
+  // ],
   email: [
     {
       required: true,
@@ -102,7 +104,7 @@ const handleValidateButtonClick = () => {
 
     try {
       const { data, message: successMessage } = await UserAPI.update(
-        formData.value.id!,
+        formData.value.userId!,
         formData.value
       )
       data.birthDate = data.birthDate && TimeUtils.formatTime(data.birthDate, 'YYYY-MM-DD')
@@ -126,6 +128,9 @@ const uploadAvatarUrl = (options: { fileList: UploadFileInfo[] }) => {
 onMounted(() =>
   UserAPI.me().then((res) => {
     const { data } = res
+    if (data.gender != null) {
+      data.gender = parseInt(data.gender, 10)
+    }
     data.birthDate = data.birthDate && TimeUtils.formatTime(data.birthDate, 'YYYY-MM-DD')
     userStore.setUser(data)
     formData.value = data
@@ -153,11 +158,11 @@ onMounted(() =>
         </template>
 
         <div class="flex items-center justify-center space-x-1 text-lg">
-          <span>{{ computedUserInfo?.username }}</span>
-          <template v-if="computedUserInfo?.gender === 1">
+          <span>{{ computedUserInfo?.userName }}</span>
+          <template v-if="computedUserInfo?.gender == '1'">
             <MaleIcon class="w-[18px] text-blue-300" />
           </template>
-          <template v-if="computedUserInfo?.gender === 0">
+          <template v-if="computedUserInfo?.gender == '0'">
             <FemaleIcon class="w-[18px] text-pink-300" />
           </template>
         </div>
@@ -268,36 +273,36 @@ onMounted(() =>
           />
         </NFormItem>
         <NFormItem
-          path="firstName"
-          :label="t('TEMP.User.FirstName')"
+          path="nickName"
+          :label="t('TEMP.User.NickName')"
         >
           <NInput
-            v-model:value="formData.firstName"
+            v-model:value="formData.nickName"
             maxlength="20"
             show-count
             clearable
-            :placeholder="t('TEMP.Validation.FirstName')"
+            :placeholder="t('TEMP.Validation.NickName')"
           />
         </NFormItem>
-        <NFormItem
-          path="lastName"
-          :label="t('TEMP.User.LastName')"
-        >
-          <NInput
-            v-model:value="formData.lastName"
-            maxlength="10"
-            show-count
-            clearable
-            :placeholder="t('TEMP.Validation.LastName')"
-          />
-        </NFormItem>
+<!--        <NFormItem-->
+<!--          path="lastName"-->
+<!--          :label="t('TEMP.User.LastName')"-->
+<!--        >-->
+<!--          <NInput-->
+<!--            v-model:value="formData.lastName"-->
+<!--            maxlength="10"-->
+<!--            show-count-->
+<!--            clearable-->
+<!--            :placeholder="t('TEMP.Validation.LastName')"-->
+<!--          />-->
+<!--        </NFormItem>-->
         <NFormItem
           :label="t('TEMP.User.Email')"
           path="email"
         >
           <NInput
             v-model:value="formData.email"
-            maxlength="20"
+            maxlength="30"
             show-count
             clearable
             :placeholder="t('TEMP.Validation.Email')"
@@ -358,6 +363,7 @@ onMounted(() =>
           <NInput
             v-model:value="formData.biography"
             maxlength="300"
+            type="textarea"
             show-count
             clearable
             :placeholder="t('TEMP.Validation.Biography')"
