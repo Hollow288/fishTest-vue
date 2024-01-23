@@ -401,7 +401,7 @@ const columns = ref<DataTableBaseColumn<User>[]>([
     width: 80,
     titleAlign: 'center',
     align: 'center',
-    render: (row) => (row.birthDate ? TimeUtils.formatTime(row.birthDate, 'YYYY/MM/DD') : '')
+    render: (row) => (row.createTime ? TimeUtils.formatTime(row.createTime, 'YYYY/MM/DD') : '')
   },
   {
     title: () => t('TEMP.User.Address'),
@@ -677,6 +677,9 @@ onMounted(() => queryList())
             </NInput>
 
           </div>
+          <NGradientText type="primary">
+            创建时间:
+          </NGradientText>
           <NDatePicker
             v-model:value="queryParams.daterange"
             class="sm:!w-[250px]"

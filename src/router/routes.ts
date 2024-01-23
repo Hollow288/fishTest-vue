@@ -37,7 +37,7 @@ export const routes = [
         name: 'navigation',
         component: () => import('@/views/Navigation'),
         meta: {
-          title: () => t('TEMP.Menu.Navigation'),
+          title: () => t('MENU.Navigation'),
           icon: NavigationIcon
           // dismissTab: true
         }
@@ -48,7 +48,7 @@ export const routes = [
         name: 'user-management',
         component: () => import('@/views/SystemFunctions/UserManagement'),
         meta: {
-          title: () => t('TEMP.Menu.UserManagement'),
+          title: () => t('MENU.UserManagement'),
           icon: UserManagementIcon
         }
       },
@@ -58,7 +58,7 @@ export const routes = [
         name: 'qrcode',
         component: () => import('@/views/SystemTools/QRCode'),
         meta: {
-          title: () => t('TEMP.Menu.QRCode'),
+          title: () => t('MENU.QRCode'),
           icon: QRCodeIcon
         }
       },
@@ -67,7 +67,7 @@ export const routes = [
         name: 'clipboard',
         component: () => import('@/views/SystemTools/Clipboard'),
         meta: {
-          title: () => t('TEMP.Menu.Clipboard'),
+          title: () => t('MENU.Clipboard'),
           icon: CopyIcon
         }
       },
@@ -76,7 +76,7 @@ export const routes = [
         name: 'print',
         component: () => import('@/views/SystemTools/Print'),
         meta: {
-          title: () => t('TEMP.Menu.Print'),
+          title: () => t('MENU.Print'),
           icon: PrintIcon
         }
       },
@@ -85,7 +85,7 @@ export const routes = [
         name: 'websocket',
         component: () => import('@/views/SystemTools/WebSocket'),
         meta: {
-          title: () => t('TEMP.Menu.WebSocket'),
+          title: () => t('MENU.WebSocket'),
           icon: WebSocketIcon
         }
       },
@@ -95,7 +95,7 @@ export const routes = [
         name: 'list-templates',
         component: () => import('@/views/CodeTemplates/ListTemplates'),
         meta: {
-          title: () => t('TEMP.Menu.ListTemplates'),
+          title: () => t('MENU.ListTemplates'),
           icon: ListTemplatesIcon
         }
       },
@@ -105,7 +105,7 @@ export const routes = [
         name: 'charts',
         component: () => import('@/views/UniversalComponents/Charts'),
         meta: {
-          title: () => t('TEMP.Menu.Charts'),
+          title: () => t('MENU.Charts'),
           icon: ChartIcon
         }
       },
@@ -115,7 +115,7 @@ export const routes = [
         name: 'digital-animation',
         component: () => import('@/views/BuiltinComponents/DigitalAnimation'),
         meta: {
-          title: () => t('TEMP.Menu.DigitalAnimation'),
+          title: () => t('MENU.DigitalAnimation'),
           icon: DigitalAnimationIcon
         }
       },
@@ -124,7 +124,7 @@ export const routes = [
         name: 'timeline',
         component: () => import('@/views/BuiltinComponents/Timeline'),
         meta: {
-          title: () => t('TEMP.Menu.Timeline'),
+          title: () => t('MENU.Timeline'),
           icon: TimelineIcon
         }
       },
@@ -170,7 +170,7 @@ export const routes = [
         name: 'user-info',
         component: () => import('@/views/User/UserInfo'),
         meta: {
-          title: () => t('TEMP.Menu.UserInfo'),
+          title: () => t('MENU.UserInfo'),
           icon: UserInfoIcon
         }
       },
@@ -179,7 +179,7 @@ export const routes = [
         name: 'change-password',
         component: () => import('@/views/User/ChangePassword'),
         meta: {
-          title: () => t('TEMP.Menu.ChangePassword'),
+          title: () => t('MENU.ChangePassword'),
           icon: ChangePasswordIcon
         }
       },
@@ -204,7 +204,7 @@ export const routes = [
         name: 'login',
         component: () => import('@/views/Auth/Login'),
         meta: {
-          title: () => t('TEMP.Menu.Login'),
+          title: () => t('MENU.Login'),
           disableAuth: true,
           dismissTab: true
         }
@@ -214,7 +214,7 @@ export const routes = [
         name: 'signup',
         component: () => import('@/views/Auth/Signup'),
         meta: {
-          title: () => t('TEMP.Menu.Signup'),
+          title: () => t('MENU.Signup'),
           disableAuth: true,
           dismissTab: true
         }

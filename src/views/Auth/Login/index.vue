@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type {FormInst, FormRules, FormValidationError} from 'naive-ui'
+
+import {StatusCode} from '@/constants'
 import type { MessageSchema } from '@/types'
 
 import { GitHubLogin, GoogleLogin } from './components'
 import type { RememberedAccountData } from './private'
-import {StatusCode} from "@/constants";
 
 const { t } = useI18n<{ message: MessageSchema }>()
 
@@ -72,7 +74,7 @@ const login = async () => {
 
   AuthAPI.login(formData)
     .then((res) => {
-      debugger
+      // debugger
       if(res.code === StatusCode.SUCCESS) {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         const { access_token, refresh_token, user } = res.data ?? {}

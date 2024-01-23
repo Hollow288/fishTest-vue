@@ -13,15 +13,15 @@ const userStore = useUserStore()
 const NMessage = useMessage()
 const userOptions = ref([
   {
-    label: () => t('TEMP.Menu.UserInfo'),
+    label: () => t('MENU.UserInfo'),
     key: UserAction['USER.INFO']
   },
   {
-    label: () => t('TEMP.Header.ChangePassword'),
+    label: () => t('MENU.ChangePassword'),
     key: UserAction['CHANGE.PASSWORD']
   },
   {
-    label: () => t('TEMP.Header.Logout'),
+    label: () => t('MENU.Logout'),
     key: UserAction.QUIT
   }
 ])
@@ -29,13 +29,17 @@ const userOptions = ref([
 /**
  * 退出登录
  */
-const logout = () =>
+const logout = async () =>{
+  await AuthAPI.logout()
   router.replace('/login').then(() => {
     NMessage.success(t('TEMP.Logout.Success'))
     userStore.clearUser()
     AuthUtils.clearAccessToken()
     AuthUtils.clearRefreshToken()
   })
+}
+
+
 
 /**
  * 选择用户下拉框选项

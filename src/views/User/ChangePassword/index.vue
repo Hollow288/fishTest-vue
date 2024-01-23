@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Lang } from '@dolphin-admin/utils'
+import type {FormInst, FormItemRule, FormRules, FormValidationError} from 'naive-ui'
 
 import type { MessageSchema } from '@/types'
 
@@ -49,7 +50,8 @@ const changePasswordRules: FormRules = {
   ]
 }
 
-const logout = () =>
+const logout = async () =>
+  AuthAPI.logout()
   router.replace('/login').then(() => {
     NMessage.success(t('TEMP.Logout.LoginAgain'))
     userStore.clearUser()
@@ -77,7 +79,7 @@ const handleChangePassword = async () => {
 
   submitLoadingDispatcher.loading()
 
-  UserAPI.changePassword(userStore.user.id!, changePasswordData)
+  UserAPI.changePassword(userStore.user.userId!, changePasswordData)
     .then((res) => {
       if (res.message) {
         NMessage.success(res.message)

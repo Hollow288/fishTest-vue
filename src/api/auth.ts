@@ -1,4 +1,5 @@
 import type { BaseResponse, LoginModel, SignupModel, UserTokenResponse } from '@/types'
+import type {ResponseResult} from '@/types'
 
 // 登录类型
 enum LoginType {
@@ -62,5 +63,13 @@ export class AuthAPI {
       `${this.AUTH_API_PREFIX}/login/google`,
       { code }
     )
+  }
+
+
+  /**
+   * 登出
+   */
+  static  logout(){
+    return  httpRequest.post<ResponseResult>('user/logout')
   }
 }

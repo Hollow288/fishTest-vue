@@ -26,85 +26,85 @@ const { renderIcon: renderMenuIcon, renderMenuLabel } = RenderUtils
 
 export const menuOptions: MenuOption[] = [
   {
-    label: renderMenuLabel(() => t('TEMP.Menu.Navigation')),
+    label: renderMenuLabel(() => t('MENU.Navigation')),
     key: 'navigation',
     icon: renderMenuIcon(NavigationIcon)
   },
   {
-    label: renderMenuLabel(() => t('TEMP.Menu.SystemFunctions')),
+    label: renderMenuLabel(() => t('MENU.SystemFunctions')),
     key: 'system-functions',
     icon: renderMenuIcon(SystemFunctionsIcon),
     children: [
       {
-        label: renderMenuLabel(() => t('TEMP.Menu.UserManagement')),
+        label: renderMenuLabel(() => t('MENU.UserManagement')),
         key: 'user-management',
         icon: renderMenuIcon(UserManagementIcon)
       }
     ]
   },
   {
-    label: renderMenuLabel(() => t('TEMP.Menu.SystemTools')),
+    label: renderMenuLabel(() => t('MENU.SystemTools')),
     key: 'system-tools',
     icon: renderMenuIcon(SystemToolsIcon),
     children: [
       {
-        label: renderMenuLabel(() => t('TEMP.Menu.QRCode')),
+        label: renderMenuLabel(() => t('MENU.QRCode')),
         key: 'qrcode',
         icon: renderMenuIcon(QRCodeIcon)
       },
       {
-        label: renderMenuLabel(() => t('TEMP.Menu.Clipboard')),
+        label: renderMenuLabel(() => t('MENU.Clipboard')),
         key: 'clipboard',
         icon: renderMenuIcon(CopyIcon)
       },
       {
-        label: renderMenuLabel(() => t('TEMP.Menu.Print')),
+        label: renderMenuLabel(() => t('MENU.Print')),
         key: 'print',
         icon: renderMenuIcon(PrintIcon)
       },
       {
-        label: renderMenuLabel(() => t('TEMP.Menu.WebSocket')),
+        label: renderMenuLabel(() => t('MENU.WebSocket')),
         key: 'websocket',
         icon: renderMenuIcon(WebSocketIcon)
       }
     ]
   },
   {
-    label: renderMenuLabel(() => t('TEMP.Menu.CodeTemplates')),
+    label: renderMenuLabel(() => t('MENU.CodeTemplates')),
     key: 'code-templates',
     icon: renderMenuIcon(CodeTemplatesIcon),
     children: [
       {
-        label: renderMenuLabel(() => t('TEMP.Menu.ListTemplates')),
+        label: renderMenuLabel(() => t('MENU.ListTemplates')),
         key: 'list-templates',
         icon: renderMenuIcon(ListTemplatesIcon)
       }
     ]
   },
   {
-    label: renderMenuLabel(() => t('TEMP.Menu.UniversalComponents')),
+    label: renderMenuLabel(() => t('MENU.UniversalComponents')),
     key: 'universal-components',
     icon: renderMenuIcon(UniversalComponentsIcon),
     children: [
       {
-        label: renderMenuLabel(() => t('TEMP.Menu.Charts')),
+        label: renderMenuLabel(() => t('MENU.Charts')),
         key: 'charts',
         icon: renderMenuIcon(ChartIcon)
       }
     ]
   },
   {
-    label: renderMenuLabel(() => t('TEMP.Menu.BuiltinComponents')),
+    label: renderMenuLabel(() => t('MENU.BuiltinComponents')),
     key: 'builtin-components',
     icon: renderMenuIcon(BuiltinComponentsIcon),
     children: [
       {
-        label: renderMenuLabel(() => t('TEMP.Menu.DigitalAnimation')),
+        label: renderMenuLabel(() => t('MENU.DigitalAnimation')),
         key: 'digital-animation',
         icon: renderMenuIcon(DigitalAnimationIcon)
       },
       {
-        label: renderMenuLabel(() => t('TEMP.Menu.Timeline')),
+        label: renderMenuLabel(() => t('MENU.Timeline')),
         key: 'timeline',
         icon: renderMenuIcon(TimelineIcon)
       }
