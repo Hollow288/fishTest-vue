@@ -24,7 +24,7 @@ const socket = ref<Socket>(
  */
 const getSendInfo = (userMessage?: string) => ({
   id: userStore.user.id,
-  username: userStore.user.username,
+  userName: userStore.user.userName,
   ...(userMessage && { message: userMessage })
 })
 

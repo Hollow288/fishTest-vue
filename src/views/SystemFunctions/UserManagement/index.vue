@@ -132,7 +132,7 @@ const [disableLoading, disableLoadingDispatcher] = useLoading()
 const isMobile = useMobile()
 
 const resetPasswordRules: FormRules = {
-  password: [
+  passWord: [
     {
       required: true,
       trigger: ['blur', 'input'],
@@ -165,7 +165,7 @@ const pagination = reactive({
   itemCount: 0
 })
 const resetPasswordData = reactive({
-  password: AuthUtils.DEFAULT_ADMIN_USERNAME
+  passWord: AuthUtils.DEFAULT_ADMIN_USERNAME
 })
 const idColumnReactive = reactive(idColumn)
 const createdAtColumnReactive = reactive(createdAtColumn)
@@ -613,7 +613,7 @@ const handleCreateUser = () => {
 }
 
 const handleResetPassword = () => {
-  resetPasswordData.password = AuthUtils.DEFAULT_ADMIN_PASSWORD
+  resetPasswordData.passWord = AuthUtils.DEFAULT_ADMIN_PASSWORD
 }
 
 const handleConfirmPassword = async () => {
@@ -629,7 +629,7 @@ const handleConfirmPassword = async () => {
 
   resetPasswordLoadingDispatcher.loading()
 
-  await UserAPI.resetPassword(currentId.value, resetPasswordData.password)
+  await UserAPI.resetPassword(currentId.value, resetPasswordData.passWord)
     .then((res) => {
       if (res.message) {
         NMessage.success(res.message)
@@ -812,8 +812,8 @@ onMounted(() => queryList())
       >
         <input
           type="text"
-          name="username"
-          autocomplete="username"
+          name="userName"
+          autocomplete="userName"
           style="display: none"
         />
         <NFormItem
@@ -821,7 +821,7 @@ onMounted(() => queryList())
           :label="t('TEMP.User.Password')"
         >
           <NInput
-            v-model:value="resetPasswordData.password"
+            v-model:value="resetPasswordData.passWord"
             type="password"
             :placeholder="t('TEMP.User.Password')"
             maxlength="20"

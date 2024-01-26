@@ -69,9 +69,9 @@ export class UserAPI {
   /**
    * 重置密码
    */
-  static resetPassword(userId: number, password: string) {
+  static resetPassword(userId: number, passWord: string) {
     return httpRequest.post<BaseResponse<User>>(`${this.USER_API_PREFIX}/${userId}/reset-password`, {
-      password
+      passWord
     })
   }
 

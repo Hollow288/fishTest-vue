@@ -27,8 +27,8 @@ const uploadRef = ref<UploadInst | null>(null)
 const formData = ref<User>({})
 const tempUserData = ref<User>({})
 const createFormData = reactive({
-  username: '',
-  password: ''
+  userName: '',
+  passWord: ''
 })
 const currentFile = ref<File | null>(null)
 const showModal = ref(false)
@@ -83,7 +83,7 @@ const editRules: FormRules = {
 }
 
 const createRules: FormRules = {
-  username: [
+  userName: [
     {
       required: true,
       trigger: ['blur', 'input'],
@@ -91,7 +91,7 @@ const createRules: FormRules = {
       renderMessage: () => t('TEMP.Validation.Username')
     }
   ],
-  password: [
+  passWord: [
     {
       required: true,
       trigger: ['blur', 'input'],
@@ -161,8 +161,8 @@ const handleSubmit = async () => {
     try {
       const { message } = await UserAPI.create(createFormData)
       NMessage.success(message!)
-      createFormData.username = ''
-      createFormData.password = ''
+      createFormData.userName = ''
+      createFormData.passWord = ''
       showModal.value = false
       emit('save')
     } catch (err: any) {
@@ -409,16 +409,16 @@ defineExpose({
       class="flex flex-col"
     >
       <NFormItem
-        path="username"
+        path="userName"
         :label="t('TEMP.User.Username')"
       >
         <NInput
-          v-model:value="createFormData.username"
+          v-model:value="createFormData.userName"
           :placeholder="t('TEMP.Validation.Username')"
           maxlength="20"
           show-count
           clearable
-          :input-props="{ autocomplete: 'username' }"
+          :input-props="{ autocomplete: 'userName' }"
         />
       </NFormItem>
 
@@ -427,7 +427,7 @@ defineExpose({
         :label="t('TEMP.User.Password')"
       >
         <NInput
-          v-model:value="createFormData.password"
+          v-model:value="createFormData.passWord"
           type="password"
           :placeholder="t('TEMP.Validation.Password')"
           maxlength="20"

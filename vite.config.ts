@@ -15,6 +15,7 @@ import { defineConfig, loadEnv } from 'vite'
 import ViteCompression from 'vite-plugin-compression'
 import progress from 'vite-plugin-progress'
 import VueDevTools from 'vite-plugin-vue-devtools'
+import bcrypt from 'bcryptjs'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())

@@ -8,15 +8,15 @@ const NMessage = useMessage()
 const [submitLoading, submitLoadingDispatcher] = useLoading(false)
 
 const formData = reactive({
-  username: '',
-  password: '',
+  userName: '',
+  passWord: '',
   confirmPassword: ''
 })
 const formRef = ref<FormInst | null>(null)
 const passwordFormItemRef = ref<FormItemInst | null>(null)
 
 const rules: FormRules = {
-  username: [
+  userName: [
     {
       required: true,
       trigger: ['blur', 'input'],
@@ -24,7 +24,7 @@ const rules: FormRules = {
       renderMessage: () => t('TEMP.Validation.Username')
     }
   ],
-  password: [
+  passWord: [
     {
       required: true,
       trigger: ['blur', 'input'],
@@ -46,7 +46,7 @@ const rules: FormRules = {
       renderMessage: () => t('TEMP.Validation.ConfirmPassword')
     },
     {
-      validator: (_: FormItemRule, value: string) => value === formData.password,
+      validator: (_: FormItemRule, value: string) => value === formData.passWord,
       message: () => t('TEMP.Validation.ConfirmPasswordNotMatch'),
       renderMessage: () => t('TEMP.Validation.ConfirmPasswordNotMatch')
     }
@@ -87,7 +87,7 @@ const signup = async () => {
       submitLoadingDispatcher.loaded()
     })
     .finally(() => {
-      formData.password = ''
+      formData.passWord = ''
       formData.confirmPassword = ''
     })
 }
@@ -105,15 +105,15 @@ const signup = async () => {
     </div>
 
     <NFormItem
-      path="username"
+      path="userName"
       :show-label="false"
       :show-feedback="false"
     >
       <NInput
-        v-model:value="formData.username"
+        v-model:value="formData.userName"
         type="text"
         :placeholder="t('TEMP.User.Username')"
-        :input-props="{ autocomplete: 'username' }"
+        :input-props="{ autocomplete: 'userName' }"
         @keydown.enter="() => signup()"
       />
     </NFormItem>
@@ -124,7 +124,7 @@ const signup = async () => {
       :show-feedback="false"
     >
       <NInput
-        v-model:value="formData.password"
+        v-model:value="formData.passWord"
         type="password"
         :placeholder="t('TEMP.User.Password')"
         show-password-on="click"

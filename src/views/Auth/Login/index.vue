@@ -19,8 +19,8 @@ const [submitLoading, submitLoadingDispatcher] = useLoading(false)
 const submitType = ref<'BASIC' | 'ADMIN'>('BASIC')
 
 const formData = reactive({
-  username: '',
-  password: ''
+  userName: '',
+  passWord: ''
 })
 const formRef = ref<FormInst | null>(null)
 const rememberPassword = ref(false)
@@ -28,7 +28,7 @@ const rememberPassword = ref(false)
 const redirectUrl = computed(() => route.query.redirect as string)
 
 const rules: FormRules = {
-  username: [
+  userName: [
     {
       required: true,
       trigger: ['blur', 'input'],
@@ -36,7 +36,7 @@ const rules: FormRules = {
       renderMessage: () => t('TEMP.Validation.Username')
     }
   ],
-  password: [
+  passWord: [
     {
       required: true,
       trigger: ['blur', 'input'],
@@ -104,7 +104,7 @@ const login = async () => {
       }else {
           NMessage.error(res.message || '登录失败')
           submitLoadingDispatcher.loaded()
-          formData.password = ''
+          formData.passWord = ''
       }
 
     })
@@ -113,7 +113,7 @@ const login = async () => {
         NMessage.error(err.message)
       }
       submitLoadingDispatcher.loaded()
-      formData.password = ''
+      formData.passWord = ''
     })
 }
 
@@ -130,8 +130,8 @@ const loginAsBasic = () => {
  */
 const loginAsAdmin = () => {
   submitType.value = 'ADMIN'
-  formData.username = AuthUtils.DEFAULT_ADMIN_USERNAME
-  formData.password = AuthUtils.DEFAULT_ADMIN_PASSWORD
+  formData.userName = AuthUtils.DEFAULT_ADMIN_USERNAME
+  formData.passWord = AuthUtils.DEFAULT_ADMIN_PASSWORD
   login()
 }
 
@@ -145,9 +145,9 @@ onMounted(() => {
   const localStorageData = AuthUtils.getRememberedAccount()
   if (localStorageData) {
     try {
-      const { username, password } = JSON.parse(localStorageData) as RememberedAccountData
-      formData.username = username
-      formData.password = password
+      const { userName, passWord } = JSON.parse(localStorageData) as RememberedAccountData
+      formData.userName = userName
+      formData.passWord = passWord
       rememberPassword.value = true
     } catch {
       //
@@ -169,26 +169,26 @@ onMounted(() => {
     </div>
 
     <NFormItem
-      path="username"
+      path="userName"
       :show-label="false"
       :show-feedback="false"
     >
       <NInput
-        v-model:value="formData.username"
+        v-model:value="formData.userName"
         type="text"
         :placeholder="t('TEMP.User.Username')"
-        :input-props="{ autocomplete: 'username' }"
+        :input-props="{ autocomplete: 'userName' }"
         @keyup.enter="loginAsBasic"
       />
     </NFormItem>
 
     <NFormItem
-      path="password"
+      path="passWord"
       :show-label="false"
       :show-feedback="false"
     >
       <NInput
-        v-model:value="formData.password"
+        v-model:value="formData.passWord"
         type="password"
         show-password-on="click"
         :placeholder="t('TEMP.User.Password')"

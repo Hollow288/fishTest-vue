@@ -1,8 +1,6 @@
 import type { User } from '@/types'
 
 export interface LoginModel {
-  username: string
-  password: string
   userName: string
   passWord: string
 }

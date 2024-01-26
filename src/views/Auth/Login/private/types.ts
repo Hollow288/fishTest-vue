@@ -1,4 +1,4 @@
 export type RememberedAccountData = {
-  username: string
-  password: string
+  userName: string
+  passWord: string
 }

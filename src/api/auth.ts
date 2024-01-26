@@ -1,4 +1,5 @@
 import type { BaseResponse, LoginModel, SignupModel, UserTokenResponse } from '@/types'
+import bcrypt from 'bcryptjs'
 import type {ResponseResult} from '@/types'
 
 // 登录类型
@@ -16,8 +17,8 @@ export class AuthAPI {
    * 登录
    */
   static login(data: LoginModel) {
-    data.userName = data.username
-    data.passWord = data.password
+    // const salt = bcrypt.genSaltSync(10)
+    // data.passWord = bcrypt.hashSync(data.passWord,salt)
     return httpRequest.post<BaseResponse<UserTokenResponse>>(
       `${this.AUTH_API_PREFIX}/login`,
       { ...data },
