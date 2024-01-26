@@ -79,7 +79,7 @@ export class UserAPI {
    * 修改密码
    */
   static changePassword(userId: number, data: ChangePasswordModel) {
-    return httpRequest.post<BaseResponse<User>>(`${this.USER_API_PREFIX}/${userId}/change-password`, {
+    return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${userId}/change-password`, {
       ...data
     })
   }

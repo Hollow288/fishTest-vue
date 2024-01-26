@@ -18,6 +18,8 @@ export interface User {
   country?: string
   province?: string
   city?: string
+  status?: string
+  createTime?: string
   address?: string
   biography?: string
   birthDate?: string

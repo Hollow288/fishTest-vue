@@ -75,6 +75,12 @@
   "EachPage50": "每页50条",
   "Create": "创建",
   "KeywordSearch": "用户名/邮箱",
-  "Save": "保存"
+  "Save": "保存",
+
+  "OldPassword": "旧密码",
+  "NewPassword": "新密码",
+  "ConfirmPassword": "确认密码",
+  "Reset": "刷新"
+
 
 }

@@ -40,7 +40,7 @@ const changePasswordRules: FormRules = {
   confirmPassword: [
     {
       required: true,
-      message: t('COMMON.ConfirmPassword'),
+      message: t('TEMP.Validation.ConfirmPassword'),
       trigger: ['blur', 'input']
     },
     {
@@ -50,7 +50,7 @@ const changePasswordRules: FormRules = {
   ]
 }
 
-const logout = async () =>
+const logout = async () =>{
   AuthAPI.logout()
   router.replace('/login').then(() => {
     NMessage.success(t('TEMP.Logout.LoginAgain'))
@@ -58,6 +58,8 @@ const logout = async () =>
     AuthUtils.clearAccessToken()
     AuthUtils.clearRefreshToken()
   })
+}
+
 
 const handleChangePassword = async () => {
   try {
@@ -79,12 +81,20 @@ const handleChangePassword = async () => {
 
   submitLoadingDispatcher.loading()
 
+  if(changePasswordData.confirmPassword !== changePasswordData.newPassword){
+    NMessage.error("两次输入的密码不一致")
+    return
+  }
+
   UserAPI.changePassword(userStore.user.userId!, changePasswordData)
     .then((res) => {
-      if (res.message) {
+      if (res.code == 200) {
         NMessage.success(res.message)
+        logout()
+      }else {
+        NMessage.error(res.message)
       }
-      logout()
+
     })
     .catch((err) => {
       if (err.message) {

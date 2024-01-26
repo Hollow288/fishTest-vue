@@ -631,8 +631,10 @@ const handleConfirmPassword = async () => {
 
   await UserAPI.resetPassword(currentId.value, resetPasswordData.passWord)
     .then((res) => {
-      if (res.message) {
+      if (res.code == 200) {
         NMessage.success(res.message)
+      }else {
+        NMessage.error(err.message)
       }
     })
     .catch((err) => {
