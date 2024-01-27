@@ -159,12 +159,17 @@ const handleSubmit = async () => {
     }
   } else {
     try {
-      const { message } = await UserAPI.create(createFormData)
-      NMessage.success(message!)
-      createFormData.userName = ''
-      createFormData.passWord = ''
-      showModal.value = false
-      emit('save')
+      const { code , message } = await UserAPI.create(createFormData)
+      if(code == 200){
+        NMessage.success(message!)
+        createFormData.userName = ''
+        createFormData.passWord = ''
+        showModal.value = false
+        emit('save')
+      }else {
+        NMessage.error(message!)
+      }
+
     } catch (err: any) {
       if (err.message) {
         NMessage.error(err.message)

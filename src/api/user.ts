@@ -38,7 +38,7 @@ export class UserAPI {
    * 创建用户
    */
   static create(data: CreateUserModel) {
-    return httpRequest.post<BaseResponse<User>>(this.USER_API_PREFIX, {
+    return httpRequest.post<ResponseResult>(this.USER_API_PREFIX, {
       ...data
     })
   }
