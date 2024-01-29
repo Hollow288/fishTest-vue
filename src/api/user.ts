@@ -22,7 +22,7 @@ export class UserAPI {
   /**
    * 用户信息
    */
-  static detail(userId: number) {
+  static detail(userId: string) {
     return httpRequest.get<BaseResponse<User>>(`${this.USER_API_PREFIX}/${userId}`)
   }
 
@@ -46,7 +46,7 @@ export class UserAPI {
   /**
    * 更新用户
    */
-  static update(userId: number, data: User) {
+  static update(userId: string, data: User) {
     return httpRequest.patch<BaseResponse<User>>(`${this.USER_API_PREFIX}/${userId}`, {
       ...data
     })
@@ -55,21 +55,21 @@ export class UserAPI {
   /**
    * 启用用户
    */
-  static enable(userId: number) {
+  static enable(userId: string) {
     return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${userId}/enable`)
   }
 
   /**
    * 禁用用户
    */
-  static disable(userId: number) {
+  static disable(userId: string) {
     return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${userId}/disable`)
   }
 
   /**
    * 重置密码
    */
-  static resetPassword(userId: number, passWord: string) {
+  static resetPassword(userId: string, passWord: string) {
     return httpRequest.post<BaseResponse<User>>(`${this.USER_API_PREFIX}/${userId}/reset-password`, {
       passWord
     })
@@ -78,7 +78,7 @@ export class UserAPI {
   /**
    * 修改密码
    */
-  static changePassword(userId: number, data: ChangePasswordModel) {
+  static changePassword(userId: string, data: ChangePasswordModel) {
     return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${userId}/change-password`, {
       ...data
     })

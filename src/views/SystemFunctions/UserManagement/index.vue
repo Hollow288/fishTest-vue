@@ -165,7 +165,7 @@ const pagination = reactive({
   itemCount: 0
 })
 const resetPasswordData = reactive({
-  passWord: AuthUtils.DEFAULT_ADMIN_USERNAME
+  passWord: 123456
 })
 const idColumnReactive = reactive(idColumn)
 const createdAtColumnReactive = reactive(createdAtColumn)
@@ -634,7 +634,7 @@ const handleConfirmPassword = async () => {
       if (res.code == 200) {
         NMessage.success(res.message)
       }else {
-        NMessage.error(err.message)
+        NMessage.error(res.message)
       }
     })
     .catch((err) => {

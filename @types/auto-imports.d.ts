@@ -143,6 +143,7 @@ declare global {
 // for vue template auto import
 import { UnwrapRef } from 'vue'
 declare module 'vue' {
+  interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly AppMetadata: UnwrapRef<typeof import('@/constants')['AppMetadata']>
     readonly AuthAPI: UnwrapRef<typeof import('../src/api/auth')['AuthAPI']>
@@ -272,6 +273,7 @@ declare module 'vue' {
   }
 }
 declare module '@vue/runtime-core' {
+  interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly AppMetadata: UnwrapRef<typeof import('@/constants')['AppMetadata']>
     readonly AuthAPI: UnwrapRef<typeof import('../src/api/auth')['AuthAPI']>

@@ -4,7 +4,7 @@ export interface CreateUserModel {
 }
 
 export interface User {
-  userId?: number
+  userId?: string
   userName?: string
   email?: string
   phoneNumber?: string
