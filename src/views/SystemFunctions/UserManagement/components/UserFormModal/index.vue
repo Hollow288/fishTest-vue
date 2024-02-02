@@ -132,7 +132,7 @@ const handleSubmit = async () => {
     uploadRef.value!.submit()
     if (currentFile.value) {
       try {
-        const { data, message } = await UploadAPI.uploadFile({
+        const { data, message } = await UploadAPI.uploadAvatarFile({
           file: currentFile.value
         })
         formData.value.avatarUrl = data.path

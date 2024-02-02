@@ -19,6 +19,21 @@ export class UploadAPI {
     })
   }
 
+
+  /**
+   * 上传文件
+   * @param data 文件数据
+   * @param options 上传配置
+   *
+   * @todo 进度条功能暂未实现
+   */
+  static uploadAvatarFile(data: any, options?: any) {
+    return httpRequest.post<BaseResponse<{ path: string }>>(`${this.UPLOAD_API_PREFIX}/avatar`, data, {
+      headers: this.headers,
+      onUploadProgress: options?.onUploadProgress ? options.onUploadProgress : () => {}
+    })
+  }
+
   /**
    * 批量上传文件
    * @param data 文件数据
