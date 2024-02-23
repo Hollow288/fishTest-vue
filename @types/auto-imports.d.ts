@@ -16,6 +16,7 @@ declare global {
   const GlobalEnvConfig: typeof import('@/constants')['GlobalEnvConfig']
   const GoogleAuthUtils: typeof import('../src/utils/google')['GoogleAuthUtils']
   const LangUtils: typeof import('@dolphin-admin/utils')['LangUtils']
+  const MenuAPI: typeof import('../src/api/menu')['MenuAPI']
   const NAvatar: typeof import('naive-ui')['NAvatar']
   const NButton: typeof import('naive-ui')['NButton']
   const NEllipsis: typeof import('naive-ui')['NEllipsis']
@@ -156,6 +157,7 @@ declare module 'vue' {
     readonly GlobalEnvConfig: UnwrapRef<typeof import('@/constants')['GlobalEnvConfig']>
     readonly GoogleAuthUtils: UnwrapRef<typeof import('../src/utils/google')['GoogleAuthUtils']>
     readonly LangUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['LangUtils']>
+    readonly MenuAPI: UnwrapRef<typeof import('../src/api/menu')['MenuAPI']>
     readonly NAvatar: UnwrapRef<typeof import('naive-ui')['NAvatar']>
     readonly NButton: UnwrapRef<typeof import('naive-ui')['NButton']>
     readonly NEllipsis: UnwrapRef<typeof import('naive-ui')['NEllipsis']>
@@ -286,6 +288,7 @@ declare module '@vue/runtime-core' {
     readonly GlobalEnvConfig: UnwrapRef<typeof import('@/constants')['GlobalEnvConfig']>
     readonly GoogleAuthUtils: UnwrapRef<typeof import('../src/utils/google')['GoogleAuthUtils']>
     readonly LangUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['LangUtils']>
+    readonly MenuAPI: UnwrapRef<typeof import('../src/api/menu')['MenuAPI']>
     readonly NAvatar: UnwrapRef<typeof import('naive-ui')['NAvatar']>
     readonly NButton: UnwrapRef<typeof import('naive-ui')['NButton']>
     readonly NEllipsis: UnwrapRef<typeof import('naive-ui')['NEllipsis']>

@@ -156,5 +156,18 @@
     "SendMessage": "发送消息",
     "SendSuccess": "发送成功",
     "Tip": "打开新标签页，或打开新浏览器来体验此功能。点击建立连接，与服务器通信。发送消息后，服务端会向所有用户进行消息广播。"
+  },
+  "MenuManagement": {
+    "keyName": "菜单/路由keyName",
+    "title": "路由title",
+    "label":  "菜单label",
+    "path": "路由路径",
+    "icon":  "图标",
+    "component": "组件路径",
+    "visible":  "是否显示",
+    "status": "是否启用",
+    "DisableAuth":  "登录验证",
+    "DismissTab": "选项卡",
+    "operation":  "位置"
   }
 }

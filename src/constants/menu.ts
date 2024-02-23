@@ -15,6 +15,7 @@ import InternalServerErrorIcon from '~icons/lucide/server-off'
 import UserManagementIcon from '~icons/mdi/account-cog-outline'
 import NavigationIcon from '~icons/mdi/compass-outline'
 import SystemFunctionsIcon from '~icons/mdi/function-variant'
+import MenuManagementIcon from '~icons/mdi/menu'
 import BuiltinComponentsIcon from '~icons/mdi/puzzle'
 import SystemToolsIcon from '~icons/mdi/tools'
 import CodeTemplatesIcon from '~icons/solar/code-bold'
@@ -39,6 +40,11 @@ export const menuOptions: MenuOption[] = [
         label: renderMenuLabel(() => t('MENU.UserManagement')),
         key: 'user-management',
         icon: renderMenuIcon(UserManagementIcon)
+      },
+      {
+        label: renderMenuLabel(() => t('MENU.MenuManagement')),
+        key: 'menu-management',
+        icon: renderMenuIcon(MenuManagementIcon)
       }
     ]
   },

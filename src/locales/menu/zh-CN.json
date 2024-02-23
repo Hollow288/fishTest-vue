@@ -21,5 +21,7 @@
   "UniversalComponents": "通用组件",
   "UserInfo": "用户信息",
   "UserManagement": "用户管理",
-  "WebSocket": "WebSocket"
+  "WebSocket": "WebSocket",
+
+  "MenuManagement": "菜单管理"
 }

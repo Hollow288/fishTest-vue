@@ -52,6 +52,16 @@ export const routes = [
           icon: UserManagementIcon
         }
       },
+      // 菜单管理
+      {
+        path: `${SYSTEM_FUNCTIONS_PREFIX}/menu-management`,
+        name: 'menu-management',
+        component: () => import('@/views/SystemFunctions/MenuManagement'),
+        meta: {
+          title: () => t('MENU.MenuManagement'),
+          icon: UserManagementIcon
+        }
+      },
       // 系统工具
       {
         path: `${SYSTEM_TOOLS_PREFIX}/qrcode`,

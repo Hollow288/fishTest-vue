@@ -80,7 +80,7 @@
   "OldPassword": "旧密码",
   "NewPassword": "新密码",
   "ConfirmPassword": "确认密码",
-  "Reset": "刷新"
-
-
+  "Reset": "刷新",
+  "MoveDown": "下移",
+  "MoveUp": "上移"
 }
