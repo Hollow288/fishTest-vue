@@ -14,8 +14,22 @@ export class MenuAPI {
   }
 
 
+  static listOnlyMenu(params: BasePageModel) {
+    return httpRequest.get<BaseResponse<Menu>>(`${this.USER_API_PREFIX}/only-menu`, {
+      ...params
+    })
+  }
+
+
   static menuByParentId(menuId: unknown) {
     return httpRequest.get<BaseResponse<Menu>>(`${this.USER_API_PREFIX}/${menuId}/children-menu`)
+  }
+
+
+  static reviseMenuSortById(menuId: unknown,sort: unknown) {
+    return httpRequest.put(`${this.USER_API_PREFIX}/${menuId}/revise-menusort`,{
+      sort
+    })
   }
 
 }

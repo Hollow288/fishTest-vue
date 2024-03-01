@@ -82,5 +82,6 @@
   "ConfirmPassword": "确认密码",
   "Reset": "刷新",
   "MoveDown": "下移",
-  "MoveUp": "上移"
+  "MoveUp": "上移",
+  "OnlyMenu": "仅菜单"
 }

@@ -1,17 +1,37 @@
 <script lang="ts">
-import type {Lang} from '@dolphin-admin/utils'
+// import type {Lang} from '@dolphin-admin/utils'
+import {Filter as FilterIcon, Reload as ReloadIcon} from '@vicons/ionicons5'
 import type {DataTableColumns, DropdownOption} from 'naive-ui'
-import {SearchIcon} from 'naive-ui/es/_internal/icons'
+import { useMessage } from 'naive-ui'
 import type {RendererElement, RendererNode, VNode} from 'vue'
 import {defineComponent, ref} from 'vue'
 
 import {BasePageModel} from '@/constants'
-import type {MessageSchema} from '@/types'
+// const {t} = useI18n<{ message: MessageSchema }, Lang>({})
+import i18n from '@/i18n'
 import type {Menu} from '@/types/api/menu'
 import CheckIcon from '~icons/ic/baseline-check'
 
+import {MenuFormModal} from './components'
 
-// const { awfs } = useI18n<{ message: MessageSchema }, Lang>({})
+// import type { MessageSchema } from '@/types'
+
+
+const menuFormModalRef = ref()
+const sortMenuId = ref()
+const menuFormData = ref({})
+const isMenuEdit = ref(true)
+const menuRightClickData = ref({})
+const dataRef = ref<Menu[]>([])
+
+const {t} = i18n.global
+
+const showDropdownRef = ref(false)
+
+const loadingRef = ref(true)
+
+const xRef = ref(0)
+const yRef = ref(0)
 
 
 const moveOptions: DropdownOption[] = [
@@ -33,18 +53,149 @@ const moveOptions: DropdownOption[] = [
   }
 ]
 
+const paginationReactive = reactive({
+  page: 1,
+  pageSize: 10,
+  showSizePicker: true,
+  pageSizes: [
+    {
+      label: t('COMMON.EachPage10', {count: 10}),
+      value: 10
+    },
+    {
+      label: t('COMMON.EachPage20', {count: 20}),
+      value: 20
+    },
+    {
+      label: t('COMMON.EachPage30', {count: 30}),
+      value: 30
+    },
+    {
+      label: t('COMMON.EachPage50', {count: 50}),
+      value: 50
+    }
+  ],
+  onChange: (page: number) => {
+    paginationReactive.page = page
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    queryList()
+  },
+  onUpdatePageSize: (pageSize: number) => {
+    paginationReactive.pageSize = pageSize
+    paginationReactive.page = 1
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    queryList()
+  },
+  prefix: (info) => t('COMMON.TotalPage', {totalPage: info.itemCount})
+})
+
+
+const queryListOnlyMenu = () =>{
+  loadingRef.value = true
+
+  const params = new BasePageModel({
+    page: paginationReactive.page,
+    pageSize: paginationReactive.pageSize,
+  })
+
+  MenuAPI.listOnlyMenu(params).then((result => {
+    const {data, total} = result.data ?? {}
+
+    dataRef.value = data.map(menu =>
+      ({
+        ...menu,
+        visible: menu.visible == 0,
+        status: menu.status == 0,
+        disableAuth: menu.disableAuth == 0,
+        dismissTab: menu.dismissTab == 0,
+        isLeaf: menu.isLeaf == 0
+      })
+    )
+    paginationReactive.itemCount = total
+    loadingRef.value = false
+  }))
+}
+
+
+const queryList = () => {
+
+  loadingRef.value = true
+
+  const params = new BasePageModel({
+    page: paginationReactive.page,
+    pageSize: paginationReactive.pageSize,
+  })
+
+  MenuAPI.list(params).then((result => {
+    const {data, total} = result.data ?? {}
+
+    dataRef.value = data.map(menu =>
+      ({
+        ...menu,
+        visible: menu.visible == 0,
+        status: menu.status == 0,
+        disableAuth: menu.disableAuth == 0,
+        dismissTab: menu.dismissTab == 0,
+        isLeaf: menu.isLeaf == 0
+      })
+    )
+    paginationReactive.itemCount = total
+    loadingRef.value = false
+  }))
+}
+
+
+const ShowOrEdit = defineComponent({
+  props: {
+    value: [String, Number],
+    onUpdateValue: [Function, Array]
+  },
+  setup (props) {
+    const isEdit = ref(false)
+    const inputRef = ref(null)
+    const inputValue = ref(props.value)
+    function handleOnClick () {
+      isEdit.value = true
+      nextTick(() => {
+        inputRef.value.focus()
+      })
+    }
+    function handleChange () {
+      props.onUpdateValue(inputValue.value)
+      isEdit.value = false
+    }
+    return () =>
+      h(
+        'div',
+        {
+          style: 'min-height: 22px',
+          onClick: handleOnClick
+        },
+        isEdit.value
+          ? h(NInput, {
+            ref: inputRef,
+            value: inputValue.value,
+            onUpdateValue: (v) => {
+              inputValue.value = v
+            },
+            // type: 'number',
+            onChange: handleChange,
+            onBlur: handleChange
+          })
+          : props.value
+      )
+  }
+})
+
+
 
 export default defineComponent({
+  components: {MenuFormModal},
   setup() {
 
-    const {t} = useI18n<{ message: MessageSchema }, Lang>({})
-    // const message = useMessage()
-    const showDropdownRef = ref(false)
+    const getDataIndex = (menuId) => dataRef.value.findIndex((item) => item.menuId === menuId)
 
-    const loadingRef = ref(true)
-
-    const xRef = ref(0)
-    const yRef = ref(0)
+    window.$message = useMessage()
 
     const colsReactive: DataTableColumns = [
       {
@@ -132,19 +283,29 @@ export default defineComponent({
           })
       },
       {
-        title: () => t('COMMON.Operation'),
-        key: 'operation',
+        title: () => t('COMMON.SORT'),
+        key: 'sort',
         align: 'center',
-        render(row) {
-          return h(
-            'div',
-            {
-              class: 'space-x-3 flex justify-center'
-            },
-            tableButton(row)
-          )
+        render (row) {
+          const index = getDataIndex(row.menuId)
+          // sortMenuId.value = row.menuId
+          return h(ShowOrEdit, {
+            value: row.sort,
+            onUpdateValue (v) {
+              if(typeof v !== 'number' && v !== row.sort){
+                debugger
+                window.$message.error('1111')
+              }else{
+                dataRef.value[index].sort = v
+                console.log("2222")
+              }
+
+              // console.log(v)
+
+            }
+          })
         },
-        width: 200,
+        width: 120,
         fixed: 'right'
       }
     ]
@@ -171,131 +332,69 @@ export default defineComponent({
     //   { id: '3', key: 'p11', example: 'p3', isLeaf: false ,children: []}
     // ])
 
-    const tableButton = (row) => {
-      // eslint-disable-next-line eqeqeq
-      if (row.id == 1) {
-        return [
-          h(
-            NButton,
-            {
-              type: 'default',
-              size: 'small',
-              onClick: () => {
-              }
-            },
-            {
-              default: () => t('COMMON.MoveDown')
-            }
-          )
-        ]
-      }
-      if (row.id == dataRef.value.length) {
-        return [
-          h(
-            NButton,
-            {
-              type: 'default',
-              size: 'small',
-              onClick: () => {
-              }
-            },
-            {
-              default: () => t('COMMON.MoveUp')
-            }
-          )
-        ]
-      }
-      return [
-        h(
-          NButton,
-          {
-            type: 'default',
-            size: 'small',
-            onClick: () => {
-            }
-          },
-          {
-            default: () => t('COMMON.MoveDown')
-          }
-        ),
-        h(
-          NButton,
-          {
-            type: 'default',
-            size: 'small',
-            onClick: () => {
-            }
-          },
-          {
-            default: () => t('COMMON.MoveUp')
-          }
-        )
-      ]
-    }
+    // const tableButton = (row) => {
+    //   // eslint-disable-next-line eqeqeq
+    //   if (row.id == 1) {
+    //     return [
+    //       h(
+    //         NButton,
+    //         {
+    //           type: 'default',
+    //           size: 'small',
+    //           onClick: () => {
+    //           }
+    //         },
+    //         {
+    //           default: () => t('COMMON.MoveDown')
+    //         }
+    //       )
+    //     ]
+    //   }
+    //   if (row.id == dataRef.value.length) {
+    //     return [
+    //       h(
+    //         NButton,
+    //         {
+    //           type: 'default',
+    //           size: 'small',
+    //           onClick: () => {
+    //           }
+    //         },
+    //         {
+    //           default: () => t('COMMON.MoveUp')
+    //         }
+    //       )
+    //     ]
+    //   }
+    //   return [
+    //     h(
+    //       NButton,
+    //       {
+    //         type: 'default',
+    //         size: 'small',
+    //         onClick: () => {
+    //         }
+    //       },
+    //       {
+    //         default: () => t('COMMON.MoveDown')
+    //       }
+    //     ),
+    //     h(
+    //       NButton,
+    //       {
+    //         type: 'default',
+    //         size: 'small',
+    //         onClick: () => {
+    //         }
+    //       },
+    //       {
+    //         default: () => t('COMMON.MoveUp')
+    //       }
+    //     )
+    //   ]
+    // }
 
-    const paginationReactive = reactive({
-      page: 1,
-      pageSize: 10,
-      showSizePicker: true,
-      pageSizes: [
-        {
-          label: t('COMMON.EachPage10', {count: 10}),
-          value: 10
-        },
-        {
-          label: t('COMMON.EachPage20', {count: 20}),
-          value: 20
-        },
-        {
-          label: t('COMMON.EachPage30', {count: 30}),
-          value: 30
-        },
-        {
-          label: t('COMMON.EachPage50', {count: 50}),
-          value: 50
-        }
-      ],
-      onChange: (page: number) => {
-        paginationReactive.page = page
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        queryList()
-      },
-      onUpdatePageSize: (pageSize: number) => {
-        paginationReactive.pageSize = pageSize
-        paginationReactive.page = 1
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        queryList()
-      },
-      prefix: (info) => t('COMMON.TotalPage', {totalPage: info.itemCount})
-    })
 
-    const dataRef = ref<Menu[]>([])
-    const queryList = () => {
-
-      loadingRef.value = true
-
-      const params = new BasePageModel({
-        page: paginationReactive.page,
-        pageSize: paginationReactive.pageSize,
-      })
-
-      MenuAPI.list(params).then((result => {
-        const {data, total} = result.data ?? {}
-
-        dataRef.value = data.map(menu =>
-          ({
-            ...menu,
-            visible: menu.visible == 0,
-            status: menu.status == 0,
-            disableAuth: menu.disableAuth == 0,
-            dismissTab: menu.dismissTab == 0,
-            isLeaf: menu.isLeaf == 0
-          })
-        )
-        paginationReactive.itemCount = total
-        loadingRef.value = false
-      }))
-    }
 
 
     onMounted(() => queryList())
@@ -306,9 +405,14 @@ export default defineComponent({
       data: dataRef,
       moveOptions,
       queryList,
-      SearchIcon,
+      queryListOnlyMenu,
+      FilterIcon,
+      ReloadIcon,
       loading: loadingRef,
       t,
+      menuFormModalRef,
+      menuFormData,
+      isMenuEdit,
       pagination: paginationReactive,
       onLoad(row: Record<string, unknown>) {
         return new Promise<void>((resolve) => {
@@ -325,13 +429,17 @@ export default defineComponent({
       y: yRef,
       handleSelect(item) {
         showDropdownRef.value = false
-        console.log(item)
+        if(item === 'edit'){
+          menuFormModalRef.value.handleShowModal()
+          menuFormData.value = menuRightClickData.value
+        }
       },
       onClickoutside() {
         showDropdownRef.value = false
       },
-      rowProps: () => ({
+      rowProps: (row) => ({
         onContextmenu: (e: MouseEvent) => {
+          menuRightClickData.value = row
           e.preventDefault()
           showDropdownRef.value = false
           nextTick().then(() => {
@@ -342,7 +450,7 @@ export default defineComponent({
         }
       }),
       onlyMenu: () => {
-        queryList()
+        queryListOnlyMenu()
       }
     }
   }
@@ -359,11 +467,20 @@ export default defineComponent({
           <div class="flex w-full items-center !space-x-2 sm:w-fit">
             <n-button icon-placement="left" secondary strong @click="onlyMenu">
               <template #icon>
-                <n-icon :component="SearchIcon" >
+                <n-icon :component="FilterIcon" >
                   <!--                <AddSharp-icon />-->
                 </n-icon>
               </template>
-              {{ t('COMMON.Create') }}
+              {{ t('COMMON.OnlyMenu') }}
+            </n-button>
+
+            <n-button icon-placement="left" secondary strong @click="queryList">
+              <template #icon>
+                <n-icon :component="ReloadIcon" >
+                  <!--                <AddSharp-icon />-->
+                </n-icon>
+              </template>
+              {{ t('COMMON.RESET') }}
             </n-button>
           </div>
         </div>
@@ -393,6 +510,14 @@ export default defineComponent({
       :on-clickoutside="onClickoutside"
       :show="showDropdown"
       @select="handleSelect"
+    />
+
+
+    <MenuFormModal
+      ref="menuFormModalRef"
+      :is-edit="isMenuEdit"
+      :user-form-data="menuFormData"
+      @save="queryList"
     />
   </DataTableLayout>
 </template>
