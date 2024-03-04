@@ -3,8 +3,6 @@
 import {Filter as FilterIcon, Reload as ReloadIcon} from '@vicons/ionicons5'
 import type {DataTableColumns, DropdownOption} from 'naive-ui'
 import { useMessage } from 'naive-ui'
-import type {RendererElement, RendererNode, VNode} from 'vue'
-import {defineComponent, ref} from 'vue'
 
 import {BasePageModel} from '@/constants'
 // const {t} = useI18n<{ message: MessageSchema }, Lang>({})
@@ -18,7 +16,6 @@ import {MenuFormModal} from './components'
 
 
 const menuFormModalRef = ref()
-const sortMenuId = ref()
 const menuFormData = ref({})
 const isMenuEdit = ref(true)
 const menuRightClickData = ref({})
@@ -148,12 +145,17 @@ const queryList = () => {
 const ShowOrEdit = defineComponent({
   props: {
     value: [String, Number],
-    onUpdateValue: [Function, Array]
+    onUpdateValue: [Function, Array],
+    row : {}
   },
   setup (props) {
     const isEdit = ref(false)
     const inputRef = ref(null)
     const inputValue = ref(props.value)
+    const rowValue = ref(props.row)
+
+
+
     function handleOnClick () {
       isEdit.value = true
       nextTick(() => {
@@ -163,6 +165,32 @@ const ShowOrEdit = defineComponent({
     function handleChange () {
       props.onUpdateValue(inputValue.value)
       isEdit.value = false
+      debugger
+      if(isNaN(inputValue.value)){
+        window.$message.destroyAll()
+        window.$message.error('排序只能是数字')
+        queryList()
+      }else {
+        // debugger
+        // console.log(rowValue.value.menuId)
+        // console.log(v)
+        MenuAPI.reviseMenuSortById(rowValue.value.menuId,inputValue.value).then(result =>{
+          const { code , message } = result ?? {}
+          if(code === 200){
+            window.$message.destroyAll()
+            window.$message.success(message)
+            // thisOperation.menuId = rowValue.value.menuId
+            queryList()
+          }else {
+            window.$message.destroyAll()
+            window.$message.error(message)
+            queryList()
+          }
+
+        })
+      }
+
+
     }
     return () =>
       h(
@@ -286,23 +314,21 @@ export default defineComponent({
         title: () => t('COMMON.SORT'),
         key: 'sort',
         align: 'center',
-        render (row) {
-          const index = getDataIndex(row.menuId)
-          // sortMenuId.value = row.menuId
+        render (row,indexs) {
           return h(ShowOrEdit, {
             value: row.sort,
             onUpdateValue (v) {
-              if(typeof v !== 'number' && v !== row.sort){
-                debugger
-                window.$message.error('1111')
+              const index = getDataIndex(row.menuId)
+              if(index === -1){
+                // debugger
+                console.log("row = " + row)
+                console.log("indexs = " + indexs)
               }else{
                 dataRef.value[index].sort = v
-                console.log("2222")
               }
 
-              // console.log(v)
-
-            }
+            },
+            row
           })
         },
         width: 120,
@@ -421,8 +447,6 @@ export default defineComponent({
           })
           resolve()
         })
-
-
       },
       showDropdown: showDropdownRef,
       x: xRef,
@@ -449,6 +473,7 @@ export default defineComponent({
           })
         }
       }),
+
       onlyMenu: () => {
         queryListOnlyMenu()
       }
@@ -488,6 +513,7 @@ export default defineComponent({
     </template>
     <!--如果是后端分页,这里一定要加上remote!-->
     <n-data-table
+      :key="(row) => row.key"
       remote
       :columns="columns"
       :data="data"
@@ -516,7 +542,7 @@ export default defineComponent({
     <MenuFormModal
       ref="menuFormModalRef"
       :is-edit="isMenuEdit"
-      :user-form-data="menuFormData"
+      :menu-form-data="menuFormData"
       @save="queryList"
     />
   </DataTableLayout>

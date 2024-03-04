@@ -1,5 +1,5 @@
 import type {BasePageModel} from '@/constants'
-import type {BaseResponse} from '@/types'
+import type {BaseResponse,ResponseResult} from '@/types'
 import type {Menu} from '@/types/api/menu'
 
 export class MenuAPI {
@@ -27,7 +27,7 @@ export class MenuAPI {
 
 
   static reviseMenuSortById(menuId: unknown,sort: unknown) {
-    return httpRequest.put(`${this.USER_API_PREFIX}/${menuId}/revise-menusort`,{
+    return httpRequest.put<ResponseResult>(`${this.USER_API_PREFIX}/${menuId}/revise-menusort`,{
       sort
     })
   }

@@ -168,6 +168,8 @@
     "status": "是否启用",
     "DisableAuth":  "登录验证",
     "DismissTab": "选项卡",
-    "operation":  "位置"
+    "operation":  "位置",
+    "EditMenu": "修改菜单",
+    "CreateMenu": "新建菜单"
   }
 }

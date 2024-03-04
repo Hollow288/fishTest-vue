@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import type {FormInst, FormItemRule, FormRules, FormValidationError, UploadFileInfo, UploadInst} from 'naive-ui'
+import type {FormInst, FormItemRule, FormRules, FormValidationError } from 'naive-ui'
 
-import type { MessageSchema, User } from '@/types'
-import UserAvatarIcon from '~icons/carbon/user-avatar-filled-alt'
+import type { MessageSchema, User, Menu } from '@/types'
 import CreateIcon from '~icons/ic/sharp-add'
 import EditIcon from '~icons/ic/sharp-edit'
 
 export interface Props {
-  userFormData?: User
+  menuFormData?: Menu
   isEdit: boolean
 }
 
@@ -23,14 +22,12 @@ const NMessage = useMessage()
 const [submitLoading, submitLoadingDispatcher] = useLoading()
 
 const formRef = ref<FormInst | null>(null)
-const uploadRef = ref<UploadInst | null>(null)
 const formData = ref<User>({})
 const tempUserData = ref<User>({})
 const createFormData = reactive({
   userName: '',
   passWord: ''
 })
-const currentFile = ref<File | null>(null)
 const showModal = ref(false)
 
 const editRules: FormRules = {
@@ -42,42 +39,12 @@ const editRules: FormRules = {
       renderMessage: () => t('TEMP.Validation.Name')
     }
   ],
-  // firstName: [
-  //   {
-  //     required: true,
-  //     trigger: ['blur', 'input'],
-  //     message: () => t('TEMP.Validation.FirstName'),
-  //     renderMessage: () => t('TEMP.Validation.FirstName')
-  //   }
-  // ],
-  // lastName: [
-  //   {
-  //     required: true,
-  //     trigger: ['blur', 'input'],
-  //     message: () => t('TEMP.Validation.LastName'),
-  //     renderMessage: () => t('TEMP.Validation.LastName')
-  //   }
-  // ],
   email: [
     {
       key: 'edit',
       trigger: ['blur', 'change'],
       message: () => t('TEMP.Validation.Email'),
       renderMessage: () => t('TEMP.Validation.Email')
-    },
-    {
-      pattern: /^([a-zA-Z]|[0-9])(\w|-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,
-      trigger: ['input', 'blur'],
-      message: () => t('TEMP.Validation.EmailFormat'),
-      renderMessage: () => t('TEMP.Validation.EmailFormat')
-    }
-  ],
-  phoneNumber: [
-    {
-      pattern: /^[1][3456789]\d{9}$/,
-      trigger: ['input', 'blur'],
-      message: () => t('TEMP.Validation.PhoneNumberFormat'),
-      renderMessage: () => t('TEMP.Validation.PhoneNumberFormat')
     }
   ]
 }
@@ -107,10 +74,6 @@ const createRules: FormRules = {
   ]
 }
 
-const uploadAvatarUrl = (options: { fileList: UploadFileInfo[] }) => {
-  const [file] = options.fileList
-  currentFile.value = file?.file ?? null
-}
 
 const handleSubmit = async () => {
   try {
@@ -129,24 +92,6 @@ const handleSubmit = async () => {
   submitLoadingDispatcher.loading()
 
   if (props.isEdit) {
-    uploadRef.value!.submit()
-    if (currentFile.value) {
-      try {
-        const { data, message } = await UploadAPI.uploadAvatarFile({
-          file: currentFile.value
-        })
-        formData.value.avatarUrl = data.path
-        if (message) {
-          NMessage.success(message)
-        }
-      } catch (err) {
-        if (err instanceof Error && err.message) {
-          NMessage.error(err.message)
-        }
-        submitLoadingDispatcher.loaded()
-        return false
-      }
-    }
     try {
       const { message } = await UserAPI.update(formData.value.userId!, formData.value)
       NMessage.success(message!)
@@ -191,36 +136,25 @@ const handleCancel = () => {
  * @todo 重构
  * 使用参数传递的方式，不要用 defineExpose 暴露方法给父组件
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const handleShowModal = () => {
   showModal.value = true
 }
 
 watch(
-  () => props.userFormData,
+  () => props.menuFormData,
   (newValue) => {
     if (newValue) {
       formData.value = {
         ...newValue,
-        ...(newValue.birthDate && {
-          birthDate: TimeUtils.formatTime(newValue.birthDate, 'YYYY-MM-DD')
-        }),
-        gender : parseInt(newValue.gender,10)
       }
-      tempUserData.value = {
-        ...newValue,
-        ...(newValue.birthDate && {
-          birthDate: TimeUtils.formatTime(newValue.birthDate, 'YYYY-MM-DD')
-        }),
-        gender : parseInt(newValue.gender,10)
-      }
+
     } else {
       formData.value = {}
-      tempUserData.value = {}
     }
   },
   { immediate: true }
 )
-
 
 defineExpose({
   handleShowModal
@@ -232,7 +166,7 @@ defineExpose({
     v-model:show="showModal"
     class="!my-6"
     preset="dialog"
-    :title="isEdit ? t('TEMP.UserManagement.EditUser') : t('TEMP.UserManagement.CreateUser')"
+    :title="isEdit ? t('TEMP.MenuManagement.EditMenu') : t('TEMP.MenuManagement.CreateMenu')"
     :loading="submitLoading"
     :positive-text="t('COMMON.Confirm')"
     :negative-text="t('COMMON.Cancel')"
@@ -251,156 +185,184 @@ defineExpose({
       ref="formRef"
       :model="formData"
       :rules="editRules"
-      label-placement="left"
       label-width="auto"
       require-mark-placement="right-hanging"
       class="flex flex-col"
     >
-      <NFormItem
-        path="avatarUrl"
-        :label="t('TEMP.User.Avatar')"
-      >
-        <NUpload
-          ref="uploadRef"
-          full-path
-          :max="1"
-          list-type="image-card"
-          :default-upload="false"
-          @change="uploadAvatarUrl"
+
+      <nGrid :cols="24" >
+        <NFormItemGi :span="24"
+          path="keyName"
+          :label="t('TEMP.MenuManagement.keyName')"
         >
-          <template v-if="formData.avatarUrl">
-            <NAvatar
-              :size="80"
-              :src="formData.avatarUrl"
-            />
-          </template>
-          <template v-else>
-            <NIcon
-              size="80"
-              depth="3"
-              :component="UserAvatarIcon"
-            />
-          </template>
-        </NUpload>
-      </NFormItem>
+          <NInput
+            v-model:value="formData.keyName"
+            :placeholder="t('TEMP.MenuManagement.keyName')"
+            maxlength="20"
+            show-count
+            clearable
+          />
+        </NFormItemGi>
+      </nGrid>
 
-      <NFormItem
-        path="name"
-        :label="t('TEMP.User.Name')"
-      >
-        <NInput
-          v-model:value="formData.name"
-          :placeholder="t('TEMP.Validation.Name')"
-          maxlength="20"
-          show-count
-          clearable
-        />
-      </NFormItem>
+      <nGrid :cols="24" >
+        <NFormItemGi :span="24"
+          path="title"
+          :label="t('TEMP.MenuManagement.title')"
+        >
+          <NInput
+            v-model:value="formData.title"
+            :placeholder="t('TEMP.MenuManagement.title')"
+            maxlength="20"
+            show-count
+            clearable
+          />
+        </NFormItemGi>
+      </nGrid>
 
-      <NFormItem
-        path="nickName"
-        :label="t('TEMP.User.NickName')"
-      >
-        <NInput
-          v-model:value="formData.nickName"
-          :placeholder="t('TEMP.Validation.NickName')"
-          maxlength="20"
-          show-count
-          clearable
-        />
-      </NFormItem>
+      <nGrid :cols="24" >
+        <NFormItemGi :span="24"
+          path="label"
+          :label="t('TEMP.MenuManagement.label')"
+        >
+          <NInput
+            v-model:value="formData.label"
+            :placeholder="t('TEMP.MenuManagement.label')"
+            maxlength="30"
+            show-count
+            clearable
+          />
+        </NFormItemGi>
+      </nGrid>
 
-<!--      <NFormItem-->
-<!--        path="lastName"-->
-<!--        :label="t('TEMP.User.LastName')"-->
+      <nGrid :cols="24" >
+        <NFormItemGi :span="24"
+          path="path"
+          :label="t('TEMP.MenuManagement.path')"
+        >
+          <NInput
+            v-model:value="formData.path"
+            :placeholder="t('TEMP.MenuManagement.path')"
+            maxlength="30"
+            show-count
+            clearable
+          />
+        </NFormItemGi>
+
+      </nGrid>
+
+      <nGrid :cols="24" >
+
+        <NFormItemGi :span="24"
+          path="icon"
+          :label="t('TEMP.MenuManagement.icon')"
+        >
+          <NInput
+            v-model:value="formData.icon"
+            :placeholder="t('TEMP.MenuManagement.icon')"
+            maxlength="30"
+            show-count
+            clearable
+          />
+        </NFormItemGi>
+
+      </nGrid>
+
+      <nGrid :cols="24" >
+        <NFormItemGi :span="24"
+          path="component"
+          :label="t('TEMP.MenuManagement.component')"
+        >
+          <NInput
+            v-model:value="formData.component"
+            :placeholder="t('TEMP.MenuManagement.component')"
+            maxlength="30"
+            show-count
+            clearable
+          />
+        </NFormItemGi>
+
+      </nGrid>
+
+      <nGrid :cols="24" >
+        <NFormItemGi :span="24"
+                     path="component"
+                     :label="t('TEMP.MenuManagement.component')"
+        >
+          <NInput
+            v-model:value="formData.component"
+            :placeholder="t('TEMP.MenuManagement.component')"
+            maxlength="30"
+            show-count
+            clearable
+          />
+        </NFormItemGi>
+
+      </nGrid>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!--      <NFormItem-->
+<!--        path="phoneNumber"-->
+<!--        :label="t('TEMP.User.PhoneNumber')"-->
 <!--      >-->
 <!--        <NInput-->
-<!--          v-model:value="formData.lastName"-->
-<!--          :placeholder="t('TEMP.Validation.LastName')"-->
-<!--          maxlength="10"-->
+<!--          v-model:value="formData.phoneNumber"-->
+<!--          :placeholder="t('TEMP.Validation.PhoneNumber')"-->
+<!--          maxlength="20"-->
 <!--          show-count-->
 <!--          clearable-->
 <!--        />-->
 <!--      </NFormItem>-->
 
-      <NFormItem
-        path="email"
-        :label="t('TEMP.User.Email')"
-      >
-        <NInput
-          v-model:value="formData.email"
-          :placeholder="t('TEMP.Validation.Email')"
-          maxlength="30"
-          show-count
-          clearable
-        />
-      </NFormItem>
-<!--&#45;&#45;{{formData.gender}}-->
-      <NFormItem
-        path="gender"
-        :label="t('TEMP.User.Gender')"
-      >
-        <NRadioGroup
-          v-model:value="formData.gender"
-          :name="t('TEMP.User.Gender')"
-        >
-          <NSpace>
-            <NRadio :value=1> {{ t('TEMP.User.Male') }} </NRadio>
-            <NRadio :value=0> {{ t('TEMP.User.Female') }} </NRadio>
-            <NRadio :value=2> {{ t('TEMP.User.Unknown') }} </NRadio>
-          </NSpace>
-        </NRadioGroup>
-      </NFormItem>
+<!--      <NFormItem-->
+<!--        path="birthDate"-->
+<!--        :label="t('TEMP.User.BirthDate')"-->
+<!--      >-->
+<!--        <NDatePicker-->
+<!--          v-model:formatted-value="formData.birthDate"-->
+<!--          clearable-->
+<!--        />-->
+<!--      </NFormItem>-->
 
-      <NFormItem
-        path="phoneNumber"
-        :label="t('TEMP.User.PhoneNumber')"
-      >
-        <NInput
-          v-model:value="formData.phoneNumber"
-          :placeholder="t('TEMP.Validation.PhoneNumber')"
-          maxlength="20"
-          show-count
-          clearable
-        />
-      </NFormItem>
+<!--      <NFormItem-->
+<!--        path="address"-->
+<!--        :label="t('TEMP.User.Address')"-->
+<!--      >-->
+<!--        <NInput-->
+<!--          v-model:value="formData.address"-->
+<!--          :placeholder="t('TEMP.Validation.Address')"-->
+<!--          maxlength="30"-->
+<!--          show-count-->
+<!--          clearable-->
+<!--        />-->
+<!--      </NFormItem>-->
 
-      <NFormItem
-        path="birthDate"
-        :label="t('TEMP.User.BirthDate')"
-      >
-        <NDatePicker
-          v-model:formatted-value="formData.birthDate"
-          clearable
-        />
-      </NFormItem>
-
-      <NFormItem
-        path="address"
-        :label="t('TEMP.User.Address')"
-      >
-        <NInput
-          v-model:value="formData.address"
-          :placeholder="t('TEMP.Validation.Address')"
-          maxlength="30"
-          show-count
-          clearable
-        />
-      </NFormItem>
-
-      <NFormItem
-        path="biography"
-        :label="t('TEMP.User.Biography')"
-      >
-        <NInput
-          v-model:value="formData.biography"
-          :placeholder="t('TEMP.Validation.Biography')"
-          maxlength="300"
-          type="textarea"
-          show-count
-          clearable
-        />
-      </NFormItem>
+<!--      <NFormItem-->
+<!--        path="biography"-->
+<!--        :label="t('TEMP.User.Biography')"-->
+<!--      >-->
+<!--        <NInput-->
+<!--          v-model:value="formData.biography"-->
+<!--          :placeholder="t('TEMP.Validation.Biography')"-->
+<!--          maxlength="300"-->
+<!--          type="textarea"-->
+<!--          show-count-->
+<!--          clearable-->
+<!--        />-->
+<!--      </NFormItem>-->
     </NForm>
 
     <NForm
@@ -444,3 +406,15 @@ defineExpose({
     </NForm>
   </NModal>
 </template>
+
+
+<style scoped>
+.light-green {
+  height: 108px;
+  background-color: rgba(0, 128, 0, 0.12);
+}
+.green {
+  height: 108px;
+  background-color: rgba(0, 128, 0, 0.24);
+}
+</style>
