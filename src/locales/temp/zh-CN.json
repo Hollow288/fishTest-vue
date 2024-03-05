@@ -144,7 +144,8 @@
     "PhoneNumber": "请输入电话号码",
     "PhoneNumberFormat": "请输入正确格式的手机号",
     "QRCodeContent": "请输入二维码内容",
-    "Username": "请输入用户名"
+    "Username": "请输入用户名",
+    "keyName": "请输入菜单/路由keyName"
   },
   "WebSocket": {
     "ContentIsEmpty": "发送内容不能为空",

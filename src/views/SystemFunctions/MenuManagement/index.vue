@@ -1,8 +1,8 @@
 <script lang="ts">
 // import type {Lang} from '@dolphin-admin/utils'
-import {Filter as FilterIcon, Reload as ReloadIcon} from '@vicons/ionicons5'
+import {Filter as FilterIcon, Reload as ReloadIcon, AddSharp} from '@vicons/ionicons5'
 import type {DataTableColumns, DropdownOption} from 'naive-ui'
-import { useMessage } from 'naive-ui'
+import {NIcon, useMessage} from 'naive-ui'
 
 import {BasePageModel} from '@/constants'
 // const {t} = useI18n<{ message: MessageSchema }, Lang>({})
@@ -87,7 +87,7 @@ const paginationReactive = reactive({
 })
 
 
-const queryListOnlyMenu = () =>{
+const queryListOnlyMenu = () => {
   loadingRef.value = true
 
   const params = new BasePageModel({
@@ -112,6 +112,8 @@ const queryListOnlyMenu = () =>{
     loadingRef.value = false
   }))
 }
+
+
 
 
 const queryList = () => {
@@ -146,42 +148,41 @@ const ShowOrEdit = defineComponent({
   props: {
     value: [String, Number],
     onUpdateValue: [Function, Array],
-    row : {}
+    row: {}
   },
-  setup (props) {
+  setup(props) {
     const isEdit = ref(false)
     const inputRef = ref(null)
     const inputValue = ref(props.value)
     const rowValue = ref(props.row)
 
 
-
-    function handleOnClick () {
+    function handleOnClick() {
       isEdit.value = true
       nextTick(() => {
         inputRef.value.focus()
       })
     }
-    function handleChange () {
+
+    function handleChange() {
       props.onUpdateValue(inputValue.value)
       isEdit.value = false
-      debugger
-      if(isNaN(inputValue.value)){
+      if (isNaN(inputValue.value)) {
         window.$message.destroyAll()
         window.$message.error('排序只能是数字')
         queryList()
-      }else {
+      } else {
         // debugger
         // console.log(rowValue.value.menuId)
         // console.log(v)
-        MenuAPI.reviseMenuSortById(rowValue.value.menuId,inputValue.value).then(result =>{
-          const { code , message } = result ?? {}
-          if(code === 200){
+        MenuAPI.reviseMenuSortById(rowValue.value.menuId, inputValue.value).then(result => {
+          const {code, message} = result ?? {}
+          if (code === 200) {
             window.$message.destroyAll()
             window.$message.success(message)
             // thisOperation.menuId = rowValue.value.menuId
             queryList()
-          }else {
+          } else {
             window.$message.destroyAll()
             window.$message.error(message)
             queryList()
@@ -192,6 +193,7 @@ const ShowOrEdit = defineComponent({
 
 
     }
+
     return () =>
       h(
         'div',
@@ -216,9 +218,8 @@ const ShowOrEdit = defineComponent({
 })
 
 
-
 export default defineComponent({
-  components: {MenuFormModal},
+  components: {NIcon, MenuFormModal},
   setup() {
 
     const getDataIndex = (menuId) => dataRef.value.findIndex((item) => item.menuId === menuId)
@@ -314,16 +315,16 @@ export default defineComponent({
         title: () => t('COMMON.SORT'),
         key: 'sort',
         align: 'center',
-        render (row,indexs) {
+        render(row, indexs) {
           return h(ShowOrEdit, {
             value: row.sort,
-            onUpdateValue (v) {
+            onUpdateValue(v) {
               const index = getDataIndex(row.menuId)
-              if(index === -1){
+              if (index === -1) {
                 // debugger
                 console.log("row = " + row)
                 console.log("indexs = " + indexs)
-              }else{
+              } else {
                 dataRef.value[index].sort = v
               }
 
@@ -421,8 +422,6 @@ export default defineComponent({
     // }
 
 
-
-
     onMounted(() => queryList())
 
     return {
@@ -439,6 +438,7 @@ export default defineComponent({
       menuFormModalRef,
       menuFormData,
       isMenuEdit,
+      AddSharp,
       pagination: paginationReactive,
       onLoad(row: Record<string, unknown>) {
         return new Promise<void>((resolve) => {
@@ -453,10 +453,17 @@ export default defineComponent({
       y: yRef,
       handleSelect(item) {
         showDropdownRef.value = false
-        if(item === 'edit'){
+        if (item === 'edit') {
+          isMenuEdit.value = true
           menuFormModalRef.value.handleShowModal()
           menuFormData.value = menuRightClickData.value
         }
+      },
+      createNewMenu(){
+        isMenuEdit.value = false
+        menuFormData.value = {}
+        menuFormModalRef.value.handleShowModal()
+        // menuFormData.value = menuRightClickData.value
       },
       onClickoutside() {
         showDropdownRef.value = false
@@ -489,10 +496,10 @@ export default defineComponent({
     <template #operate>
       <div class="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between sm:space-y-0">
         <div class="flex flex-col items-center space-y-2 sm:flex-row sm:space-x-3 sm:space-y-0">
-          <div class="flex w-full items-center !space-x-2 sm:w-fit">
+          <div class="flex w-full items-center !space-x-2 sm:w-fit ">
             <n-button icon-placement="left" secondary strong @click="onlyMenu">
               <template #icon>
-                <n-icon :component="FilterIcon" >
+                <n-icon :component="FilterIcon">
                   <!--                <AddSharp-icon />-->
                 </n-icon>
               </template>
@@ -501,14 +508,27 @@ export default defineComponent({
 
             <n-button icon-placement="left" secondary strong @click="queryList">
               <template #icon>
-                <n-icon :component="ReloadIcon" >
+                <n-icon :component="ReloadIcon">
                   <!--                <AddSharp-icon />-->
                 </n-icon>
               </template>
               {{ t('COMMON.RESET') }}
             </n-button>
+
           </div>
         </div>
+
+        <div class="flex w-full items-center justify-between space-x-3 sm:justify-end ">
+          <n-button icon-placement="left" secondary strong @click="createNewMenu">
+            <template #icon>
+              <n-icon :component="AddSharp">
+                <!--                <AddSharp-icon />-->
+              </n-icon>
+            </template>
+            {{ t('COMMON.Create') }}
+          </n-button>
+        </div>
+
       </div>
     </template>
     <!--如果是后端分页,这里一定要加上remote!-->
