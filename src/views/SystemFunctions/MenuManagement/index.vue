@@ -2,7 +2,7 @@
 // import type {Lang} from '@dolphin-admin/utils'
 import {Filter as FilterIcon, Reload as ReloadIcon, AddSharp} from '@vicons/ionicons5'
 import type {DataTableColumns, DropdownOption} from 'naive-ui'
-import {NIcon, useMessage} from 'naive-ui'
+import {NIcon, useMessage, useDialog} from 'naive-ui'
 
 import {BasePageModel} from '@/constants'
 // const {t} = useI18n<{ message: MessageSchema }, Lang>({})
@@ -226,6 +226,8 @@ export default defineComponent({
 
     window.$message = useMessage()
 
+    const dialog = useDialog()
+
     const colsReactive: DataTableColumns = [
       {
         title: 'No.',
@@ -241,23 +243,32 @@ export default defineComponent({
       }
     ]
 
-    const columns: ({ width: number; title: string; key: string } | { title: () => string; key: string } | {
+    const columns: ({ width: number; title: string; key: string } | { width: number; title: () => any; key: string } | {
       width: number;
-      title: () => string;
+      title: () => any;
+      key: string;
+      ellipsis: { tooltip: boolean }
+    } | {
+      title: () => any;
+      key: string
+    } | {
+      width: number;
+      title: () => any;
       align: string;
-      render: (row) => VNode<RendererNode, RendererElement, { [p: string]: any }>;
+      render: (row) => any;
       key: string;
       titleAlign: string
     } | {
       width: number;
       fixed: string;
-      title: () => string;
+      title: () => any;
       align: string;
-      render(row): VNode<RendererNode, RendererElement, { [p: string]: any }>;
+      render(row, indexs): any;
       key: string
     })[] = [
-      {key: 'menuId', title: 'ID', width: 100},
-      {key: 'keyName', title: () => t('TEMP.MenuManagement.keyName')},
+      {key: 'menuId', title: 'ID', width: 100,ellipsis: true},
+      {key: 'keyName', title: () => t('TEMP.MenuManagement.keyName'),width: 200},
+      {key: 'remark', title: () => t('TEMP.MenuManagement.remark'),ellipsis: {tooltip: true},width: 250},
       {key: 'title', title: () => t('TEMP.MenuManagement.title')},
       {key: 'label', title: () => t('TEMP.MenuManagement.label')},
       {key: 'path', title: () => t('TEMP.MenuManagement.path')},
@@ -439,13 +450,17 @@ export default defineComponent({
       menuFormData,
       isMenuEdit,
       AddSharp,
+      dialog,
       pagination: paginationReactive,
+      rowKey (rowData) {
+        return rowData.menuId
+      },
       onLoad(row: Record<string, unknown>) {
         return new Promise<void>((resolve) => {
           MenuAPI.menuByParentId(row.menuId).then(result => {
             row.children = result.data
+            resolve()
           })
-          resolve()
         })
       },
       showDropdown: showDropdownRef,
@@ -457,11 +472,67 @@ export default defineComponent({
           isMenuEdit.value = true
           menuFormModalRef.value.handleShowModal()
           menuFormData.value = menuRightClickData.value
+        }else if(item === 'delete'){
+          const menuDeleteName =  `确定删除该菜单/路由"${menuRightClickData.value.keyName}"`
+          dialog.warning({
+            title: '警告',
+            content: menuDeleteName,
+            positiveText: '确定',
+            negativeText: '取消',
+            onPositiveClick: async () => {
+              const {code, message} = await MenuAPI.delete(menuRightClickData.value.menuId)
+              if(code == '200'){
+                queryList()
+                window.$message.success(message)
+              }else{
+                window.$message.error(message)
+              }
+
+            },
+            onNegativeClick: () => {
+              window.$message.warning('取消操作')
+            }
+          })
+        }else if(item === 'addSiblings'){
+            isMenuEdit.value = false
+            menuFormData.value = {}
+            // init
+            menuFormData.value.visible = true
+            menuFormData.value.status = true
+            menuFormData.value.disableAuth = true
+            menuFormData.value.dismissTab = true
+            menuFormData.value.isLeaf = true
+            menuFormData.value.menuParentId = menuRightClickData.value.menuParentId
+            menuFormData.value.routerParentId = 1
+
+            menuFormModalRef.value.handleShowModal()
+        }else if(item === 'addChildren'){
+          isMenuEdit.value = false
+          menuFormData.value = {}
+          // init
+          menuFormData.value.visible = true
+          menuFormData.value.status = true
+          menuFormData.value.disableAuth = true
+          menuFormData.value.dismissTab = true
+          menuFormData.value.isLeaf = true
+          menuFormData.value.menuParentId = menuRightClickData.value.menuId
+          menuFormData.value.routerParentId = 1
+
+          menuFormModalRef.value.handleShowModal()
         }
       },
       createNewMenu(){
         isMenuEdit.value = false
         menuFormData.value = {}
+        // init
+        menuFormData.value.visible = true
+        menuFormData.value.status = true
+        menuFormData.value.disableAuth = true
+        menuFormData.value.dismissTab = true
+        menuFormData.value.isLeaf = true
+        menuFormData.value.menuParentId = 0
+        menuFormData.value.routerParentId = 1
+
         menuFormModalRef.value.handleShowModal()
         // menuFormData.value = menuRightClickData.value
       },
@@ -533,8 +604,8 @@ export default defineComponent({
     </template>
     <!--如果是后端分页,这里一定要加上remote!-->
     <n-data-table
-      :key="(row) => row.key"
-      remote
+      :row-key="rowKey"
+      :remote = "true"
       :columns="columns"
       :data="data"
       :cascade="false"

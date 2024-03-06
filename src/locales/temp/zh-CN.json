@@ -161,6 +161,7 @@
   "MenuManagement": {
     "keyName": "菜单/路由keyName",
     "title": "路由title",
+    "remark": "备注",
     "label":  "菜单label",
     "path": "路由路径",
     "icon":  "图标",

@@ -55,9 +55,24 @@ const handleSubmit = async () => {
   }
   submitLoadingDispatcher.loading()
 
+  formData.value = {
+    ...formData.value,
+    visible: formData.value.visible?'0':'1',
+    status: formData.value.status?'0':'1',
+    disableAuth: formData.value.disableAuth?'0':'1',
+    dismissTab: formData.value.dismissTab?'0':'1',
+    isLeaf: formData.value.isLeaf?'0':'1'
+  }
   if (props.isEdit) {
     try {
-
+      const { message, code } = await MenuAPI.update(formData.value.menuId, formData.value)
+      if(code == 200){
+        NMessage.success(message!)
+        showModal.value = false
+        emit('save')
+      }else {
+        NMessage.error(message!)
+      }
     } catch (err: any) {
       if (err.message) {
         NMessage.error(err.message)
@@ -65,8 +80,14 @@ const handleSubmit = async () => {
     }
   } else {
     try {
-
-
+      const { message, code } = await MenuAPI.create(formData.value)
+      if(code == 200){
+        NMessage.success(message!)
+        showModal.value = false
+        emit('save')
+      }else {
+        NMessage.error(message!)
+      }
     } catch (err: any) {
       if (err.message) {
         NMessage.error(err.message)
@@ -238,6 +259,23 @@ defineExpose({
 
       </nGrid>
 
+
+      <nGrid :cols="24" >
+        <NFormItemGi :span="24"
+                     path="remark"
+                     :label="t('TEMP.MenuManagement.remark')"
+        >
+          <NInput
+            v-model:value="formData.remark"
+            :placeholder="t('TEMP.MenuManagement.remark')"
+            maxlength="120"
+            show-count
+            clearable
+          />
+        </NFormItemGi>
+
+      </nGrid>
+
       <nGrid :cols="24" :x-gap="12">
         <NFormItemGi :span="12"
                      path="visible"
@@ -279,7 +317,7 @@ defineExpose({
     <NForm
       v-else
       ref="formRef"
-      :model="createFormData"
+      :model="formData"
       :rules="menuRules"
       label-width="auto"
       require-mark-placement="right-hanging"
@@ -371,6 +409,22 @@ defineExpose({
           <NInput
             v-model:value="formData.component"
             :placeholder="t('TEMP.MenuManagement.component')"
+            maxlength="120"
+            show-count
+            clearable
+          />
+        </NFormItemGi>
+
+      </nGrid>
+
+      <nGrid :cols="24" >
+        <NFormItemGi :span="24"
+                     path="remark"
+                     :label="t('TEMP.MenuManagement.remark')"
+        >
+          <NInput
+            v-model:value="formData.remark"
+            :placeholder="t('TEMP.MenuManagement.remark')"
             maxlength="120"
             show-count
             clearable

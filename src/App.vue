@@ -14,26 +14,28 @@ const themeStore = useThemeStore()
     abstract
     inline-theme-disabled
   >
-    <NLoadingBarProvider>
-      <NNotificationProvider>
-        <NMessageProvider>
-          <RouterView v-slot="{ Component }">
-            <template v-if="Component">
-              <Transition
-                name="router"
-                mode="out-in"
-              >
-                <component
-                  :is="Component"
-                  class="text-base"
-                />
-              </Transition>
-            </template>
-          </RouterView>
-        </NMessageProvider>
-      </NNotificationProvider>
-    </NLoadingBarProvider>
-    <NGlobalStyle />
+    <NDialogProvider>
+      <NLoadingBarProvider>
+        <NNotificationProvider>
+          <NMessageProvider>
+            <RouterView v-slot="{ Component }">
+              <template v-if="Component">
+                <Transition
+                  name="router"
+                  mode="out-in"
+                >
+                  <component
+                    :is="Component"
+                    class="text-base"
+                  />
+                </Transition>
+              </template>
+            </RouterView>
+          </NMessageProvider>
+        </NNotificationProvider>
+      </NLoadingBarProvider>
+    </NDialogProvider>
+    <NGlobalStyle/>
   </NConfigProvider>
 </template>
 

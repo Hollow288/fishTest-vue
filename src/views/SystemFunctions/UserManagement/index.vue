@@ -32,7 +32,8 @@ const idColumn: DataTableBaseColumn<User> = {
   width: 50,
   titleAlign: 'center',
   align: 'center',
-  sorter: true
+  sorter: true,
+  ellipsis: true
 }
 
 const createdAtColumn: {
