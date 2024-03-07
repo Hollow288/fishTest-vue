@@ -193,6 +193,7 @@ const handleCancel = () => {
  */
 const handleShowModal = () => {
   showModal.value = true
+  emit('save')
 }
 
 watch(

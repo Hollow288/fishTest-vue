@@ -28,6 +28,7 @@ declare global {
   const NaiveUtils: typeof import('../src/utils/naive')['NaiveUtils']
   const QRCodeUtils: typeof import('../src/utils/qrcode')['QRCodeUtils']
   const RenderUtils: typeof import('../src/utils/render')['RenderUtils']
+  const RoleAPI: typeof import('../src/api/role')['RoleAPI']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
   const SiteUtils: typeof import('../src/utils/site')['SiteUtils']
@@ -168,6 +169,7 @@ declare module 'vue' {
     readonly NaiveUtils: UnwrapRef<typeof import('../src/utils/naive')['NaiveUtils']>
     readonly QRCodeUtils: UnwrapRef<typeof import('../src/utils/qrcode')['QRCodeUtils']>
     readonly RenderUtils: UnwrapRef<typeof import('../src/utils/render')['RenderUtils']>
+    readonly RoleAPI: UnwrapRef<typeof import('../src/api/role')['RoleAPI']>
     readonly RouterLink: UnwrapRef<typeof import('vue-router')['RouterLink']>
     readonly RouterView: UnwrapRef<typeof import('vue-router')['RouterView']>
     readonly SiteUtils: UnwrapRef<typeof import('../src/utils/site')['SiteUtils']>
@@ -298,6 +300,7 @@ declare module '@vue/runtime-core' {
     readonly NaiveUtils: UnwrapRef<typeof import('../src/utils/naive')['NaiveUtils']>
     readonly QRCodeUtils: UnwrapRef<typeof import('../src/utils/qrcode')['QRCodeUtils']>
     readonly RenderUtils: UnwrapRef<typeof import('../src/utils/render')['RenderUtils']>
+    readonly RoleAPI: UnwrapRef<typeof import('../src/api/role')['RoleAPI']>
     readonly RouterLink: UnwrapRef<typeof import('vue-router')['RouterLink']>
     readonly RouterView: UnwrapRef<typeof import('vue-router')['RouterView']>
     readonly SiteUtils: UnwrapRef<typeof import('../src/utils/site')['SiteUtils']>

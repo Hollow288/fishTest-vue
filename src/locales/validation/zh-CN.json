@@ -1,3 +1,6 @@
 {
-  "FONT": "请选择字体"
+  "FONT": "请选择字体",
+  "ChooseOneAtLeast": "请选择至少一条数据",
+  "ChooseOneDetail": "请选择一条数据",
+  "OnlyAllowOneDetail": "只能选择一条数据"
 }

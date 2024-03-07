@@ -101,6 +101,7 @@ const handleSubmit = async () => {
 
 const handleCancel = () => {
   showModal.value = false
+  emit('save')
 }
 
 /**
@@ -110,6 +111,7 @@ const handleCancel = () => {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const handleShowModal = () => {
   showModal.value = true
+  emit('save')
 }
 
 watch(

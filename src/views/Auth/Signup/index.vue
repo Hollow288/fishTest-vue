@@ -155,7 +155,7 @@ const signup = async () => {
       :loading="submitLoading"
       @click="() => signup()"
     >
-      {{ t('TEMP.Menu.Signup') }}
+      {{ t('TEMP.Login.Signup') }}
     </NButton>
 
     <div class="flex items-center space-x-1 text-xs">
@@ -166,7 +166,7 @@ const signup = async () => {
         @click="() => router.push('/login')"
       >
         <span class="text-xs font-semibold underline-offset-4 hover:underline">
-          {{ t('TEMP.Menu.Login') }}
+          {{ t('TEMP.Login.Login') }}
         </span>
       </NButton>
     </div>

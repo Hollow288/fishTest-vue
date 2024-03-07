@@ -1,6 +1,7 @@
 import ChartIcon from '~icons/ic/baseline-bar-chart'
 import CopyIcon from '~icons/ic/baseline-content-copy'
 import UnauthorizedIcon from '~icons/ic/baseline-do-not-disturb'
+import {PricetagOutline as RoleManagementIcon} from '@vicons/ionicons5'
 import DigitalAnimationIcon from '~icons/ic/baseline-hourglass-empty'
 import QRCodeIcon from '~icons/ic/baseline-qrcode'
 import TimelineIcon from '~icons/ic/baseline-timeline'
@@ -60,6 +61,16 @@ export const routes = [
         meta: {
           title: () => t('MENU.MenuManagement'),
           icon: UserManagementIcon
+        }
+      },
+      // 菜单管理
+      {
+        path: `${SYSTEM_FUNCTIONS_PREFIX}/role-management`,
+        name: 'role-management',
+        component: () => import('@/views/SystemFunctions/RoleManagement'),
+        meta: {
+          title: () => t('MENU.RoleManagement'),
+          icon: RoleManagementIcon
         }
       },
       // 系统工具

@@ -165,7 +165,7 @@ onMounted(() => {
     class="absolute inset-0 m-auto flex h-fit w-[340px] max-w-[85%] flex-col space-y-4 rounded-lg bg-default-light px-4 py-8 shadow-md transition-colors dark:bg-default-dark sm:w-[260px] md:w-[340px]"
   >
     <div class="text-center text-lg font-semibold">
-      {{ t('TEMP.Menu.Login') }}
+      {{ t('TEMP.Login.Login') }}
     </div>
 
     <NFormItem
@@ -205,14 +205,14 @@ onMounted(() => {
         class="!text-xs"
         :disabled="submitLoading"
       >
-        {{ t('COMMON.RememberPassword') }}
+        {{ t('TEMP.Login.RememberPassword') }}
       </NCheckbox>
       <div
-        v-if="false"
+
         class="cursor-pointer hover:text-blue-600"
         @click="forgetPassword"
       >
-        {{ t('COMMON.ForgetPassword') }}
+        {{ t('TEMP.Login.ForgetPassword') }}
       </div>
     </div>
 
@@ -224,7 +224,7 @@ onMounted(() => {
         :loading="submitType === 'BASIC' && submitLoading"
         @click="loginAsBasic"
       >
-        {{ t('TEMP.Menu.Login') }}
+        {{ t('TEMP.Login.Login') }}
       </NButton>
       <NButton
         class="!w-[calc(50%-4px)]"
@@ -246,7 +246,7 @@ onMounted(() => {
         @click="() => router.push('/signup')"
       >
         <span class="text-xs font-semibold underline-offset-4 hover:underline">
-          {{ t('TEMP.Menu.Signup') }}
+          {{ t('TEMP.Login.Signup') }}
         </span>
       </NButton>
     </div>

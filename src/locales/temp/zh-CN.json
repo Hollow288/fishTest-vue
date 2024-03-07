@@ -24,7 +24,12 @@
     "LoginWithGitHub": "GitHub 登录",
     "LoginWithGoogle": "Google 登录",
     "NeedAccount": "需要账号？",
-    "ThirdPartyLogin": "第三方登录"
+    "ThirdPartyLogin": "第三方登录",
+    "Login": "登录",
+    "Signup": "注册",
+    "RememberPassword": "记住密码",
+    "ForgetPassword": "忘记密码?"
+
   },
   "Logout": {
     "LoginAgain": "用户身份状态已失效，请重新登录",
@@ -145,7 +150,9 @@
     "PhoneNumberFormat": "请输入正确格式的手机号",
     "QRCodeContent": "请输入二维码内容",
     "Username": "请输入用户名",
-    "keyName": "请输入菜单/路由keyName"
+    "keyName": "请输入菜单/路由keyName",
+    "roleKey": "请输入角色编码",
+    "roleName": "请输入角色名称"
   },
   "WebSocket": {
     "ContentIsEmpty": "发送内容不能为空",
@@ -173,5 +180,18 @@
     "operation":  "位置",
     "EditMenu": "修改菜单",
     "CreateMenu": "新建菜单"
+  },
+  "RoleManagement": {
+    "roleKey": "角色编码",
+    "roleName": "角色名称",
+    "remark": "备注",
+    "status": "是否启用",
+    "createTime": "创建时间",
+    "updateTime": "更新时间",
+    "ChangePeople": "修改人员",
+    "ChangeMenu": "修改菜单",
+    "RoleKeywordSearch": "角色名称",
+    "EditRole": "修改角色",
+    "CreateRole": "添加角色"
   }
 }
