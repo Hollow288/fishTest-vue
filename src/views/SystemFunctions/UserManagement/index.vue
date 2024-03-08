@@ -453,12 +453,12 @@ const columns = ref<DataTableBaseColumn<User>[]>([
     key: 'roles',
     width: 200,
     render: (row) => {
-      const tags = (row?.roles ?? []).map((role) =>
+      const tags = (row?.roles ?? []).map((role,index) =>
         h(
           NTag,
           {
             class: '!mr-2',
-            type: 'primary',
+            type: ['default', 'warning', 'error', 'success', 'info'][index % 5],
             bordered: false
           },
           {

@@ -4,7 +4,7 @@ import type {
   ChangePasswordModel,
   CreateUserModel,
   PageResponse,
-ResponseResult,  User
+ResponseResult,  User, UserRole
 } from '@/types'
 
 export class UserAPI {
@@ -82,5 +82,15 @@ export class UserAPI {
     return httpRequest.post<ResponseResult>(`${this.USER_API_PREFIX}/${userId}/change-password`, {
       ...data
     })
+  }
+
+
+  static allUserRole() {
+    return httpRequest.get<ResponseResult<UserRole>>(`${this.USER_API_PREFIX}/all-user-role`)
+  }
+
+
+  static allUserByRole(roleId: string) {
+    return httpRequest.get<ResponseResult>(`${this.USER_API_PREFIX}/${roleId}/all-user-by-role`)
   }
 }

@@ -68,6 +68,7 @@ declare module 'vue' {
     NTimeline: typeof import('naive-ui')['NTimeline']
     NTimelineItem: typeof import('naive-ui')['NTimelineItem']
     NTooltip: typeof import('naive-ui')['NTooltip']
+    NTransfer: typeof import('naive-ui')['NTransfer']
     NUpload: typeof import('naive-ui')['NUpload']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

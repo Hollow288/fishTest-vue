@@ -152,7 +152,8 @@
     "Username": "请输入用户名",
     "keyName": "请输入菜单/路由keyName",
     "roleKey": "请输入角色编码",
-    "roleName": "请输入角色名称"
+    "roleName": "请输入角色名称",
+    "nickName": "请输入用户名"
   },
   "WebSocket": {
     "ContentIsEmpty": "发送内容不能为空",
@@ -192,6 +193,7 @@
     "ChangeMenu": "修改菜单",
     "RoleKeywordSearch": "角色名称",
     "EditRole": "修改角色",
-    "CreateRole": "添加角色"
+    "CreateRole": "添加角色",
+    "EditUserRole": "修改角色人员"
   }
 }

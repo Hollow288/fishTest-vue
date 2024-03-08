@@ -31,14 +31,14 @@ const rules: FormRules = {
       renderMessage: () => t('TEMP.Validation.Name')
     }
   ],
-  // firstName: [
-  //   {
-  //     required: true,
-  //     trigger: ['blur', 'input'],
-  //     message: () => t('TEMP.Validation.FirstName'),
-  //     renderMessage: () => t('TEMP.Validation.FirstName')
-  //   }
-  // ],
+  nickName: [
+    {
+      required: true,
+      trigger: ['blur', 'input'],
+      message: () => t('TEMP.Validation.nickName'),
+      renderMessage: () => t('TEMP.Validation.nickName')
+    }
+  ],
   // lastName: [
   //   {
   //     required: true,

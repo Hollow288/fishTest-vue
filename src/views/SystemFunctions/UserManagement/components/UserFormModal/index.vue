@@ -42,14 +42,14 @@ const editRules: FormRules = {
       renderMessage: () => t('TEMP.Validation.Name')
     }
   ],
-  // firstName: [
-  //   {
-  //     required: true,
-  //     trigger: ['blur', 'input'],
-  //     message: () => t('TEMP.Validation.FirstName'),
-  //     renderMessage: () => t('TEMP.Validation.FirstName')
-  //   }
-  // ],
+  nickName: [
+    {
+      required: true,
+      trigger: ['blur', 'input'],
+      message: () => t('TEMP.Validation.nickName'),
+      renderMessage: () => t('TEMP.Validation.nickName')
+    }
+  ],
   // lastName: [
   //   {
   //     required: true,
@@ -304,7 +304,7 @@ defineExpose({
       >
         <NInput
           v-model:value="formData.nickName"
-          :placeholder="t('TEMP.Validation.NickName')"
+          :placeholder="t('TEMP.Validation.nickName')"
           maxlength="20"
           show-count
           clearable

@@ -30,6 +30,14 @@ export interface User {
   authTypes?: string[]
 }
 
+
+export interface UserRole {
+  userId?: string
+  userName?: string
+  nickName?: string
+  avatarUrl?: string
+}
+
 /**
  * 性别
  */

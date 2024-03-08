@@ -11,16 +11,18 @@ import CheckIcon from '~icons/ic/baseline-check'
 import ResetIcon from '~icons/ic/round-refresh'
 import SearchIcon from '~icons/line-md/search'
 
-import {RoleFormModal} from './components'
+import {RoleFormModal,UserRoleModal} from './components'
 import {AddSharp,TrashBinOutline} from "@vicons/ionicons5";
 
 const dataRef = ref<Menu[]>([])
 const roleFormData = ref({})
+const userRoleData = ref({})
 const {t} = i18n.global
 const loadingRef = ref(true)
 const isRoleEdit = ref(true)
 
 const roleFormModalRef = ref()
+const userRoleModalRef = ref()
 
 
 const paginationReactive = reactive({
@@ -99,7 +101,7 @@ const handleReset = () => {
 
 
 export default defineComponent({
-  components: {NIcon, RoleFormModal,SearchIcon},
+  components: {NIcon, RoleFormModal,SearchIcon,UserRoleModal},
   setup() {
 
     window.$message = useMessage()
@@ -160,8 +162,8 @@ export default defineComponent({
                   size: 'small',
                   onClick: () => {
                     // isEdit.value = true
-                    // userFormModalRef.value.handleShowModal()
-                    // userFormData.value = row
+                    userRoleModalRef.value.handleShowModal()
+                    userRoleData.value = row
                   }
                 },
                 {
@@ -187,7 +189,11 @@ export default defineComponent({
       }
     ]
 
-    onMounted(() => queryList())
+    onMounted(() => {
+      console.log("fat的挂载被调用")
+      queryList()
+    }
+)
 
     return {
       columns,
@@ -203,23 +209,22 @@ export default defineComponent({
       handleReset,
       isRoleEdit,
       roleFormData,
+      userRoleData,
       roleFormModalRef,
+      userRoleModalRef,
       t,
       rowKey: (row: Role) => row.roleId,
       pagination: paginationReactive,
       deleteRoles(){
         if(checkedRowKeysRef.value.length === 0){
           window.$message.warning(()=>t('VALIDATION.ChooseOneAtLeast'))
+          return
         }
 
         const willBeDeleteRole = ref([])
         willBeDeleteRole.value = dataRef.value.filter(m => checkedRowKeysRef.value.indexOf(m.roleId) > -1)
         const willDeleteName =  willBeDeleteRole.value.map(n => n.roleName).join(',')
-        //Todo
-        let args = []
-        for (let value of Object.values(checkedRowKeysRef.value)) {
-          args.push(value)
-        }
+        const args = {ids:checkedRowKeysRef.value}
         dialog.warning({
             title: '警告',
             content: `确定删除角色"${willDeleteName}"`,
@@ -336,7 +341,8 @@ export default defineComponent({
             {{ t('COMMON.Edit') }}
           </n-button>
 
-
+          <n-popover trigger="hover">
+            <template #trigger>
           <n-button icon-placement="left" secondary strong @click="deleteRoles">
             <template #icon>
               <n-icon :component="TrashBinOutline">
@@ -345,13 +351,16 @@ export default defineComponent({
             </template>
             {{ t('COMMON.DELETE') }}
           </n-button>
+            </template>
+            <span>干掉它们！😈</span>
+          </n-popover>
 
 
           <NTooltip>
             <template #trigger>
               <NButton
                 circle
-                :size="medium"
+
                 :disabled="loading"
                 @click="handleReset"
               >
@@ -387,6 +396,12 @@ export default defineComponent({
       ref="roleFormModalRef"
       :is-edit="isRoleEdit"
       :role-form-data="roleFormData"
+      @save="queryList"
+    />
+
+    <UserRoleModal
+      ref="userRoleModalRef"
+      :user-role-data="userRoleData"
       @save="queryList"
     />
 

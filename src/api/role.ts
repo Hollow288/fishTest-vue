@@ -26,9 +26,16 @@ export class RoleAPI {
   }
 
 
-  static delete(roleIds: string[]) {
+  static delete(roleIds: object) {
     return httpRequest.patch<ResponseResult>(`${this.ROLE_API_PREFIX}/delete-roles`,{
       ...roleIds
+    })
+  }
+
+
+  static addUsersRole(roleId: string,userIds: object) {
+    return httpRequest.post<ResponseResult>(`${this.ROLE_API_PREFIX}/${roleId}/add-users-role`,{
+      ...userIds
     })
   }
 
