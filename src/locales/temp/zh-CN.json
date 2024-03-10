@@ -194,6 +194,7 @@
     "RoleKeywordSearch": "角色名称",
     "EditRole": "修改角色",
     "CreateRole": "添加角色",
-    "EditUserRole": "修改角色人员"
+    "EditUserRole": "修改角色人员",
+    "EditMenuRole": "修改角色菜单"
   }
 }

@@ -25,6 +25,8 @@ declare global {
   const NInput: typeof import('naive-ui')['NInput']
   const NPopconfirm: typeof import('naive-ui')['NPopconfirm']
   const NTag: typeof import('naive-ui')['NTag']
+  const NTagNTag: typeof import('naive-ui')['NTag']
+  const NTree: typeof import('naive-ui')['NTree']
   const NaiveUtils: typeof import('../src/utils/naive')['NaiveUtils']
   const QRCodeUtils: typeof import('../src/utils/qrcode')['QRCodeUtils']
   const RenderUtils: typeof import('../src/utils/render')['RenderUtils']
@@ -166,6 +168,7 @@ declare module 'vue' {
     readonly NInput: UnwrapRef<typeof import('naive-ui')['NInput']>
     readonly NPopconfirm: UnwrapRef<typeof import('naive-ui')['NPopconfirm']>
     readonly NTag: UnwrapRef<typeof import('naive-ui')['NTag']>
+    readonly NTree: UnwrapRef<typeof import('naive-ui')['NTree']>
     readonly NaiveUtils: UnwrapRef<typeof import('../src/utils/naive')['NaiveUtils']>
     readonly QRCodeUtils: UnwrapRef<typeof import('../src/utils/qrcode')['QRCodeUtils']>
     readonly RenderUtils: UnwrapRef<typeof import('../src/utils/render')['RenderUtils']>
@@ -297,6 +300,7 @@ declare module '@vue/runtime-core' {
     readonly NInput: UnwrapRef<typeof import('naive-ui')['NInput']>
     readonly NPopconfirm: UnwrapRef<typeof import('naive-ui')['NPopconfirm']>
     readonly NTag: UnwrapRef<typeof import('naive-ui')['NTag']>
+    readonly NTree: UnwrapRef<typeof import('naive-ui')['NTree']>
     readonly NaiveUtils: UnwrapRef<typeof import('../src/utils/naive')['NaiveUtils']>
     readonly QRCodeUtils: UnwrapRef<typeof import('../src/utils/qrcode')['QRCodeUtils']>
     readonly RenderUtils: UnwrapRef<typeof import('../src/utils/render')['RenderUtils']>

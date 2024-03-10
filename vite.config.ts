@@ -91,6 +91,7 @@ export default defineConfig(({ mode }) => {
               'NIcon',
               'NPopconfirm',
               'NInput',
+              'NTree',
               'NAvatar',
               'NImage',
               'NEllipsis'

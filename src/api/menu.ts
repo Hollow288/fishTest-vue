@@ -1,6 +1,6 @@
 import type {BasePageModel} from '@/constants'
 import type {BaseResponse,ResponseResult} from '@/types'
-import type {Menu} from '@/types/api/menu'
+import type {Menu,MenuRoleAndChildren} from '@/types/api/menu'
 
 export class MenuAPI {
   private static MENU_API_PREFIX = `${GlobalEnvConfig.BASE_API_PREFIX}/menu`
@@ -46,6 +46,11 @@ export class MenuAPI {
 
   static delete(menuId: string) {
     return httpRequest.patch<ResponseResult>(`${this.MENU_API_PREFIX}/${menuId}/delete-menu`)
+  }
+
+
+  static allMenuAneChildren() {
+    return httpRequest.get<BaseResponse<MenuRoleAndChildren>>(`${this.MENU_API_PREFIX}/all-menu-children`)
   }
 
 }

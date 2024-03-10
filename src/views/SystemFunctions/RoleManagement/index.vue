@@ -1,5 +1,4 @@
 <script lang="ts">
-import type { DataTableRowKey} from 'naive-ui'
 import {NIcon, useDialog, useMessage} from 'naive-ui'
 
 import {BasePageModel} from '@/constants'
@@ -11,18 +10,20 @@ import CheckIcon from '~icons/ic/baseline-check'
 import ResetIcon from '~icons/ic/round-refresh'
 import SearchIcon from '~icons/line-md/search'
 
-import {RoleFormModal,UserRoleModal} from './components'
-import {AddSharp,TrashBinOutline} from "@vicons/ionicons5";
+import {RoleFormModal,UserRoleModal,MenuRoleModal} from './components'
+import {AddSharp,TrashBinOutline} from '@vicons/ionicons5';
 
 const dataRef = ref<Menu[]>([])
 const roleFormData = ref({})
 const userRoleData = ref({})
+const menuRoleData = ref({})
 const {t} = i18n.global
 const loadingRef = ref(true)
 const isRoleEdit = ref(true)
 
 const roleFormModalRef = ref()
 const userRoleModalRef = ref()
+const menuRoleModalRef = ref()
 
 
 const paginationReactive = reactive({
@@ -101,11 +102,10 @@ const handleReset = () => {
 
 
 export default defineComponent({
-  components: {NIcon, RoleFormModal,SearchIcon,UserRoleModal},
+  components: {NIcon, RoleFormModal,SearchIcon,UserRoleModal,MenuRoleModal},
   setup() {
 
     window.$message = useMessage()
-
 
     const checkedRowKeysRef = ref<[]>([])
     const dialog = useDialog()
@@ -176,8 +176,8 @@ export default defineComponent({
                   type: 'default',
                   size: 'small',
                   onClick: () => {
-                    // showResetPasswordDialog.value = true
-                    // currentId.value = row.userId
+                    menuRoleModalRef.value.handleShowModal()
+                    menuRoleData.value = row
                   }
                 },
                 {
@@ -210,8 +210,10 @@ export default defineComponent({
       isRoleEdit,
       roleFormData,
       userRoleData,
+      menuRoleData,
       roleFormModalRef,
       userRoleModalRef,
+      menuRoleModalRef,
       t,
       rowKey: (row: Role) => row.roleId,
       pagination: paginationReactive,
@@ -402,6 +404,12 @@ export default defineComponent({
     <UserRoleModal
       ref="userRoleModalRef"
       :user-role-data="userRoleData"
+      @save="queryList"
+    />
+
+    <MenuRoleModal
+      ref="menuRoleModalRef"
+      :menu-role-data="menuRoleData"
       @save="queryList"
     />
 

@@ -23,3 +23,11 @@ export interface Menu {
     isLeaf?: string
     children?: Menu[]
 }
+
+
+
+export interface MenuRoleAndChildren {
+  value?: string
+  label?: string
+  children?: MenuRoleAndChildren[]
+}
