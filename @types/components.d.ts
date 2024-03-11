@@ -19,6 +19,7 @@ declare module 'vue' {
     DpPieChart: typeof import('./../src/charts/DpPieChart/index.vue')['default']
     DpReportUserTrafficProvider: typeof import('./../src/components/DpReportUserTrafficProvider/index.vue')['default']
     DpTimeline: typeof import('./../src/components/DpTimeline/index.vue')['default']
+    NAutoComplete: typeof import('naive-ui')['NAutoComplete']
     NAvatar: typeof import('naive-ui')['NAvatar']
     NBadge: typeof import('naive-ui')['NBadge']
     NBlockquote: typeof import('naive-ui')['NBlockquote']

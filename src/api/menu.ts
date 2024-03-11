@@ -53,4 +53,15 @@ export class MenuAPI {
     return httpRequest.get<BaseResponse<MenuRoleAndChildren>>(`${this.MENU_API_PREFIX}/all-menu-children`)
   }
 
+  static allMenuIdByRoleId(roleId: string){
+    return httpRequest.get<ResponseResult<[]>>(`${this.MENU_API_PREFIX}/${roleId}/all-menuid-by-roleid`)
+  }
+
+
+  static addMenuIdByRoleId(roleId: string,menuIds: object) {
+    return httpRequest.post<ResponseResult>(`${this.MENU_API_PREFIX}/${roleId}/add-menuid-by-roleid`,{
+      ...menuIds
+    })
+  }
+
 }

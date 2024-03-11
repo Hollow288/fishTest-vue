@@ -187,6 +187,23 @@ const handleCancel = () => {
   formData.value = tempUserData.value
 }
 
+
+const options = computed(() => ['@gmail.com', '@163.com', '@qq.com'].map((suffix) => {
+    if(typeof formData.value.email === 'undefined' || formData.value.email == null || formData.value.email === ""){
+      return {
+        label:  suffix,
+        value:  suffix
+      }
+    }else{
+      const prefix = formData.value.email.split('@')[0]
+      return {
+        label: prefix + suffix,
+        value: prefix + suffix
+      }
+    }
+
+  }))
+
 /**
  * @todo 重构
  * 使用参数传递的方式，不要用 defineExpose 暴露方法给父组件
@@ -328,13 +345,23 @@ defineExpose({
         path="email"
         :label="t('TEMP.User.Email')"
       >
-        <NInput
+<!--        <NInput-->
+<!--          v-model:value="formData.email"-->
+<!--          :placeholder="t('TEMP.Validation.Email')"-->
+<!--          maxlength="30"-->
+<!--          show-count-->
+<!--          clearable-->
+<!--        />-->
+        <n-auto-complete
           v-model:value="formData.email"
-          :placeholder="t('TEMP.Validation.Email')"
-          maxlength="30"
-          show-count
+          :input-props="{
+            autocomplete: 'disabled'
+          }"
+          :options="options"
+          placeholder="邮箱"
           clearable
         />
+
       </NFormItem>
 <!--&#45;&#45;{{formData.gender}}-->
       <NFormItem

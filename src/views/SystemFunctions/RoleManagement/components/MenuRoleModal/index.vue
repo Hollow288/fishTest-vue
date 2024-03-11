@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type {FormInst, FormValidationError , TransferRenderSourceList } from 'naive-ui'
+import type {CascaderOption, FormInst, FormValidationError, TransferRenderSourceList, TreeOption} from 'naive-ui'
 
-import type { MessageSchema, User, Role, MenuRoleAndChildren } from '@/types'
-import CreateIcon from '~icons/ic/sharp-add'
+import type { MenuRoleAndChildren,MessageSchema, Role } from '@/types'
 import EditIcon from '~icons/ic/sharp-edit'
 
 export interface Props {
@@ -21,14 +20,14 @@ const NMessage = useMessage()
 const [submitLoading, submitLoadingDispatcher] = useLoading()
 
 const formRef = ref<FormInst | null>(null)
-const formData = ref<User>({})
-let options = ref<MenuRoleAndChildren[]>([])
+const options = ref<MenuRoleAndChildren[]>([])
 
 const showModal = ref(false)
 
 
+
 // const treeData = createData()
-const valueRef = ref<Array<string | number>>([])
+const valueRef = ref([])
 const renderSourceList: TransferRenderSourceList = function ({
                                                                onCheck,
                                                                pattern
@@ -38,17 +37,31 @@ const renderSourceList: TransferRenderSourceList = function ({
     keyField: 'value',
     checkable: true,
     selectable: false,
+    cascade: true,
     blockLine: true,
     checkOnClick: true,
-    data: options,
+    data: options.value,
+    defaultExpandAll: true,
     pattern,
     checkedKeys: valueRef.value,
-    onUpdateCheckedKeys: (checkedKeys: Array<string | number>) => {
+    onUpdateCheckedKeys: (checkedKeys: Array<string | number>,option: Array<TreeOption | null>,
+    meta: { node: TreeOption | null, action: 'check' | 'uncheck' }) => {
       onCheck(checkedKeys)
+      console.log(checkedKeys)
+      // Todo 这里不知道怎么拿到半选的父节点
+      // console.log("keys = " + checkedKeys)
+      // console.log("option = " + option)
+      // console.log("meta = " + meta)
+      // console.log("=================================")
+    },
+    onUpdateIndeterminateKeys: (keys: Array<string | number>, option: Array<TreeOption | null>)=>{
+      // Todo 这里可以单独获得半选中的父节点,但是不知道后续怎么操作
+      // console.log("keys = " + keys)
+      // console.log("option = " + option)
+      // console.log("=================================")
     }
   })
 }
-
 
 
 const handleSubmit = async () => {
@@ -66,49 +79,38 @@ const handleSubmit = async () => {
     return true
   }
   submitLoadingDispatcher.loading()
-
-  formData.value = {
-    ...formData.value,
-    status: formData.value.status?'0':'1',
-  }
-  if (props.isEdit) {
-    try {
-      const temFormData = ref({})
-      temFormData.value = formData.value
-      temFormData.value.roleKey = `ROLE_${ formData.value.roleKey }`
-      const { message, code } = await RoleAPI.update(formData.value.roleId, temFormData.value)
-      if(code == 200){
-        NMessage.success(message!)
-        showModal.value = false
-      }else {
-        NMessage.error(message!)
-      }
-    } catch (err: any) {
-      if (err.message) {
-        NMessage.error(err.message)
-      }
+  try {
+    const args = {menuIds:valueRef.value}
+    const {code,message} = await MenuAPI.addMenuIdByRoleId(props.menuRoleData.roleId,args)
+    if(code == 200){
+      NMessage.success(message)
+      showModal.value = false
+    }else{
+      NMessage.error(message)
     }
-  } else {
-    try {
-      const temFormData = ref({})
-      temFormData.value = formData.value
-      temFormData.value.roleKey = `ROLE_${ formData.value.roleKey }`
-      const { message, code } = await RoleAPI.create(temFormData.value)
-      if(code == 200){
-        NMessage.success(message!)
-        showModal.value = false
-      }else {
-        NMessage.error(message!)
-      }
-    } catch (err: any) {
-      if (err.message) {
-        NMessage.error(err.message)
-      }
+  } catch (err: any) {
+    if (err.message) {
+      NMessage.error(err.message)
     }
   }
   emit('save')
   submitLoadingDispatcher.loaded()
   return true
+}
+
+
+function flattenTree (list: undefined | MenuRoleAndChildren[]): MenuRoleAndChildren[] {
+  const result: MenuRoleAndChildren[] = []
+  function flatten (_list: MenuRoleAndChildren[] = []) {
+    _list.forEach((item) => {
+      result.push(item)
+      if(item.children != null){
+        flatten(item.children)
+      }
+    })
+  }
+  flatten(list)
+  return result
 }
 
 const handleCancel = () => {
@@ -120,7 +122,7 @@ const handleCancel = () => {
  * @todo 重构
  * 使用参数传递的方式，不要用 defineExpose 暴露方法给父组件
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const handleShowModal = () => {
   showModal.value = true
   emit('save')
@@ -131,18 +133,26 @@ watch(
   async (newValue) => {
     if (newValue && typeof newValue.roleId !== 'undefined') {
       const {code:code1, data:data1} = await MenuAPI.allMenuAneChildren()
-      options = data1
-      formData.value = {
-        ...newValue,
-        status: newValue.status === '0' ? true : newValue.status === '1' ? false : newValue.status,
-        roleKey: newValue.roleKey ? newValue.roleKey.replace(/^ROLE_/, '') : ''
+      const {code:code2, data:data2} = await MenuAPI.allMenuIdByRoleId(newValue.roleId)
+      if(code1 == 200 && code2 == 200){
+        options.value = data1.map(item=>{
+          const newItem = { ...item }
+          if(Array.isArray(newItem.children) && newItem.children.length === 0){
+            newItem.children = null
+          }
+          return newItem
+        })
+        valueRef.value = data2
+      }else {
+        NMessage.error('数据读取错误')
       }
 
     } else {
-      formData.value = {}
+      // formData.value = {}
     }
   },
-  { immediate: true }
+  { immediate: true, deep: true  }
+  // { immediate: true, deep: true  }
 )
 
 defineExpose({
@@ -165,20 +175,20 @@ defineExpose({
     <template #icon>
       <NIcon
         size="24"
-        :component="isEdit ? EditIcon : CreateIcon"
+        :component="EditIcon"
       />
     </template>
 
     <NForm
       ref="formRef"
-      :model="formData"
       label-width="auto"
       require-mark-placement="right-hanging"
       class="flex flex-col"
     >
 
       <nGrid :cols="24" >
-        <NFormItemGi :span="24"
+        <NFormItemGi
+:span="24"
                      path="roleKey"
                      :label="t('TEMP.RoleManagement.roleKey')"
                      :show-label ="false"
@@ -187,16 +197,12 @@ defineExpose({
           <n-transfer
             ref="transfer"
             style="height:500px"
-            v-model:value="value"
-            :options="options"
+            v-model:value="valueRef"
+            :options="flattenTree(options)"
             :render-source-list="renderSourceList"
             source-filterable
+            target-filterable
           />
-
-          <NTree>
-
-          </NTree>
-
 
         </NFormItemGi>
       </nGrid>

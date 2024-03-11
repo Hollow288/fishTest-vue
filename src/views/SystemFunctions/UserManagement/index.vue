@@ -29,7 +29,7 @@ const { t, locale } = useI18n<{ message: MessageSchema }, Lang>({})
 const idColumn: DataTableBaseColumn<User> = {
   title: 'ID',
   key: 'userId',
-  width: 50,
+  width: 40,
   titleAlign: 'center',
   align: 'center',
   sorter: true,
@@ -310,7 +310,7 @@ const columns = ref<DataTableBaseColumn<User>[]>([
   {
     title: () => t('TEMP.User.Username'),
     key: 'userName',
-    width: 100,
+    width: 70,
     ellipsis: {
       tooltip: true
     },
