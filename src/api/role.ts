@@ -1,6 +1,6 @@
 import type {BasePageModel} from '@/constants'
 import type {ResponseResult} from '@/types'
-import {Menu, Role} from "@/types";
+import {Role} from "@/types";
 
 export class RoleAPI {
   private static ROLE_API_PREFIX = `${GlobalEnvConfig.BASE_API_PREFIX}/role`

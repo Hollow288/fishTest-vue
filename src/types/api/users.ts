@@ -32,9 +32,8 @@ export interface User {
 
 
 export interface UserRole {
-  userId?: string
-  userName?: string
-  nickName?: string
+  value?: string
+  label?: string
   avatarUrl?: string
 }
 

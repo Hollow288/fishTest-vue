@@ -21,7 +21,7 @@ import SystemToolsIcon from '~icons/mdi/tools'
 import CodeTemplatesIcon from '~icons/solar/code-bold'
 import WebSocketIcon from '~icons/tabler/brand-socket-io'
 import NotFoundIcon from '~icons/tabler/error-404'
-import {PricetagOutline as RoleManagementIcon} from '@vicons/ionicons5'
+import {PricetagOutline as RoleManagementIcon, ChatbubbleEllipsesOutline as NoticeManagementIcon} from '@vicons/ionicons5'
 
 const { t } = i18n.global
 const { renderIcon: renderMenuIcon, renderMenuLabel } = RenderUtils
@@ -51,6 +51,11 @@ export const menuOptions: MenuOption[] = [
         label: renderMenuLabel(() => t('MENU.RoleManagement')),
         key: 'role-management',
         icon: renderMenuIcon(RoleManagementIcon)
+      },
+      {
+        label: renderMenuLabel(() => t('MENU.NoticeManagement')),
+        key: 'notice-management',
+        icon: renderMenuIcon(NoticeManagementIcon)
       }
     ]
   },

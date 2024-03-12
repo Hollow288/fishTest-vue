@@ -27,7 +27,7 @@ const handleClickNotification = () => {
 }
 
 onMounted(() => {
-  const eventSource = new EventSource(`/base-api/sse/notification?userId=${userStore.user.id}`)
+  const eventSource = new EventSource(`/base-api/sse/notification?userId=${userStore.user.userId}`)
   eventSource.addEventListener('notification', ({ data, type }) => {
     console.log(data, type)
     if (type === 'notification') {

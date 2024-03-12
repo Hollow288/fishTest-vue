@@ -88,7 +88,7 @@
     "eslint": "^8.56.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
-    "naive-ui": "^2.35.0",
+    "naive-ui": "^2.38.0",
     "postcss": "^8.4.32",
     "prettier": "3.1.1",
     "rollup-plugin-visualizer": "^5.11.0",

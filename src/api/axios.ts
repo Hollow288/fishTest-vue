@@ -123,6 +123,7 @@ class Request {
         }else if(res.data.code === 40001) {
           NMessage.error('用户登录信息已过期')
           this.handleUnauthorized()
+          router.replace('/login')
         }else if(res.data.code === 40003) {
           NMessage.error('请求被理解但拒绝执行')
           router.replace('/403')

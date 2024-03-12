@@ -23,5 +23,6 @@
   "UserManagement": "用户管理",
   "WebSocket": "WebSocket",
 
-  "MenuManagement": "菜单管理"
+  "MenuManagement": "菜单管理",
+  "NoticeManagement": "通知公告"
 }

@@ -153,7 +153,9 @@
     "keyName": "请输入菜单/路由keyName",
     "roleKey": "请输入角色编码",
     "roleName": "请输入角色名称",
-    "nickName": "请输入用户名"
+    "nickName": "请输入用户名",
+    "userIds": "请选择受害者",
+    "message": "请填写骚扰通知内容"
   },
   "WebSocket": {
     "ContentIsEmpty": "发送内容不能为空",
@@ -196,5 +198,19 @@
     "CreateRole": "添加角色",
     "EditUserRole": "修改角色人员",
     "EditMenuRole": "修改角色菜单"
+  },
+  "NoticeManagement": {
+    "message": "通知内容",
+    "endProcessedNum": "已读人数",
+    "needProcessedNum": "通知人数",
+    "Perfection": "完成度",
+    "releaseDate": "发布日期",
+    "MessageWordSearch" : "通知内容",
+    "EditNotice": "修改通知",
+    "CreateNotice": "创建通知",
+    "userIds": "被通知人员",
+    "Cancel": "取消",
+    "Save": "保存",
+    "Publish": "发布"
   }
 }

@@ -2,5 +2,6 @@
   "FONT": "请选择字体",
   "ChooseOneAtLeast": "请选择至少一条数据",
   "ChooseOneDetail": "请选择一条数据",
-  "OnlyAllowOneDetail": "只能选择一条数据"
+  "OnlyAllowOneDetail": "只能选择一条数据",
+  "OnlyAllowUnpublished": "已经发布了,假装大家没看到吗"
 }

@@ -1,7 +1,7 @@
 import ChartIcon from '~icons/ic/baseline-bar-chart'
 import CopyIcon from '~icons/ic/baseline-content-copy'
 import UnauthorizedIcon from '~icons/ic/baseline-do-not-disturb'
-import {PricetagOutline as RoleManagementIcon} from '@vicons/ionicons5'
+import {PricetagOutline as RoleManagementIcon, ChatbubbleEllipsesOutline as NoticeManagementIcon} from '@vicons/ionicons5'
 import DigitalAnimationIcon from '~icons/ic/baseline-hourglass-empty'
 import QRCodeIcon from '~icons/ic/baseline-qrcode'
 import TimelineIcon from '~icons/ic/baseline-timeline'
@@ -71,6 +71,15 @@ export const routes = [
         meta: {
           title: () => t('MENU.RoleManagement'),
           icon: RoleManagementIcon
+        }
+      },
+      {
+        path: `${SYSTEM_FUNCTIONS_PREFIX}/notice-management`,
+        name: 'notice-management',
+        component: () => import('@/views/SystemFunctions/NoticeManagement'),
+        meta: {
+          title: () => t('MENU.NoticeManagement'),
+          icon: NoticeManagementIcon
         }
       },
       // 系统工具

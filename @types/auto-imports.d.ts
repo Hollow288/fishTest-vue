@@ -18,16 +18,21 @@ declare global {
   const LangUtils: typeof import('@dolphin-admin/utils')['LangUtils']
   const MenuAPI: typeof import('../src/api/menu')['MenuAPI']
   const NAvatar: typeof import('naive-ui')['NAvatar']
+  const NBadge: typeof import('naive-ui')['NBadge']
   const NButton: typeof import('naive-ui')['NButton']
   const NEllipsis: typeof import('naive-ui')['NEllipsis']
+  const NFloatButton: typeof import('naive-ui')['NFloatButton']
   const NIcon: typeof import('naive-ui')['NIcon']
   const NImage: typeof import('naive-ui')['NImage']
   const NInput: typeof import('naive-ui')['NInput']
   const NPopconfirm: typeof import('naive-ui')['NPopconfirm']
+  const NProgress: typeof import('naive-ui')['NProgress']
   const NTag: typeof import('naive-ui')['NTag']
   const NTagNTag: typeof import('naive-ui')['NTag']
+  const NText: typeof import('naive-ui')['NText']
   const NTree: typeof import('naive-ui')['NTree']
   const NaiveUtils: typeof import('../src/utils/naive')['NaiveUtils']
+  const NoticeAPI: typeof import('../src/api/notice')['NoticeAPI']
   const QRCodeUtils: typeof import('../src/utils/qrcode')['QRCodeUtils']
   const RenderUtils: typeof import('../src/utils/render')['RenderUtils']
   const RoleAPI: typeof import('../src/api/role')['RoleAPI']
@@ -161,15 +166,20 @@ declare module 'vue' {
     readonly LangUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['LangUtils']>
     readonly MenuAPI: UnwrapRef<typeof import('../src/api/menu')['MenuAPI']>
     readonly NAvatar: UnwrapRef<typeof import('naive-ui')['NAvatar']>
+    readonly NBadge: UnwrapRef<typeof import('naive-ui')['NBadge']>
     readonly NButton: UnwrapRef<typeof import('naive-ui')['NButton']>
     readonly NEllipsis: UnwrapRef<typeof import('naive-ui')['NEllipsis']>
+    readonly NFloatButton: UnwrapRef<typeof import('naive-ui')['NFloatButton']>
     readonly NIcon: UnwrapRef<typeof import('naive-ui')['NIcon']>
     readonly NImage: UnwrapRef<typeof import('naive-ui')['NImage']>
     readonly NInput: UnwrapRef<typeof import('naive-ui')['NInput']>
     readonly NPopconfirm: UnwrapRef<typeof import('naive-ui')['NPopconfirm']>
+    readonly NProgress: UnwrapRef<typeof import('naive-ui')['NProgress']>
     readonly NTag: UnwrapRef<typeof import('naive-ui')['NTag']>
+    readonly NText: UnwrapRef<typeof import('naive-ui')['NText']>
     readonly NTree: UnwrapRef<typeof import('naive-ui')['NTree']>
     readonly NaiveUtils: UnwrapRef<typeof import('../src/utils/naive')['NaiveUtils']>
+    readonly NoticeAPI: UnwrapRef<typeof import('../src/api/notice')['NoticeAPI']>
     readonly QRCodeUtils: UnwrapRef<typeof import('../src/utils/qrcode')['QRCodeUtils']>
     readonly RenderUtils: UnwrapRef<typeof import('../src/utils/render')['RenderUtils']>
     readonly RoleAPI: UnwrapRef<typeof import('../src/api/role')['RoleAPI']>
@@ -293,15 +303,20 @@ declare module '@vue/runtime-core' {
     readonly LangUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['LangUtils']>
     readonly MenuAPI: UnwrapRef<typeof import('../src/api/menu')['MenuAPI']>
     readonly NAvatar: UnwrapRef<typeof import('naive-ui')['NAvatar']>
+    readonly NBadge: UnwrapRef<typeof import('naive-ui')['NBadge']>
     readonly NButton: UnwrapRef<typeof import('naive-ui')['NButton']>
     readonly NEllipsis: UnwrapRef<typeof import('naive-ui')['NEllipsis']>
+    readonly NFloatButton: UnwrapRef<typeof import('naive-ui')['NFloatButton']>
     readonly NIcon: UnwrapRef<typeof import('naive-ui')['NIcon']>
     readonly NImage: UnwrapRef<typeof import('naive-ui')['NImage']>
     readonly NInput: UnwrapRef<typeof import('naive-ui')['NInput']>
     readonly NPopconfirm: UnwrapRef<typeof import('naive-ui')['NPopconfirm']>
+    readonly NProgress: UnwrapRef<typeof import('naive-ui')['NProgress']>
     readonly NTag: UnwrapRef<typeof import('naive-ui')['NTag']>
+    readonly NText: UnwrapRef<typeof import('naive-ui')['NText']>
     readonly NTree: UnwrapRef<typeof import('naive-ui')['NTree']>
     readonly NaiveUtils: UnwrapRef<typeof import('../src/utils/naive')['NaiveUtils']>
+    readonly NoticeAPI: UnwrapRef<typeof import('../src/api/notice')['NoticeAPI']>
     readonly QRCodeUtils: UnwrapRef<typeof import('../src/utils/qrcode')['QRCodeUtils']>
     readonly RenderUtils: UnwrapRef<typeof import('../src/utils/render')['RenderUtils']>
     readonly RoleAPI: UnwrapRef<typeof import('../src/api/role')['RoleAPI']>

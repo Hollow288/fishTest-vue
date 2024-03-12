@@ -88,13 +88,17 @@ export default defineConfig(({ mode }) => {
               'createDiscreteApi',
               'NButton',
               'NTag',
+              'NText',
               'NIcon',
+              'NBadge',
+              'NFloatButton',
               'NPopconfirm',
               'NInput',
               'NTree',
               'NAvatar',
               'NImage',
-              'NEllipsis'
+              'NEllipsis',
+              'NProgress'
             ]
           },
           {
