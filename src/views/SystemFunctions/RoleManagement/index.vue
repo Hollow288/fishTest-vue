@@ -25,6 +25,9 @@ const roleFormModalRef = ref()
 const userRoleModalRef = ref()
 const menuRoleModalRef = ref()
 
+const checkedRowKeysRef = ref<[]>([])
+const checkArray = ref([])
+
 
 const paginationReactive = reactive({
   page: 1,
@@ -89,6 +92,7 @@ const queryList = () => {
     paginationReactive.itemCount = total
     loadingRef.value = false
   }))
+
 }
 
 
@@ -107,7 +111,7 @@ export default defineComponent({
 
     window.$message = useMessage()
 
-    const checkedRowKeysRef = ref<[]>([])
+
     const dialog = useDialog()
 
     const columns = [
@@ -197,6 +201,7 @@ export default defineComponent({
 
     return {
       columns,
+      checkArray,
       data: dataRef,
       loading: loadingRef,
       queryList,
@@ -236,6 +241,7 @@ export default defineComponent({
               const {code, message} = await RoleAPI.delete(args)
               if(code == '200'){
                 queryList()
+                checkArray.value = []
                 window.$message.success(message)
               }else{
                 window.$message.error(message)
@@ -380,6 +386,7 @@ export default defineComponent({
     </template>
     <!--如果是后端分页,这里一定要加上remote!-->
     <n-data-table
+      v-model:checked-row-keys="checkArray"
       :remote="true"
       :columns="columns"
       :row-key="rowKey"

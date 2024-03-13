@@ -206,12 +206,13 @@ watch(
       if(code1 == 200 && code2 == 200){
         options.value = data1
         result.value = data2
-
+        loadingRef.value = false
       }else {
+        loadingRef.value = false
         NMessage.error('数据读取错误')
         return
       }
-      loadingRef.value = false
+
     } else {
 
     }

@@ -4,7 +4,7 @@ import {NIcon, useDialog,useMessage} from 'naive-ui'
 
 import {BasePageModel} from '@/constants'
 import i18n from '@/i18n'
-import type {Menu} from '@/types/api/menu'
+import type {Notice} from '@/types/api/notice'
 
 import {NoticeFormModal} from './components'
 import SearchIcon from '~icons/line-md/search'
@@ -18,13 +18,16 @@ import EditIcon from '~icons/ic/sharp-edit'
 const noticeFormModalRef = ref()
 const noticeFormData = ref({})
 const isNoticeEdit = ref(true)
-const dataRef = ref<Menu[]>([])
+const dataRef = ref<Notice[]>([])
+const checkArray = ref([])
 
 const {t} = i18n.global
 
 const showDropdownRef = ref(false)
 
 const loadingRef = ref(true)
+
+const checkedRowKeysRef = ref<[]>([])
 
 
 
@@ -120,7 +123,7 @@ const progressHow = (row):string => {
   components: {NIcon, NoticeFormModal, SearchIcon},
   setup() {
 
-    const checkedRowKeysRef = ref<[]>([])
+
 
     window.$message = useMessage()
 
@@ -197,6 +200,7 @@ const progressHow = (row):string => {
     return {
       columns,
       data: dataRef,
+      checkArray,
       queryList,
       handleReset,
       queryParams,
@@ -243,7 +247,33 @@ const progressHow = (row):string => {
         }
       },
       deleteNotices(){
+        if(checkedRowKeysRef.value.length === 0){
+          window.$message.warning(()=>t('VALIDATION.ChooseOneDetail'))
+          return
+        }
 
+        const args = {ids:checkedRowKeysRef.value}
+        dialog.warning({
+          title: '警告',
+          content: "偷偷删掉,没看到此条通知的可能就看不到了",
+          positiveText: '确定',
+          negativeText: '取消',
+          onPositiveClick: async () => {
+            const {code, message} = await NoticeAPI.delete(args)
+            if(code == '200'){
+              queryList()
+              checkArray.value = []
+              console.log(checkedRowKeysRef.value)
+              window.$message.success(message)
+            }else{
+              window.$message.error(message)
+            }
+
+          },
+          onNegativeClick: () => {
+            window.$message.warning('取消操作')
+          }
+        })
       }
     }
   }
@@ -344,6 +374,7 @@ const progressHow = (row):string => {
     </template>
     <!--如果是后端分页,这里一定要加上remote!-->
     <n-data-table
+      v-model:checked-row-keys="checkArray"
       :row-key="rowKey"
       :remote = "true"
       :columns="columns"

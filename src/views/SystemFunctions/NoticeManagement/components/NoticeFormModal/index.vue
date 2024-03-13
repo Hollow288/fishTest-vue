@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type {FormInst, FormRules, FormValidationError ,SelectRenderLabel, SelectRenderTag} from 'naive-ui'
 
-import type { Menu,MessageSchema, User ,UserRole} from '@/types'
+import type { Menu,MessageSchema ,UserRole} from '@/types'
 import CreateIcon from '~icons/ic/sharp-add'
 import EditIcon from '~icons/ic/sharp-edit'
+import {Notice} from "@/types/api/notice";
 
 export interface Props {
   noticeFormData?: Menu
@@ -11,6 +12,8 @@ export interface Props {
 }
 
 const props = defineProps<Props>()
+
+const loadingRef = ref(true)
 
 const emit = defineEmits<{
   (e: 'save'): void
@@ -22,10 +25,17 @@ const NMessage = useMessage()
 const [submitLoading, submitLoadingDispatcher] = useLoading()
 
 const formRef = ref<FormInst | null>(null)
-const formData = ref<User>({})
+const formData = ref<Notice>({})
 const options = ref<UserRole[]>([])
 
 const showModal = ref(false)
+
+
+const noticeFormData = ref<Notice>({
+  noticeId: null,
+  message: null,
+  userIds: []
+})
 
 const noticeRules: FormRules = {
   userIds: [
@@ -147,17 +157,10 @@ const handleSubmit = async () => {
   }
   submitLoadingDispatcher.loading()
 
-  formData.value = {
-    ...formData.value,
-    visible: formData.value.visible?'0':'1',
-    status: formData.value.status?'0':'1',
-    disableAuth: formData.value.disableAuth?'0':'1',
-    dismissTab: formData.value.dismissTab?'0':'1',
-    isLeaf: formData.value.isLeaf?'0':'1'
-  }
+
   if (props.isEdit) {
     try {
-      const { message, code } = await MenuAPI.update(formData.value.menuId, formData.value)
+      const { message, code } = await NoticeAPI.update(formData.value.noticeId, formData.value)
       if(code == 200){
         NMessage.success(message!)
         showModal.value = false
@@ -172,7 +175,63 @@ const handleSubmit = async () => {
     }
   } else {
     try {
-      const { message, code } = await MenuAPI.create(formData.value)
+      const { message, code } = await NoticeAPI.create(formData.value)
+      if(code == 200){
+        NMessage.success(message!)
+        showModal.value = false
+        emit('save')
+      }else {
+        NMessage.error(message!)
+      }
+    } catch (err: any) {
+      if (err.message) {
+        NMessage.error(err.message)
+      }
+    }
+  }
+
+  submitLoadingDispatcher.loaded()
+  return true
+}
+
+
+
+const handlePublish = async () => {
+  try {
+    await formRef.value!.validate()
+  } catch (errors) {
+    const errorMessage = (errors as FormValidationError[])[0][0].message
+    if (errorMessage) {
+      NMessage.error(errorMessage)
+    }
+    return false
+  }
+
+  if (submitLoading.value) {
+    return true
+  }
+  submitLoadingDispatcher.loading()
+
+  if (props.isEdit) {
+    try {
+      // 修改并发布新通知
+      const { message, code } = await NoticeAPI.updateAndPublishNotice(formData.value.noticeId, formData.value)
+      if(code == 200){
+        NMessage.success(message!)
+        showModal.value = false
+        emit('save')
+      }else {
+        NMessage.error(message!)
+      }
+    } catch (err: any) {
+      if (err.message) {
+        NMessage.error(err.message)
+      }
+    }
+  } else {
+    try {
+      // 创建并发布新通知
+      const { message, code } = await NoticeAPI.createAndPublishNotice(formData.value)
       if(code == 200){
         NMessage.success(message!)
         showModal.value = false
@@ -235,7 +294,7 @@ const actonTest = () => h(
         type: 'warning',
         size: 'small',
         onClick: () => {
-
+          handlePublish()
         }
       },
       {
@@ -264,15 +323,27 @@ watch(
       formData.value = {
         ...newValue,
       }
+      loadingRef.value = true
       const {code:code1, data:data1} = await UserAPI.allUserRole()
       const {code:code2, data:data2} = await NoticeAPI.allUsersByNoticeId(newValue.noticeId)
-      options.value = data1
-      formData.value.userIds = data2
-
+      if(code1 == 200 && code2 == 200){
+        options.value = data1
+        formData.value.userIds = data2
+        loadingRef.value = false
+      }else {
+        loadingRef.value = false
+        NMessage.error('数据读取错误')
+        return
+      }
     } else {
       const {data:data1} = await UserAPI.allUserRole()
       options.value = data1
-      formData.value = {}
+      noticeFormData.value.noticeId = null
+      noticeFormData.value.message = null
+      noticeFormData.value.userIds = []
+      formData.value = noticeFormData.value
+      // console.log(formData.value)
+
     }
   },
   { immediate: true }
