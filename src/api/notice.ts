@@ -48,5 +48,10 @@ export class NoticeAPI {
   }
 
 
+  static noticesByUserId(userId: string) {
+    return httpRequest.get<ResponseResult>(`${this.NOTICE_API_PREFIX}/${userId}/notice-me`)
+  }
+
+
 
 }
