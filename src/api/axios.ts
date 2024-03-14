@@ -205,7 +205,7 @@ class Request {
           case StatusCode.FORBIDDEN:
             NMessage.error(errorMessage)
             // router.replace('/403')
-            this.handleUnauthorized()
+            // this.handleUnauthorized()
             break
           case StatusCode.INTERNAL_SERVER_ERROR:
           case StatusCode.BAD_GATEWAY:
