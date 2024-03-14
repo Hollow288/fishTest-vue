@@ -24,7 +24,7 @@ import {
     </div>
 
     <div class="flex h-full items-center justify-end space-x-4">
-      <DiscordButton />
+<!--      <DiscordButton />-->
       <GitHubButton />
       <DocsButton />
       <FullScreenButton />

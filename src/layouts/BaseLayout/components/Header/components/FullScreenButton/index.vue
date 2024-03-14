@@ -8,10 +8,7 @@ const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
 </script>
 
 <template>
-  <NTooltip
-    placement="bottom"
-    trigger="hover"
-  >
+  <NPopover trigger="hover">
     <template #trigger>
       <NIcon
         class="hidden cursor-pointer sm:block"
@@ -21,5 +18,5 @@ const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
       />
     </template>
     {{ t(isFullscreen ? 'TEMP.Header.ExitFullScreen' : 'TEMP.Header.FullScreen') }}
-  </NTooltip>
+  </NPopover>
 </template>

@@ -8,10 +8,7 @@ const sidebarStore = useSidebarStore()
 </script>
 
 <template>
-  <NTooltip
-    placement="bottom"
-    trigger="hover"
-  >
+  <NPopover trigger="hover">
     <template #trigger>
       <NIcon
         class="cursor-pointer"
@@ -21,5 +18,5 @@ const sidebarStore = useSidebarStore()
       />
     </template>
     {{ sidebarStore.isDisplay ? t('TEMP.Sidebar.Hide') : t('TEMP.Sidebar.Show') }}
-  </NTooltip>
+  </NPopover>
 </template>

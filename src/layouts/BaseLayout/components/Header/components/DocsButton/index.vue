@@ -8,10 +8,7 @@ const { t } = useI18n<{ message: MessageSchema }>()
 </script>
 
 <template>
-  <NTooltip
-    placement="bottom"
-    trigger="hover"
-  >
+  <NPopover trigger="hover">
     <template #trigger>
       <NIcon
         class="cursor-pointer"
@@ -21,5 +18,5 @@ const { t } = useI18n<{ message: MessageSchema }>()
       />
     </template>
     {{ t('COMMON.Docs') }}
-  </NTooltip>
+  </NPopover>
 </template>

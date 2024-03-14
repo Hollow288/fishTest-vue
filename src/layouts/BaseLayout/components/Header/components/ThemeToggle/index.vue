@@ -40,10 +40,7 @@ const handleToggleTheme = async (event: MouseEvent) => {
 </script>
 
 <template>
-  <NTooltip
-    placement="bottom"
-    trigger="hover"
-  >
+  <NPopover trigger="hover">
     <template #trigger>
       <NIcon
         class="cursor-pointer"
@@ -54,7 +51,7 @@ const handleToggleTheme = async (event: MouseEvent) => {
       />
     </template>
     {{ t('TEMP.Header.SwitchTheme') }}
-  </NTooltip>
+  </NPopover>
 </template>
 
 <style lang="scss">

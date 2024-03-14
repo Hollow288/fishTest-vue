@@ -37,10 +37,7 @@ watch(
 </script>
 
 <template>
-  <NTooltip
-    placement="bottom"
-    trigger="hover"
-  >
+  <NPopover trigger="hover">
     <template #trigger>
       <NIcon
         class="cursor-pointer"
@@ -50,7 +47,7 @@ watch(
       />
     </template>
     {{ t('COMMON.SETTINGS') }}
-  </NTooltip>
+  </NPopover>
 
   <NDrawer
     v-model:show="showDrawer"

@@ -16,8 +16,6 @@ const notification = useNotification()
 const handleClickNotification = () => {
   if (list.value.length > 0) {
     list.value.forEach((item: any) => {
-      debugger
-      console.log(item)
       const n = notification.create({
           title: '你的新通知:',
           description: item.name,
@@ -35,10 +33,17 @@ const handleClickNotification = () => {
               {
                 text: true,
                 type: 'success',
-                onClick: () => {
+                onClick: async () => {
                   // BrowserUtils.openNewWindow(REPO_GITHUB_URL)
-                  // MenuAPI.
-                  n.destroy()
+                 const {code,message} =  await NoticeAPI.processedNoticeById(item.pendingId,item.userId)
+                  if(code != 200){
+                    NMessage.error(message)
+                  }else{
+                    list.value = list.value.filter((i: any) => i.message !== item.message)
+                    messageCount.value -= 1
+                    n.destroy()
+                  }
+
                 }
               },
               {
@@ -46,16 +51,16 @@ const handleClickNotification = () => {
               }
           ),
           onAfterLeave: () => {
-            NMessage.success("Wouldn't it be Nice")
+            // NMessage.success("Wouldn't it be Nice")
           }
         })
-        list.value = list.value.filter((i: any) => i.message !== item.message)
-        messageCount.value -= 1
+
     })
   }
 }
 
 onMounted(async () => {
+  // Todo 这种实时的不会写
   // const eventSource = new EventSource(`/fish-api/sse/notification?userId=${userStore.user.userId}`)
   // eventSource.addEventListener('notification', ({ data, type }) => {
   //   console.log(data, type)
@@ -75,13 +80,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <NPopover trigger="click">
+  <NPopover trigger="hover">
     <template #trigger>
-      <NTooltip
-        placement="bottom"
-        trigger="hover"
-      >
-        <template #trigger>
+
           <NIcon
             class="cursor-pointer"
             size="20"
@@ -96,9 +97,7 @@ onMounted(async () => {
             />
             <NotificationIcon />
           </NIcon>
-        </template>
-        {{ t('COMMON.NOTIFICATION') }}
-      </NTooltip>
     </template>
+    <span>{{ t('COMMON.NOTIFICATION') }}</span>
   </NPopover>
 </template>

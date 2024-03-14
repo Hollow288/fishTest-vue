@@ -52,6 +52,10 @@ export class NoticeAPI {
     return httpRequest.get<ResponseResult>(`${this.NOTICE_API_PREFIX}/${userId}/notice-me`)
   }
 
+  static processedNoticeById(pendingId: string,userId: string){
+    return httpRequest.patch<ResponseResult>(`${this.NOTICE_API_PREFIX}/${pendingId}/processed-notice/${userId}`)
+  }
+
 
 
 }

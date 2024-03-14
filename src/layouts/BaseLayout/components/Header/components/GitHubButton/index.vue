@@ -5,10 +5,7 @@ const { REPO_GITHUB_URL } = AppMetadata
 </script>
 
 <template>
-  <NTooltip
-    placement="bottom"
-    trigger="hover"
-  >
+  <NPopover trigger="hover">
     <template #trigger>
       <NIcon
         class="cursor-pointer"
@@ -18,5 +15,5 @@ const { REPO_GITHUB_URL } = AppMetadata
       />
     </template>
     GitHub
-  </NTooltip>
+  </NPopover>
 </template>
