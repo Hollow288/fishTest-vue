@@ -27,10 +27,6 @@ import {
 
 const { t } = i18n.global
 
-export const routess = async () => {
-
-}
-
 
 export const routes = [
   {
