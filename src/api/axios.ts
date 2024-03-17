@@ -19,16 +19,16 @@ interface PendingTask {
 
 const { t } = i18n.global
 
-const langStore = useLangStore()
-const themeStore = useThemeStore()
+// const langStore = useLangStore()
+// const themeStore = useThemeStore()
 
-const { message: NMessage } = createDiscreteApi(['message'], {
-  configProviderProps: {
-    theme: themeStore.naiveTheme,
-    locale: langStore.locale,
-    dateLocale: langStore.dateLocale
-  }
-})
+// const { message: NMessage } = createDiscreteApi(['message'], {
+//   configProviderProps: {
+//     theme: themeStore.naiveTheme,
+//     locale: langStore.locale,
+//     dateLocale: langStore.dateLocale
+//   }
+// })
 
 class Request {
   instance: AxiosInstance
@@ -121,11 +121,11 @@ class Request {
             this.handleUnauthorized()
           }
         }else if(res.data.code === 40001) {
-          NMessage.error('用户登录信息已过期')
+          // NMessage.error('用户登录信息已过期')
           this.handleUnauthorized()
           // router.replace('/login')
         }else if(res.data.code === 40003) {
-          NMessage.error('请求被理解但拒绝执行')
+          // NMessage.error('请求被理解但拒绝执行')
           router.replace('/403')
         }
         // 将处理后的数据传递到 Promise 链的下一步
@@ -203,21 +203,21 @@ class Request {
           //   this.handleUnauthorized()
           //   break
           case StatusCode.FORBIDDEN:
-            NMessage.error(errorMessage)
+            // NMessage.error(errorMessage)
             // router.replace('/403')
             // this.handleUnauthorized()
             break
           case StatusCode.INTERNAL_SERVER_ERROR:
           case StatusCode.BAD_GATEWAY:
           case StatusCode.GATEWAY_TIMEOUT:
-            NMessage.error(errorMessage)
+            // NMessage.error(errorMessage)
             router.replace('/500')
             break
           default:
         }
         // 网络错误，跳转到 404 页面
         if (!window.navigator.onLine) {
-          NMessage.error(t('COMMON.NETWORK.ERROR'))
+          // NMessage.error(t('COMMON.NETWORK.ERROR'))
           router.replace('/404')
         }
 

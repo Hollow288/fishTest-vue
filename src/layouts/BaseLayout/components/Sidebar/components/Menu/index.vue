@@ -22,14 +22,14 @@ const handleChangeRouter = () => {
 }
 
 // 递归函数，处理菜单选项
-const processMenuOptions = (options, t) => {
+const processMenuOptions =  (options, t) => {
   return options.map(option => {
     const label = renderMenuLabel(() => t(option.label))
     const key = option.key
     // const icon = renderMenuIcon(option.icon)
-    const icon = renderMenuIcon(NavigationIcon)
-
-    let children = null;
+    const icon = renderMenuIcon('@/icons/lucide/server-off')
+    // const icon =  renderMenuIcon(NavigationIcon)
+    let children = null
     if (option.children && option.children.length > 0) {
       children = processMenuOptions(option.children, t) // 递归处理子菜单
     }
@@ -45,14 +45,9 @@ const processMenuOptions = (options, t) => {
 
 const queryMenuList = async () => {
 
-
   const {data} = await CommonAPI.allMenuAndChildren()
 
-
-  resultMenuList.value = processMenuOptions(data, t)
-
-
-  debugger
+  resultMenuList.value = await processMenuOptions(data, t)
 
 }
 

@@ -1,11 +1,52 @@
 <script setup lang="ts">
-import { menuOptions } from '@/constants'
+// import { menuOptions } from '@/constants'
+import NavigationIcon from '~icons/mdi/compass-outline'
 import router from '@/router'
+const { renderIcon: renderMenuIcon, renderMenuLabel } = RenderUtils
 
 const route = useRoute()
 
+const resultMenuList = ref([])
+
+const { t } = i18n.global
+
+// 递归函数，处理菜单选项
+const processMenuOptions = (options, t) => {
+  return options.map(option => {
+    const label = renderMenuLabel(() => t(option.label))
+    const key = option.key
+    // const icon = renderMenuIcon(option.icon)
+    const icon = renderMenuIcon(NavigationIcon)
+
+    let children = null;
+    if (option.children && option.children.length > 0) {
+      children = processMenuOptions(option.children, t) // 递归处理子菜单
+    }
+
+    return {
+      label,
+      key,
+      icon,
+      children
+    }
+  })
+}
+
+const queryMenuList = async () => {
+
+
+  const {data} = await CommonAPI.allMenuAndChildren()
+
+
+  resultMenuList.value = processMenuOptions(data, t)
+
+
+  debugger
+
+}
+
 // 一级菜单选项
-const firstLevelOptions = ref(menuOptions)
+const firstLevelOptions = ref(resultMenuList)
 // 一级菜单路径渲染元素
 const firstLevelPath = ref()
 
@@ -59,7 +100,10 @@ watch(
     secondLevelPath.value = secondLevelOption.label
   },
   { immediate: true }
+
 )
+
+onMounted(() => queryMenuList())
 </script>
 
 <template>

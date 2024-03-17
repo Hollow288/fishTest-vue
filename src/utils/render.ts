@@ -24,7 +24,14 @@ export class RenderUtils {
    * @param icon 图标
    * @param size 图标大小
    */
-  static renderIcon(icon: any, size: number = 16, options?: any) {
+  static async renderIcon(icon: any, size: number = 16, options?: any) {
+
+    // 动态导入图标模块
+    const iconModule = await  import(icon)
+    debugger
+    // 获取图标组件
+    const iconComponent = iconModule.default
+
     return () =>
       h(
         NIcon,
@@ -33,7 +40,7 @@ export class RenderUtils {
           ...options
         },
         {
-          default: () => h(icon)
+          default: () => h(iconComponent)
         }
       )
   }
