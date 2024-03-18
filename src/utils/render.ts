@@ -26,11 +26,11 @@ export class RenderUtils {
    */
   static async renderIcon(icon: any, size: number = 16, options?: any) {
 
-    // 动态导入图标模块
-    const iconModule = await  import(icon)
-    debugger
-    // 获取图标组件
-    const iconComponent = iconModule.default
+    // // 动态导入图标模块
+    // const iconModule = await  import(icon)
+    // debugger
+    // // 获取图标组件
+    // const iconComponent = iconModule.default
 
     return () =>
       h(
@@ -40,7 +40,7 @@ export class RenderUtils {
           ...options
         },
         {
-          default: () => h(iconComponent)
+          default: () => h(icon)
         }
       )
   }

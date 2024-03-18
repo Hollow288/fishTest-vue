@@ -1,58 +1,28 @@
 <script setup lang="ts">
-import {MenuInst, MenuOption} from "naive-ui"
-import NavigationIcon from '~icons/mdi/compass-outline'
+import type {MenuInst, MenuOption} from 'naive-ui'
 
-const resultMenuList = ref([])
+import { menuOptions } from '@/constants'
 
 const { t } = i18n.global
-const { renderIcon: renderMenuIcon, renderMenuLabel } = RenderUtils
 
 const route = useRoute()
 const router = useRouter()
 const sidebarStore = useSidebarStore()
 
 const menuInstRef = ref<MenuInst | null>(null)
-const menuData = ref(resultMenuList)
+const menuData = ref<MenuOption[]>([])
+
 const accordion = ref(false)
 const selectedKey = ref()
+
+watchEffect(async () => {
+  menuData.value = await menuOptions()
+})
 
 const handleChangeRouter = () => {
   selectedKey.value = route.name
   menuInstRef.value?.showOption(route.name as string)
 }
-
-// 递归函数，处理菜单选项
-const processMenuOptions =  (options, t) => {
-  return options.map(option => {
-    const label = renderMenuLabel(() => t(option.label))
-    const key = option.key
-    // const icon = renderMenuIcon(option.icon)
-    const icon = renderMenuIcon('@/icons/lucide/server-off')
-    // const icon =  renderMenuIcon(NavigationIcon)
-    let children = null
-    if (option.children && option.children.length > 0) {
-      children = processMenuOptions(option.children, t) // 递归处理子菜单
-    }
-
-    return {
-      label,
-      key,
-      icon,
-      children
-    }
-  })
-}
-
-const queryMenuList = async () => {
-
-  const {data} = await CommonAPI.allMenuAndChildren()
-
-  resultMenuList.value = await processMenuOptions(data, t)
-
-}
-
-
-
 
 watch(
   () => route.name,
@@ -68,7 +38,6 @@ const handleChangeMenu = (key: string, item: MenuOption) => {
 }
 
 
-onMounted(() => queryMenuList())
 </script>
 
 <template>

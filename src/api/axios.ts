@@ -30,6 +30,10 @@ const { t } = i18n.global
 //   }
 // })
 
+
+const { message: NMessage } = createDiscreteApi(['message'])
+
+
 class Request {
   instance: AxiosInstance
 
@@ -121,11 +125,11 @@ class Request {
             this.handleUnauthorized()
           }
         }else if(res.data.code === 40001) {
-          // NMessage.error('用户登录信息已过期')
+          NMessage.error('用户登录信息已过期')
           this.handleUnauthorized()
           // router.replace('/login')
         }else if(res.data.code === 40003) {
-          // NMessage.error('请求被理解但拒绝执行')
+          NMessage.error('请求被理解但拒绝执行')
           router.replace('/403')
         }
         // 将处理后的数据传递到 Promise 链的下一步
@@ -165,8 +169,10 @@ class Request {
         //  * - 500 服务器错误，跳转到 500 页面
         //  * - 其他状态码，提示错误信息
         //  */
-        const errorMessage =
-          message ?? errorMessageMap.get(status as number) ?? t('COMMON.UNKNOWN.ERROR')
+
+        // const errorMessage =
+        //   message ?? errorMessageMap.get(status as number) ?? t('COMMON.UNKNOWN.ERROR')
+
         // const currentRefreshToken = AuthUtils.getRefreshToken()
         switch (status) {
           // case StatusCode.UNAUTHORIZED:

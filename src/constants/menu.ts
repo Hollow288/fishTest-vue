@@ -1,48 +1,76 @@
-import type { MenuOption } from 'naive-ui'
-
-import UniversalComponentsIcon from '~icons/ic/baseline-auto-awesome-mosaic'
-import ChartIcon from '~icons/ic/baseline-bar-chart'
-import CopyIcon from '~icons/ic/baseline-content-copy'
-import UnauthorizedIcon from '~icons/ic/baseline-do-not-disturb'
-import ErrorPagesIcon from '~icons/ic/baseline-error-outline'
-import DigitalAnimationIcon from '~icons/ic/baseline-hourglass-empty'
-import QRCodeIcon from '~icons/ic/baseline-qrcode'
-import TimelineIcon from '~icons/ic/baseline-timeline'
-import ListTemplatesIcon from '~icons/ic/outline-list-alt'
-import PrintIcon from '~icons/ic/outline-local-printshop'
-import IAmATeapotIcon from '~icons/icon-park-outline/tea-drink'
-import InternalServerErrorIcon from '~icons/lucide/server-off'
-import UserManagementIcon from '~icons/mdi/account-cog-outline'
-import NavigationIcon from '~icons/mdi/compass-outline'
-import SystemFunctionsIcon from '~icons/mdi/function-variant'
-import MenuManagementIcon from '~icons/mdi/menu'
-import BuiltinComponentsIcon from '~icons/mdi/puzzle'
-import SystemToolsIcon from '~icons/mdi/tools'
-import CodeTemplatesIcon from '~icons/solar/code-bold'
-import WebSocketIcon from '~icons/tabler/brand-socket-io'
-import NotFoundIcon from '~icons/tabler/error-404'
-import {PricetagOutline as RoleManagementIcon, ChatbubbleEllipsesOutline as NoticeManagementIcon} from '@vicons/ionicons5'
+// import type { MenuOption } from 'naive-ui'
+//
+// import UniversalComponentsIcon from '~icons/ic/baseline-auto-awesome-mosaic'
+// import ChartIcon from '~icons/ic/baseline-bar-chart'
+// import CopyIcon from '~icons/ic/baseline-content-copy'
+// import UnauthorizedIcon from '~icons/ic/baseline-do-not-disturb'
+// import ErrorPagesIcon from '~icons/ic/baseline-error-outline'
+// import DigitalAnimationIcon from '~icons/ic/baseline-hourglass-empty'
+// import QRCodeIcon from '~icons/ic/baseline-qrcode'
+// import TimelineIcon from '~icons/ic/baseline-timeline'
+// import ListTemplatesIcon from '~icons/ic/outline-list-alt'
+// import PrintIcon from '~icons/ic/outline-local-printshop'
+// import IAmATeapotIcon from '~icons/icon-park-outline/tea-drink'
+// import InternalServerErrorIcon from '~icons/lucide/server-off'
+// import UserManagementIcon from '~icons/mdi/account-cog-outline'
+// import NavigationIcon from '~icons/mdi/compass-outline'
+// import SystemFunctionsIcon from '~icons/mdi/function-variant'
+// import MenuManagementIcon from '~icons/mdi/menu'
+// import BuiltinComponentsIcon from '~icons/mdi/puzzle'
+// import SystemToolsIcon from '~icons/mdi/tools'
+// import CodeTemplatesIcon from '~icons/solar/code-bold'
+// import WebSocketIcon from '~icons/tabler/brand-socket-io'
+// import NotFoundIcon from '~icons/tabler/error-404'
+// import {PricetagOutline as RoleManagementIcon, ChatbubbleEllipsesOutline as NoticeManagementIcon} from '@vicons/ionicons5'
 
 const { t } = i18n.global
 const { renderIcon: renderMenuIcon, renderMenuLabel } = RenderUtils
 
+const processMenuOptions = (options:any, t) => options.map(option => {
+    const label = renderMenuLabel(() => t(option.label))
+    const {key} = option
+    // const icon = renderMenuIcon(option.icon)
+    const icon = renderMenuIcon('@/icons/lucide/server-off')
+    // const icon =  renderMenuIcon(NavigationIcon)
+    let children = null
+    if (option.children && option.children.length > 0) {
+      children = processMenuOptions(option.children, t) // 递归处理子菜单
+    }
+
+    return {
+      label,
+      key,
+      icon,
+      children
+    }
+  })
 
 
+export const menuOptions = async () => {
+  const {data} = await CommonAPI.allMenuAndChildren()
+  return processMenuOptions(data, t)
+}
 
 
+// const flattenMenuOptions = (options: MenuOption[]): MenuOption[] =>
+//   options.flatMap((option) => {
+//     const newPath = [
+//       {
+//         label: option.label,
+//         key: option.key,
+//         icon: option.icon,
+//         show: option.show !== false
+//       }
+//     ]
+//
+//     if (option.children) {
+//       return flattenMenuOptions(option.children)
+//     }
+//     return newPath
+//   })
+//
+// export const menuOptionsFlat: MenuOption[] = flattenMenuOptions(menuOptions)
 
-// const queryMenuList = async () => {
-//
-//
-//   const {data} = await CommonAPI.allMenuAndChildren()
-//
-//
-//   // resultMenuList.value = processMenuOptions(data, t)
-//
-//
-//   debugger
-//
-// }
 
 // export const menuOptions: MenuOption[] = [
 //   {
@@ -173,22 +201,3 @@ const { renderIcon: renderMenuIcon, renderMenuLabel } = RenderUtils
 //     ]
 //   }
 // ]
-
-// const flattenMenuOptions = (options: MenuOption[]): MenuOption[] =>
-//   options.flatMap((option) => {
-//     const newPath = [
-//       {
-//         label: option.label,
-//         key: option.key,
-//         icon: option.icon,
-//         show: option.show !== false
-//       }
-//     ]
-//
-//     if (option.children) {
-//       return flattenMenuOptions(option.children)
-//     }
-//     return newPath
-//   })
-//
-// export const menuOptionsFlat: MenuOption[] = flattenMenuOptions(menuOptions)
