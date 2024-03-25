@@ -28,6 +28,11 @@ watchEffect(async () => {
 watch(
   () => route.fullPath,
   async () => {
+
+    if (!Array.isArray(firstLevelOptions.value)) {
+      return
+    }
+
     // 如果路由路径为 / ，清空面包屑
     if (route.fullPath === '/') {
       firstLevelPath.value = ''
@@ -40,7 +45,7 @@ watch(
     const routePath = route.fullPath.split('/').filter((path) => path !== '')
 
     // 获取一级菜单
-    const firstLevelOption = firstLevelOptions.value.find((option) => option.key === routePath[0])
+    const firstLevelOption =firstLevelOptions.value.find((option) => option.key === routePath[0])
     // 如果一级菜单不存在，则直接返回
     if (!firstLevelOption) {
       return

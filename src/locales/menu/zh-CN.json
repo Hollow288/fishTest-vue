@@ -24,5 +24,7 @@
   "WebSocket": "WebSocket",
 
   "MenuManagement": "菜单管理",
-  "NoticeManagement": "通知公告"
+  "NoticeManagement": "通知公告",
+  "CabinetRelated": "橱柜相关",
+  "Quotation": "报价单"
 }

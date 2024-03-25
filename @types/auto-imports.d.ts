@@ -10,6 +10,7 @@ declare global {
   const AuthUtils: typeof import('@dolphin-admin/utils')['AuthUtils']
   const BasePageModel: typeof import('@/constants')['BasePageModel']
   const BrowserUtils: typeof import('@dolphin-admin/utils')['BrowserUtils']
+  const CabinetRelatedAPI: typeof import('../src/api/cabinetRelated')['CabinetRelatedAPI']
   const CommonAPI: typeof import('../src/api/common')['CommonAPI']
   const EffectScope: typeof import('vue')['EffectScope']
   const ExcelUtils: typeof import('../src/utils/excel')['ExcelUtils']
@@ -159,6 +160,7 @@ declare module 'vue' {
     readonly AuthUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['AuthUtils']>
     readonly BasePageModel: UnwrapRef<typeof import('@/constants')['BasePageModel']>
     readonly BrowserUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['BrowserUtils']>
+    readonly CabinetRelatedAPI: UnwrapRef<typeof import('../src/api/cabinetRelated')['CabinetRelatedAPI']>
     readonly CommonAPI: UnwrapRef<typeof import('../src/api/common')['CommonAPI']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly ExcelUtils: UnwrapRef<typeof import('../src/utils/excel')['ExcelUtils']>
@@ -297,6 +299,7 @@ declare module '@vue/runtime-core' {
     readonly AuthUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['AuthUtils']>
     readonly BasePageModel: UnwrapRef<typeof import('@/constants')['BasePageModel']>
     readonly BrowserUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['BrowserUtils']>
+    readonly CabinetRelatedAPI: UnwrapRef<typeof import('../src/api/cabinetRelated')['CabinetRelatedAPI']>
     readonly CommonAPI: UnwrapRef<typeof import('../src/api/common')['CommonAPI']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly ExcelUtils: UnwrapRef<typeof import('../src/utils/excel')['ExcelUtils']>

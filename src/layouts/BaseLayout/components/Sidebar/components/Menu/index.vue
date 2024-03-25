@@ -11,6 +11,7 @@ const sidebarStore = useSidebarStore()
 
 const menuInstRef = ref<MenuInst | null>(null)
 const menuData = ref<MenuOption[]>([])
+// const menuData = ref(menuOptions)
 
 const accordion = ref(false)
 const selectedKey = ref()

@@ -212,5 +212,28 @@
     "Cancel": "取消",
     "Save": "保存",
     "Publish": "发布"
+  },
+  "Cabinet": {
+    "Quotation": {
+      "address": "地址",
+      "customerName": "客户名称",
+      "telephone": "电话",
+      "productName": "产品名称",
+      "quotationDate": "报价日期",
+      "allTotalPrice": "总金额",
+      "customerNameOrAddress" : "客户姓名/地址",
+      "create": "创建",
+      "edit": "修改",
+      "view": "查看",
+      "Cabinets": "橱柜类",
+      "projectName": "项目",
+      "specificationModel": "规格型号",
+      "pricingQuantity": "计价数量",
+      "unitPrice": "单价",
+      "pricingCoefficient": "计价系数",
+      "priceAmount": "金额",
+      "remark": "备注",
+      "serialNumber": "序号"
+    }
   }
 }

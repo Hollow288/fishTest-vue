@@ -7,7 +7,7 @@ import EditIcon from '~icons/ic/sharp-edit'
 import {Notice} from "@/types/api/notice";
 
 export interface Props {
-  noticeFormData?: Menu
+  noticeFormData?: Notice
   isEdit: boolean
 }
 
