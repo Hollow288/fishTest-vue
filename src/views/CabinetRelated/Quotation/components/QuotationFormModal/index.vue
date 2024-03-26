@@ -4,9 +4,11 @@
 // import Eye16Regular from '@vicons/fluent/Eye16Regular'
 import type {FormInst, FormRules, FormValidationError} from 'naive-ui'
 import {AddSharp, TrashBinOutline} from '@vicons/ionicons5'
+import {CommonUtils} from '@/utils/common'
 
 import type {MessageSchema} from '@/types'
 import type {CabinetQuotation} from '@/types/api/cabinetQuotation'
+import type {CabinetQuotationDetail} from '@/types/api/cabinetQuotationDetail'
 import CreateIcon from '~icons/ic/sharp-add'
 import EditIcon from '~icons/ic/sharp-edit'
 import ViewIcon from '~icons/mdi/file-search-outline'
@@ -31,8 +33,11 @@ const [submitLoading, submitLoadingDispatcher] = useLoading()
 
 const formRef = ref<FormInst | null>(null)
 const formData = ref<CabinetQuotation>({})
+const detail = ref<CabinetQuotationDetail>({})
+const detailData = ref<CabinetQuotationDetail>([])
 
 const showModal = ref(false)
+
 
 
 const quotationRules: FormRules = {
@@ -53,6 +58,13 @@ const quotationRules: FormRules = {
       renderMessage: () => t('TEMP.Validation.message')
     }
   ]
+}
+
+const addDetailRow = () =>{
+  console.log(detailData.value)
+  detailData.value = CommonUtils.insertOneRow(detailData.value,detail.value)
+  // detailData.value.push(detail.value)
+  console.log(detailData.value)
 }
 
 
@@ -248,6 +260,7 @@ watch(
       formData.value = {
         ...newValue,
       }
+      detailData.value = []
       loadingRef.value = true
       // const {code:code2, data:data2} = await NoticeAPI.allUsersByNoticeId(newValue.noticeId)
       // if(code1 == 200 && code2 == 200){
@@ -267,7 +280,7 @@ watch(
       // noticeFormData.value.userIds = []
       // formData.value = noticeFormData.value
       // // console.log(formData.value)
-
+      detailData.value = []
     }
   },
   {immediate: true}
@@ -415,13 +428,13 @@ defineExpose({
 
       <div class=" justify-between space-x-3" style="margin-top: -20px">
 
-        <n-button secondary strong>
+        <n-button secondary strong @click="addDetailRow">
           <template #icon>
             <n-icon :component="AddSharp">
               <!--                <AddSharp-icon />-->
             </n-icon>
           </template>
-          {{ t('COMMON.Create') }}
+          {{ t('COMMON.Insert') }}
         </n-button>
 
         <!--        @click="deleteNotices"-->
@@ -469,39 +482,81 @@ defineExpose({
         </tr>
         </thead>
         <tbody>
-        <tr>
+        <tr v-for="(n,i) in detailData" :key="i">
           <td>
             <n-checkbox />
           </td>
           <td>
-            {{1}}
+            {{i+1}}
           </td>
           <td>
             <NInput
-              v-model:value="formData.address"
-              :placeholder="t('TEMP.Cabinet.Quotation.address')"
-              maxlength="100"
-              show-count
+              v-model:value="n.projectName"
+              :placeholder="t('TEMP.Cabinet.Quotation.projectName')"
               clearable
             />
           </td>
           <td>
-            反常的
+            <NInput
+              v-model:value="n.specificationModel"
+              :placeholder="t('TEMP.Cabinet.Quotation.specificationModel')"
+              clearable
+            />
           </td>
           <td>
-            反常的
+            <NInput
+              v-model:value="n.pricingQuantity"
+              :placeholder="t('TEMP.Cabinet.Quotation.pricingQuantity')"
+              clearable
+            />
           </td>
           <td>
-            反常的
+            <NInputNumber
+              v-model:value="n.unitPrice"
+              :placeholder="t('TEMP.Cabinet.Quotation.unitPrice')"
+              type="number"
+              show-count
+              clearable
+              :parse="parse"
+              :format="format"
+              :show-button="false"
+              style="width: 100%"
+            >
+              <template #suffix>
+                元
+              </template>
+            </NInputNumber>
           </td>
           <td>
-            反常的
+            <NInput
+              v-model:value="n.pricingCoefficient"
+              :placeholder="t('TEMP.Cabinet.Quotation.pricingCoefficient')"
+              clearable
+            />
           </td>
           <td>
-            反常的
+            <NInputNumber
+              v-model:value="n.priceAmount"
+              :placeholder="t('TEMP.Cabinet.Quotation.priceAmount')"
+              type="number"
+              show-count
+              clearable
+              :parse="parse"
+              :format="format"
+              :show-button="false"
+              style="width: 100%"
+            >
+              <template #suffix>
+                元
+              </template>
+            </NInputNumber>
           </td>
           <td>
-            反常的
+            <NInput
+              v-model:value="n.remark"
+              :placeholder="t('TEMP.Cabinet.Quotation.remark')"
+              clearable
+            />
           </td>
 
         </tr>
