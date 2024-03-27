@@ -1,10 +1,10 @@
-// import { cloneDeep } from 'lodash-es'
+import { cloneDeep } from 'lodash-es'
 
 export class CommonUtils{
   static insertOneRow<T>(objs: T[], basicObj: T): T[] {
     // 在此方法中使用 basicObj 的类型 T 来确定返回数组中元素的类型
-    // const temObj = cloneDeep(basicObj)
-    // objs.push(temObj)
+    const temObj = cloneDeep(basicObj)
+    objs.push(temObj)
     return objs
   }
 

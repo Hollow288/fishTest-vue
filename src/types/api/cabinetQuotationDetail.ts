@@ -8,5 +8,5 @@ export interface CabinetQuotationDetail{
   priceAmount?: number
   remark?: string
   detailType?: string
-  isChecked?:string
+  isChecked?:boolean
 }

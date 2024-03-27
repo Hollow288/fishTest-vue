@@ -1,6 +1,7 @@
 import type {BasePageModel} from '@/constants'
 import type {ResponseResult} from '@/types'
 import type {Notice} from '@/types/api/notice'
+import type {CabinetQuotation} from '@/types/api/cabinetQuotation'
 
 export class CabinetRelatedAPI {
   private static CABINET_API_PREFIX = `${GlobalEnvConfig.BASE_API_PREFIX}/cabinet`
@@ -11,6 +12,11 @@ export class CabinetRelatedAPI {
     return httpRequest.get<ResponseResult>(`${this.CABINET_API_PREFIX}/quotation`, {
       ...params
     })
+  }
+
+
+  static create(cabinetQuotation: CabinetQuotation) {
+    return httpRequest.post<ResponseResult>(`${this.CABINET_API_PREFIX}/quotation`, {...cabinetQuotation})
   }
 
 

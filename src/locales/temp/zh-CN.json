@@ -155,7 +155,10 @@
     "roleName": "请输入角色名称",
     "nickName": "请输入用户名",
     "userIds": "请选择受害者",
-    "message": "请填写骚扰通知内容"
+    "message": "请填写骚扰通知内容",
+    "customerName": "请填写客户名称",
+    "telephone": "请填写电话"
+
   },
   "WebSocket": {
     "ContentIsEmpty": "发送内容不能为空",
@@ -233,7 +236,9 @@
       "pricingCoefficient": "计价系数",
       "priceAmount": "金额",
       "remark": "备注",
-      "serialNumber": "序号"
+      "serialNumber": "序号",
+      "kitchenwareHardware":"厨具五金类",
+      "attachFiles": "附件相关"
     }
   }
 }
