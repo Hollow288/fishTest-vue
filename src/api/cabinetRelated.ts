@@ -25,5 +25,10 @@ export class CabinetRelatedAPI {
   }
 
 
+  static getAttachDataByQuotationId(quotationId: string) {
+    return httpRequest.get<ResponseResult>(`${this.CABINET_API_PREFIX}/${quotationId}/all-attach-by-quotationId`)
+  }
+
+
 
 }

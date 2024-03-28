@@ -39,7 +39,7 @@ const formRef = ref<FormInst | null>(null)
 const formData = ref<CabinetQuotation>({})
 // const detail = ref<CabinetQuotationDetail>({})
 const detailData = ref<CabinetQuotationDetail>([])
-
+const fileList = ref<UploadFileInfo[]>([])
 const showModal = ref(false)
 
 const emptyCabinetQuotationDetail: {
@@ -278,6 +278,11 @@ const actonTest = () => h(
 )
 
 
+const handleDownload = (file: UploadFileInfo) => {
+  NMessage.success(`下载成功：${file.name}`)
+}
+
+
 /**
  * @todo 重构
  * 使用参数传递的方式，不要用 defineExpose 暴露方法给父组件
@@ -311,9 +316,13 @@ watch(
         })
       }
       if(formData.value.quotationId !== null && typeof formData.value.quotationId !=='undefined'){
-        const {code, data} = await CabinetRelatedAPI.getDetailDataByQuotationId(formData.value.quotationId)
-        if(code == 200){
-          detailData.value = data
+        // 子表信息
+        const {code: detailCode, data: detailDatas} = await CabinetRelatedAPI.getDetailDataByQuotationId(formData.value.quotationId)
+        // 附件信息
+        const {code: attachCode, data: attachDatas} = await CabinetRelatedAPI.getAttachDataByQuotationId(formData.value.quotationId)
+        if(detailCode == 200 && attachCode == 200 ){
+          detailData.value = detailDatas
+          fileList.value = attachDatas
         }else{
           NMessage.error('数据读取错误')
         }
@@ -1430,11 +1439,13 @@ defineExpose({
       </n-divider>
 
       <n-upload
+        v-model:file-list="fileList"
         multiple
         directory-dnd
         :max="5"
         style="margin-top: -20px"
         @change="uploadAvatarUrl"
+        @download="handleDownload"
       >
         <n-upload-dragger>
           <div style="margin-bottom: 12px">
