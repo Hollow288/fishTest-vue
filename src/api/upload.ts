@@ -34,6 +34,22 @@ export class UploadAPI {
     })
   }
 
+
+
+
+  /**
+   * 上传文件
+   * @param data 文件数据
+   * @param quotationId
+   *
+   * @todo 进度条功能暂未实现
+   */
+  static uploadQuotationFile(data: any, quotationId: any) {
+    return httpRequest.post<BaseResponse<{ path: string }>>(`${this.UPLOAD_API_PREFIX}/${quotationId}/quotation`, data, {
+      headers: this.headers
+    })
+  }
+
   /**
    * 批量上传文件
    * @param data 文件数据

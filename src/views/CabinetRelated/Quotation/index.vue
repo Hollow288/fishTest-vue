@@ -1,6 +1,7 @@
 <script lang="ts">
 import {AddSharp,Filter as FilterIcon, Reload as ReloadIcon, TrashBinOutline} from '@vicons/ionicons5'
 import {NIcon, useDialog,useMessage} from 'naive-ui'
+import ViewIcon from '~icons/mdi/file-search-outline'
 
 import {BasePageModel} from '@/constants'
 import i18n from '@/i18n'
@@ -10,6 +11,7 @@ import {QuotationFormModal} from './components'
 import SearchIcon from '~icons/line-md/search'
 import ResetIcon from '~icons/ic/round-refresh'
 import EditIcon from '~icons/ic/sharp-edit'
+import {CabinetQuotation} from "@/types/api/cabinetQuotation";
 
 const quotationFormModalRef = ref()
 const quotationFormData = ref({})
@@ -160,6 +162,7 @@ setup() {
     checkArray,
     queryList,
     handleReset,
+    ViewIcon,
     queryParams,
     FilterIcon,
     ReloadIcon,
@@ -176,27 +179,39 @@ setup() {
     dialog,
     pagination: paginationReactive,
     rowKey (rowData) {
-      return rowData.noticeId
+      return rowData.quotationId
     },
     handleCheck (rowKeys) {
       checkedRowKeysRef.value = rowKeys
     },
     showDropdown: showDropdownRef,
-    createNewNotice(){
+    createNewQuotation(){
       quotationState.value = 'create'
       quotationFormData.value = {}
       quotationFormModalRef.value.handleShowModal()
     },
-    editOneNotice(){
+    editOneQuotation(){
       if(checkedRowKeysRef.value.length === 0){
         window.$message.warning(()=>t('VALIDATION.ChooseOneDetail'))
       }else if(checkedRowKeysRef.value.length > 1){
         window.$message.warning(()=>t('VALIDATION.OnlyAllowOneDetail'))
       }else {
-        quotationState.value = true
+        quotationState.value = 'edit'
         quotationFormData.value = {}
-        quotationFormData.value = dataRef.value.filter(m => m.noticeId === checkedRowKeysRef.value[0])[0]
-
+        quotationFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
+        debugger
+        quotationFormModalRef.value.handleShowModal()
+      }
+    },
+    viewOneQuotation(){
+      if(checkedRowKeysRef.value.length === 0){
+        window.$message.warning(()=>t('VALIDATION.ChooseOneDetail'))
+      }else if(checkedRowKeysRef.value.length > 1){
+        window.$message.warning(()=>t('VALIDATION.OnlyAllowOneDetail'))
+      }else {
+        quotationState.value = 'view'
+        quotationFormData.value = {}
+        quotationFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
         quotationFormModalRef.value.handleShowModal()
       }
     },
@@ -209,7 +224,7 @@ setup() {
       const args = {ids:checkedRowKeysRef.value}
       dialog.warning({
         title: '警告',
-        content: "偷偷删掉,没看到此条通知的可能就看不到了",
+        content: "确定要删掉这些报价单吗",
         positiveText: '确定',
         negativeText: '取消',
         onPositiveClick: async () => {
@@ -272,7 +287,7 @@ setup() {
 
         <div class="flex w-full items-center justify-between space-x-3 sm:justify-end ">
 
-          <n-button icon-placement="left" secondary strong @click="createNewNotice">
+          <n-button icon-placement="left" secondary strong @click="createNewQuotation">
             <template #icon>
               <n-icon :component="AddSharp">
                 <!--                <AddSharp-icon />-->
@@ -282,13 +297,23 @@ setup() {
           </n-button>
 
 
-          <n-button icon-placement="left" secondary strong @click="editOneNotice">
+          <n-button icon-placement="left" secondary strong @click="editOneQuotation">
             <template #icon>
               <n-icon :component="EditIcon">
                 <!--                <AddSharp-icon />-->
               </n-icon>
             </template>
             {{ t('COMMON.Edit') }}
+          </n-button>
+
+
+          <n-button icon-placement="left" secondary strong @click="viewOneQuotation">
+            <template #icon>
+              <n-icon :component="ViewIcon">
+                <!--                <AddSharp-icon />-->
+              </n-icon>
+            </template>
+            {{ t('TEMP.Cabinet.Quotation.view') }}
           </n-button>
 
 

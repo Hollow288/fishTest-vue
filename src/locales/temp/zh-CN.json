@@ -238,7 +238,9 @@
       "remark": "备注",
       "serialNumber": "序号",
       "kitchenwareHardware":"厨具五金类",
-      "attachFiles": "附件相关"
+      "attachFiles": "附件相关",
+      "cabinetBody": "柜体",
+      "color": "颜色"
     }
   }
 }

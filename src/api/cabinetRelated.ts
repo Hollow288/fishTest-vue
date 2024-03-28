@@ -20,5 +20,10 @@ export class CabinetRelatedAPI {
   }
 
 
+  static getDetailDataByQuotationId(quotationId: string) {
+    return httpRequest.get<ResponseResult>(`${this.CABINET_API_PREFIX}/${quotationId}/all-detail-by-quotationId`)
+  }
+
+
 
 }
