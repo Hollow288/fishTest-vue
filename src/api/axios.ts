@@ -131,6 +131,8 @@ class Request {
         }else if(res.data.code === 40003) {
           NMessage.error('请求被理解但拒绝执行')
           router.replace('/403')
+        }else if(res.data.code === 50000){
+          NMessage.error('服务器错误')
         }
         // 将处理后的数据传递到 Promise 链的下一步
         return responseData
@@ -212,8 +214,11 @@ class Request {
             // NMessage.error(errorMessage)
             // router.replace('/403')
             // this.handleUnauthorized()
+            NMessage.error("服务端错误!")
             break
           case StatusCode.INTERNAL_SERVER_ERROR:
+            NMessage.error("服务端错误!")
+            break
           case StatusCode.BAD_GATEWAY:
           case StatusCode.GATEWAY_TIMEOUT:
             // NMessage.error(errorMessage)
@@ -224,6 +229,7 @@ class Request {
         // 网络错误，跳转到 404 页面
         if (!window.navigator.onLine) {
           // NMessage.error(t('COMMON.NETWORK.ERROR'))
+          NMessage.error("网络连接超时!")
           router.replace('/404')
         }
 

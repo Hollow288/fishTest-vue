@@ -40,6 +40,7 @@ const formData = ref<CabinetQuotation>({})
 // const detail = ref<CabinetQuotationDetail>({})
 const detailData = ref<CabinetQuotationDetail>([])
 const fileList = ref<UploadFileInfo[]>([])
+const willRemoveAttachs = ref<string>([])
 const showModal = ref(false)
 
 const emptyCabinetQuotationDetail: {
@@ -136,6 +137,7 @@ const checkAllKitchenwareHardwareDetail = (checked) => {
 const uploadAvatarUrl = (options: { fileList: UploadFileInfo[] }) => {
   const files = options.fileList.map(item => item.file)
   fileListRef.value = files
+  // console.log(fileListRef.value)
 }
 
 
@@ -163,7 +165,7 @@ const handleSubmit = async () => {
       formData.value.cabinetTotalPrice = cabinetTotalPrice
       formData.value.electricalTotalPrice = electricalTotalPricePrice
 
-      const { data:createData, code:createCode,message:createMessage} = await CabinetRelatedAPI.create(formData.value)
+      const { data:createData, code:createCode,message:createMessage} = await CabinetRelatedAPI.createQuotation(formData.value)
 
       if(fileListRef.value.length > 0){
         const fileData = new FormData()
@@ -195,15 +197,36 @@ const handleSubmit = async () => {
         NMessage.error(err.message)
       }
     }
-  } else {
+  }
+  else if(props.quotationState === 'edit'){
     try {
-      const {message, code} = await NoticeAPI.create(formData.value)
-      if (code == 200) {
-        NMessage.success(message!)
+      formData.value.cabinetQuotationDetails = detailData.value
+      formData.value.cabinetTotalPrice = cabinetTotalPrice
+      formData.value.electricalTotalPrice = electricalTotalPricePrice
+
+      // 修改主表信息和子表信息
+      const {message: updateMessage, code: updateCode} = await CabinetRelatedAPI.updateQuotation(formData.value,formData.value.quotationId)
+
+      // 要删除的附件
+      const temObj = {ids:willRemoveAttachs.value}
+      const {code: removeCode} =await CabinetRelatedAPI.removeQuotationAttachs(temObj)
+
+      // 上传新的附件
+      if(fileListRef.value.filter(file => file !== null).length > 0){
+        debugger
+        const fileData = new FormData()
+        fileListRef.value.filter(file => file !== null).forEach(file => {
+          fileData.append('file', file)
+        })
+        const { code:uploadCode} = await UploadAPI.uploadQuotationFile(fileData,formData.value.quotationId)
+      }
+
+      if (updateCode == 200 && removeCode == 200) {
+        NMessage.success(updateMessage!)
         showModal.value = false
         emit('save')
       } else {
-        NMessage.error(message!)
+        NMessage.error('服务器异常')
       }
     } catch (err: any) {
       if (err.message) {
@@ -279,7 +302,32 @@ const actonTest = () => h(
 
 
 const handleDownload = (file: UploadFileInfo) => {
-  NMessage.success(`下载成功：${file.name}`)
+  DownloadAPI.getDownloadQuotation(file.id).then(result=>{
+
+    console.log(result)
+    const blob = new Blob([result], { type: 'application/octet-stream' })
+    // 创建一个临时 URL
+    const url = window.URL.createObjectURL(blob)
+    // 创建一个下载链接
+    const a = document.createElement('a')
+    a.href = url
+    a.download = file.name // 设置下载的文件名
+    a.target = "_blank"
+    // 触发点击事件，开始下载
+    document.body.appendChild(a)
+    a.click()
+    // 清理临时 URL
+    window.URL.revokeObjectURL(url)
+
+    NMessage.success(`下载成功：${file.name}`)
+  })
+
+
+}
+
+
+const onRemove = (options: { file: UploadFileInfo, fileList: Array<UploadFileInfo> })=>{
+  willRemoveAttachs.value.push(options.file.id)
 }
 
 
@@ -301,6 +349,8 @@ watch(
         ...newValue,
       }
       detailData.value=[]
+      fileListRef.value = []
+      willRemoveAttachs.value = []
     }else if(props.quotationState === 'edit'){
 
       formData.value = {
@@ -327,6 +377,8 @@ watch(
           NMessage.error('数据读取错误')
         }
       }
+      fileListRef.value = []
+      willRemoveAttachs.value = []
     }else {
       formData.value = {
         ...newValue,
@@ -340,6 +392,9 @@ watch(
           updateTime: TimeUtils.formatTime(newValue.updateTime, 'YYYY-MM-DD')
         })
       }
+
+      fileListRef.value = []
+      willRemoveAttachs.value = []
     }
   },
   {immediate: true,}
@@ -404,10 +459,13 @@ const electricalTotalPricePrice = computed({
   }
 })
 
-//
-// onMounted(() => {
-//   detailData.value = []
-// })
+
+onMounted(() => {
+  // detailData.value = []
+  // fileListRef.value = []
+  // willRemoveAttachs.value = []
+  // debugger
+})
 
 defineExpose({
   handleShowModal
@@ -925,7 +983,7 @@ defineExpose({
       <n-upload
         multiple
         directory-dnd
-        :max="5"
+        :max="10"
         style="margin-top: -20px"
         @change="uploadAvatarUrl"
       >
@@ -1442,9 +1500,11 @@ defineExpose({
         v-model:file-list="fileList"
         multiple
         directory-dnd
-        :max="5"
+        :max="10"
         style="margin-top: -20px"
         @change="uploadAvatarUrl"
+        show-download-button
+        @remove="onRemove"
         @download="handleDownload"
       >
         <n-upload-dragger>
@@ -1866,7 +1926,7 @@ defineExpose({
       <n-upload
         multiple
         directory-dnd
-        :max="5"
+        :max="10"
         style="margin-top: -20px"
         @change="uploadAvatarUrl"
         disabled

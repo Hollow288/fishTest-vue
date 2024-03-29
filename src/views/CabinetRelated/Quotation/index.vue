@@ -79,7 +79,7 @@ const queryList = () => {
     searchText: queryParams.searchText
   })
 
-  CabinetRelatedAPI.list(params).then((result => {
+  CabinetRelatedAPI.listQuotation(params).then((result => {
     const {data, total} = result.data ?? {}
 
     dataRef.value = data.map(cabinetQuotation =>
@@ -199,7 +199,6 @@ setup() {
         quotationState.value = 'edit'
         quotationFormData.value = {}
         quotationFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
-        debugger
         quotationFormModalRef.value.handleShowModal()
       }
     },
