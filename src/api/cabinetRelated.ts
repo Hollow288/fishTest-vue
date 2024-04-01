@@ -1,6 +1,5 @@
 import type {BasePageModel} from '@/constants'
 import type {ResponseResult} from '@/types'
-import type {Notice} from '@/types/api/notice'
 import type {CabinetQuotation} from '@/types/api/cabinetQuotation'
 
 export class CabinetRelatedAPI {
@@ -41,6 +40,11 @@ export class CabinetRelatedAPI {
 
   static updateQuotation(cabinetQuotation: CabinetQuotation,quotationId: string){
     return httpRequest.put<ResponseResult>(`${this.CABINET_API_PREFIX}/${quotationId}/update-quotation`, {...cabinetQuotation})
+  }
+
+
+  static delete(quotationIds: object) {
+    return httpRequest.patch<ResponseResult>(`${this.CABINET_API_PREFIX}/delete-quotations`, {...quotationIds})
   }
 
 

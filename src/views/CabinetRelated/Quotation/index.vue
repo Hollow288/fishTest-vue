@@ -1,6 +1,6 @@
 <script lang="ts">
-import {AddSharp,Filter as FilterIcon, Reload as ReloadIcon, TrashBinOutline} from '@vicons/ionicons5'
-import {NIcon, useDialog,useMessage} from 'naive-ui'
+import {AddSharp, Filter as FilterIcon, Reload as ReloadIcon, TrashBinOutline} from '@vicons/ionicons5'
+import {NIcon, useDialog, useMessage} from 'naive-ui'
 import ViewIcon from '~icons/mdi/file-search-outline'
 
 import {BasePageModel} from '@/constants'
@@ -11,7 +11,7 @@ import {QuotationFormModal} from './components'
 import SearchIcon from '~icons/line-md/search'
 import ResetIcon from '~icons/ic/round-refresh'
 import EditIcon from '~icons/ic/sharp-edit'
-import {CabinetQuotation} from "@/types/api/cabinetQuotation";
+import {CabinetRelatedAPI} from "@/api/cabinetRelated";
 
 const quotationFormModalRef = ref()
 const quotationFormData = ref({})
@@ -102,149 +102,146 @@ const handleReset = () => {
 }
 
 
-
 export default defineComponent({
-components: {NIcon, QuotationFormModal, SearchIcon},
-setup() {
+  components: {NIcon, QuotationFormModal, SearchIcon},
+  setup() {
 
 
+    window.$message = useMessage()
 
-  window.$message = useMessage()
-
-  const dialog = useDialog()
-
-
-  const columns: [{ disabled(row): boolean; type: string }, {
-    width: number;
-    title: string;
-    key: string;
-    ellipsis: boolean
-  }, { width: number; title: () => any; key: string; ellipsis: boolean }, {
-    width: number;
-    title: () => any;
-    key: string
-  }, { width: number; title: () => any; key: string }, { width: number; title: () => any; key: string }, {
-    width: number;
-    title: () => any;
-    align: string;
-    render: (row) => string;
-    key: string;
-    titleAlign: string
-  }, { width: number; title: () => any; key: string }] = [
-    {
-      type: 'selection',
-      disabled (row) {
-        return false
-      }
-    },
-    {key: 'quotationId', title: 'ID', width: 30,ellipsis: true},
-    {key: 'address', title: () => t('TEMP.Cabinet.Quotation.address'),width: 180,ellipsis: true},
-    {key: 'customerName', title: () => t('TEMP.Cabinet.Quotation.customerName'),width: 50},
-    {key: 'telephone', title: () => t('TEMP.Cabinet.Quotation.telephone'),width: 50},
-    {key: 'productName', title: () => t('TEMP.Cabinet.Quotation.productName'),width: 50},
-    {
-      title: () => t('TEMP.Cabinet.Quotation.quotationDate'),
-      key: 'quotationDate',
-      width: 80,
-      titleAlign: 'center',
-      align: 'center',
-      render: (row) => (row.quotationDate ? TimeUtils.formatTime(row.quotationDate, 'YYYY/MM/DD') : '')
-    },
-    {key: 'allTotalPrice', title: () => t('TEMP.Cabinet.Quotation.allTotalPrice'),width: 50}
-  ]
+    const dialog = useDialog()
 
 
-  onMounted(() => queryList())
-
-  return {
-    columns,
-    data: dataRef,
-    checkArray,
-    queryList,
-    handleReset,
-    ViewIcon,
-    queryParams,
-    FilterIcon,
-    ReloadIcon,
-    EditIcon,
-    TrashBinOutline,
-    ResetIcon,
-    SearchIcon,
-    loading: loadingRef,
-    t,
-    quotationFormModalRef,
-    quotationFormData,
-    quotationState,
-    AddSharp,
-    dialog,
-    pagination: paginationReactive,
-    rowKey (rowData) {
-      return rowData.quotationId
-    },
-    handleCheck (rowKeys) {
-      checkedRowKeysRef.value = rowKeys
-    },
-    showDropdown: showDropdownRef,
-    createNewQuotation(){
-      quotationState.value = 'create'
-      quotationFormData.value = {}
-      quotationFormModalRef.value.handleShowModal()
-    },
-    editOneQuotation(){
-      if(checkedRowKeysRef.value.length === 0){
-        window.$message.warning(()=>t('VALIDATION.ChooseOneDetail'))
-      }else if(checkedRowKeysRef.value.length > 1){
-        window.$message.warning(()=>t('VALIDATION.OnlyAllowOneDetail'))
-      }else {
-        quotationState.value = 'edit'
-        quotationFormData.value = {}
-        quotationFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
-        quotationFormModalRef.value.handleShowModal()
-      }
-    },
-    viewOneQuotation(){
-      if(checkedRowKeysRef.value.length === 0){
-        window.$message.warning(()=>t('VALIDATION.ChooseOneDetail'))
-      }else if(checkedRowKeysRef.value.length > 1){
-        window.$message.warning(()=>t('VALIDATION.OnlyAllowOneDetail'))
-      }else {
-        quotationState.value = 'view'
-        quotationFormData.value = {}
-        quotationFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
-        quotationFormModalRef.value.handleShowModal()
-      }
-    },
-    deleteNotices(){
-      if(checkedRowKeysRef.value.length === 0){
-        window.$message.warning(()=>t('VALIDATION.ChooseOneDetail'))
-        return
-      }
-
-      const args = {ids:checkedRowKeysRef.value}
-      dialog.warning({
-        title: '警告',
-        content: "确定要删掉这些报价单吗",
-        positiveText: '确定',
-        negativeText: '取消',
-        onPositiveClick: async () => {
-          const {code, message} = await NoticeAPI.delete(args)
-          if(code == '200'){
-            queryList()
-            checkArray.value = []
-            console.log(checkedRowKeysRef.value)
-            window.$message.success(message)
-          }else{
-            window.$message.error(message)
-          }
-
-        },
-        onNegativeClick: () => {
-          window.$message.warning('取消操作')
+    const columns: [{ disabled(row): boolean; type: string }, {
+      width: number;
+      title: string;
+      key: string;
+      ellipsis: boolean
+    }, { width: number; title: () => any; key: string; ellipsis: boolean }, {
+      width: number;
+      title: () => any;
+      key: string
+    }, { width: number; title: () => any; key: string }, { width: number; title: () => any; key: string }, {
+      width: number;
+      title: () => any;
+      align: string;
+      render: (row) => string;
+      key: string;
+      titleAlign: string
+    }, { width: number; title: () => any; key: string }] = [
+      {
+        type: 'selection',
+        disabled(row) {
+          return false
         }
-      })
+      },
+      {key: 'quotationId', title: 'ID', width: 30, ellipsis: true},
+      {key: 'address', title: () => t('TEMP.Cabinet.Quotation.address'), width: 180, ellipsis: true},
+      {key: 'customerName', title: () => t('TEMP.Cabinet.Quotation.customerName'), width: 50},
+      {key: 'telephone', title: () => t('TEMP.Cabinet.Quotation.telephone'), width: 50},
+      {key: 'productName', title: () => t('TEMP.Cabinet.Quotation.productName'), width: 50},
+      {
+        title: () => t('TEMP.Cabinet.Quotation.quotationDate'),
+        key: 'quotationDate',
+        width: 80,
+        titleAlign: 'center',
+        align: 'center',
+        render: (row) => (row.quotationDate ? TimeUtils.formatTime(row.quotationDate, 'YYYY/MM/DD') : '')
+      },
+      {key: 'allTotalPrice', title: () => t('TEMP.Cabinet.Quotation.allTotalPrice'), width: 50}
+    ]
+
+
+    onMounted(() => queryList())
+
+    return {
+      columns,
+      data: dataRef,
+      checkArray,
+      queryList,
+      handleReset,
+      ViewIcon,
+      queryParams,
+      FilterIcon,
+      ReloadIcon,
+      EditIcon,
+      TrashBinOutline,
+      ResetIcon,
+      SearchIcon,
+      loading: loadingRef,
+      t,
+      quotationFormModalRef,
+      quotationFormData,
+      quotationState,
+      AddSharp,
+      dialog,
+      pagination: paginationReactive,
+      rowKey(rowData) {
+        return rowData.quotationId
+      },
+      handleCheck(rowKeys) {
+        checkedRowKeysRef.value = rowKeys
+      },
+      showDropdown: showDropdownRef,
+      createNewQuotation() {
+        quotationState.value = 'create'
+        quotationFormData.value = {}
+        quotationFormModalRef.value.handleShowModal()
+      },
+      editOneQuotation() {
+        if (checkedRowKeysRef.value.length === 0) {
+          window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
+        } else if (checkedRowKeysRef.value.length > 1) {
+          window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
+        } else {
+          quotationState.value = 'edit'
+          quotationFormData.value = {}
+          quotationFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
+          quotationFormModalRef.value.handleShowModal()
+        }
+      },
+      viewOneQuotation() {
+        if (checkedRowKeysRef.value.length === 0) {
+          window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
+        } else if (checkedRowKeysRef.value.length > 1) {
+          window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
+        } else {
+          quotationState.value = 'view'
+          quotationFormData.value = {}
+          quotationFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
+          quotationFormModalRef.value.handleShowModal()
+        }
+      },
+      deleteNotices() {
+        if (checkedRowKeysRef.value.length === 0) {
+          window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
+          return
+        }
+
+        const args = {ids: checkedRowKeysRef.value}
+        dialog.warning({
+          title: '警告',
+          content: "确定要删掉这些报价单吗",
+          positiveText: '确定',
+          negativeText: '取消',
+          onPositiveClick: async () => {
+            const {code, message} = await CabinetRelatedAPI.delete(args)
+            if (code == '200') {
+              queryList()
+              checkArray.value = []
+              window.$message.success(message)
+            } else {
+              window.$message.error(message)
+            }
+
+          },
+          onNegativeClick: () => {
+            window.$message.warning('取消操作')
+          }
+        })
+      }
     }
   }
-}
 })
 
 
@@ -271,10 +268,10 @@ setup() {
               </template>
             </NInput>
 
-            <n-button icon-placement="left" secondary strong round   @click="queryList">
+            <n-button icon-placement="left" secondary strong round @click="queryList">
               <template #icon>
                 <n-icon>
-                  <search-icon />
+                  <search-icon/>
                 </n-icon>
               </template>
               {{ t('COMMON.Search') }}
@@ -339,7 +336,7 @@ setup() {
                 @click="handleReset"
               >
                 <template #icon>
-                  <NIcon :component="ResetIcon" />
+                  <NIcon :component="ResetIcon"/>
                 </template>
               </NButton>
             </template>
@@ -354,7 +351,7 @@ setup() {
     <n-data-table
       v-model:checked-row-keys="checkArray"
       :row-key="rowKey"
-      :remote = "true"
+      :remote="true"
       :columns="columns"
       :data="data"
       :cascade="false"

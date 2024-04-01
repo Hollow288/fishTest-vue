@@ -2,10 +2,9 @@
 // Todo 为什么这样的引入不行？
 // import {Eye20Regular as ViewIcon20Regular} from '@vicons/fluent'
 // import Eye16Regular from '@vicons/fluent/Eye16Regular'
-import type {FormInst, FormRules, FormValidationError} from 'naive-ui'
-import {AddSharp, TrashBinOutline} from '@vicons/ionicons5'
-import { cloneDeep } from 'lodash-es'
-import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
+import {AddSharp, ArchiveOutline as ArchiveIcon,TrashBinOutline} from '@vicons/ionicons5'
+import {cloneDeep} from 'lodash-es'
+import type {FormInst, FormRules, FormValidationError,UploadFileInfo} from 'naive-ui'
 
 import type {MessageSchema} from '@/types'
 import type {CabinetQuotation} from '@/types/api/cabinetQuotation'
@@ -13,7 +12,6 @@ import type {CabinetQuotationDetail} from '@/types/api/cabinetQuotationDetail'
 import CreateIcon from '~icons/ic/sharp-add'
 import EditIcon from '~icons/ic/sharp-edit'
 import ViewIcon from '~icons/mdi/file-search-outline'
-import {UploadFileInfo} from "naive-ui";
 
 export interface Props {
   quotationFormData?: CabinetQuotation
@@ -68,7 +66,6 @@ const emptyCabinetQuotationDetail: {
 }
 
 
-
 const quotationRules: FormRules = {
   customerName: [
     {
@@ -88,14 +85,14 @@ const quotationRules: FormRules = {
   ]
 }
 
-const addCabinetsDetailRow = () =>{
+const addCabinetsDetailRow = () => {
   const temObj = cloneDeep(emptyCabinetQuotationDetail)
   temObj.detailType = '0'
   detailData.value.push(temObj)
 }
 
 
-const addKitchenwareHardwareDetailRow = () =>{
+const addKitchenwareHardwareDetailRow = () => {
   const temObj = cloneDeep(emptyCabinetQuotationDetail)
   temObj.detailType = '1'
   detailData.value.push(temObj)
@@ -103,14 +100,14 @@ const addKitchenwareHardwareDetailRow = () =>{
 
 
 const deleteCabinetsSelectedRows = () => {
-  detailData.value = detailData.value.filter(m=>(!m.isChecked && m.detailType === '0') || m.detailType !== '0')
+  detailData.value = detailData.value.filter(m => (!m.isChecked && m.detailType === '0') || m.detailType !== '0')
   detailData.value.filter(item => item.detailType === '0').forEach(item => {
     item.isChecked = false
   })
 }
 
-const deleteKitchenwareHardwareSelectedRows=()=> {
-  detailData.value = detailData.value.filter(m=>(!m.isChecked && m.detailType === '1') || m.detailType !== '1')
+const deleteKitchenwareHardwareSelectedRows = () => {
+  detailData.value = detailData.value.filter(m => (!m.isChecked && m.detailType === '1') || m.detailType !== '1')
   detailData.value.filter(item => item.detailType === '1').forEach(item => {
     item.isChecked = false
   })
@@ -133,13 +130,11 @@ const checkAllKitchenwareHardwareDetail = (checked) => {
 }
 
 
-
 const uploadAvatarUrl = (options: { fileList: UploadFileInfo[] }) => {
   const files = options.fileList.map(item => item.file)
   fileListRef.value = files
   // console.log(fileListRef.value)
 }
-
 
 
 const handleSubmit = async () => {
@@ -165,14 +160,18 @@ const handleSubmit = async () => {
       formData.value.cabinetTotalPrice = cabinetTotalPrice
       formData.value.electricalTotalPrice = electricalTotalPricePrice
 
-      const { data:createData, code:createCode,message:createMessage} = await CabinetRelatedAPI.createQuotation(formData.value)
+      const {
+        data: createData,
+        code: createCode,
+        message: createMessage
+      } = await CabinetRelatedAPI.createQuotation(formData.value)
 
-      if(fileListRef.value.length > 0){
+      if (fileListRef.value.length > 0) {
         const fileData = new FormData()
         fileListRef.value.forEach(file => {
           fileData.append('file', file)
         })
-        const { code:updateCode, message } = await UploadAPI.uploadQuotationFile(fileData,createData)
+        const {code: updateCode, message} = await UploadAPI.uploadQuotationFile(fileData, createData)
 
         if (createCode == 200 && updateCode == 200) {
           NMessage.success(message!)
@@ -181,15 +180,13 @@ const handleSubmit = async () => {
         } else {
           NMessage.error('服务器异常')
         }
-      }else {
-        if (createCode == 200) {
+      } else if (createCode == 200) {
           NMessage.success(createMessage!)
           showModal.value = false
           emit('save')
         } else {
           NMessage.error('服务器异常')
         }
-      }
 
 
     } catch (err: any) {
@@ -197,28 +194,29 @@ const handleSubmit = async () => {
         NMessage.error(err.message)
       }
     }
-  }
-  else if(props.quotationState === 'edit'){
+  } else if (props.quotationState === 'edit') {
     try {
       formData.value.cabinetQuotationDetails = detailData.value
       formData.value.cabinetTotalPrice = cabinetTotalPrice
       formData.value.electricalTotalPrice = electricalTotalPricePrice
 
       // 修改主表信息和子表信息
-      const {message: updateMessage, code: updateCode} = await CabinetRelatedAPI.updateQuotation(formData.value,formData.value.quotationId)
+      const {
+        message: updateMessage,
+        code: updateCode
+      } = await CabinetRelatedAPI.updateQuotation(formData.value, formData.value.quotationId)
 
       // 要删除的附件
-      const temObj = {ids:willRemoveAttachs.value}
-      const {code: removeCode} =await CabinetRelatedAPI.removeQuotationAttachs(temObj)
+      const temObj = {ids: willRemoveAttachs.value}
+      const {code: removeCode} = await CabinetRelatedAPI.removeQuotationAttachs(temObj)
 
       // 上传新的附件
-      if(fileListRef.value.filter(file => file !== null).length > 0){
-        debugger
+      if (fileListRef.value.filter(file => file !== null).length > 0) {
         const fileData = new FormData()
         fileListRef.value.filter(file => file !== null).forEach(file => {
           fileData.append('file', file)
         })
-        const { code:uploadCode} = await UploadAPI.uploadQuotationFile(fileData,formData.value.quotationId)
+        const {code: uploadCode} = await UploadAPI.uploadQuotationFile(fileData, formData.value.quotationId)
       }
 
       if (updateCode == 200 && removeCode == 200) {
@@ -240,7 +238,6 @@ const handleSubmit = async () => {
 }
 
 
-
 const handleCancel = () => {
   showModal.value = false
   emit('save')
@@ -254,7 +251,7 @@ const parse = (input: string) => {
 }
 
 const format = (value: number | null) => {
-  if (value === null){
+  if (value === null) {
     return ''
   }
   return value.toLocaleString('en-US', {
@@ -269,50 +266,63 @@ const actonTest = () => h(
   {
     class: 'space-x-3 flex justify-center',
     style: 'margin-top: 5px'
-  },
-  [
-    h(
-      NButton,
-      {
-        type: 'default',
-        size: 'small',
-        onClick: () => {
-          handleCancel()
+  }, props.quotationState === 'view' ? [
+      h(
+        NButton,
+        {
+          type: 'default',
+          size: 'small',
+          onClick: () => {
+            handleCancel()
+          }
+        },
+        {
+          default: () => t('TEMP.NoticeManagement.Cancel')
         }
-      },
-      {
-        default: () => t('TEMP.NoticeManagement.Cancel')
-      }
-    ),
-    h(
-      NButton,
-      {
-        type: 'info',
-        size: 'small',
-        onClick: () => {
-          handleSubmit()
+      )
+    ] :
+    [
+      h(
+        NButton,
+        {
+          type: 'default',
+          size: 'small',
+          onClick: () => {
+            handleCancel()
+          }
+        },
+        {
+          default: () => t('TEMP.NoticeManagement.Cancel')
         }
-      },
-      {
-        default: () => t('TEMP.NoticeManagement.Save')
-      }
-    )
-  ]
+      ),
+      h(
+        NButton,
+        {
+          type: 'info',
+          size: 'small',
+          onClick: () => {
+            handleSubmit()
+          }
+        },
+        {
+          default: () => t('TEMP.NoticeManagement.Save')
+        }
+      )
+    ]
 )
 
 
 const handleDownload = (file: UploadFileInfo) => {
-  DownloadAPI.getDownloadQuotation(file.id).then(result=>{
+  DownloadAPI.getDownloadQuotation(file.id).then(result => {
 
-    console.log(result)
-    const blob = new Blob([result], { type: 'application/octet-stream' })
+    const blob = new Blob([result], {type: 'application/octet-stream'})
     // 创建一个临时 URL
     const url = window.URL.createObjectURL(blob)
     // 创建一个下载链接
     const a = document.createElement('a')
     a.href = url
     a.download = file.name // 设置下载的文件名
-    a.target = "_blank"
+    a.target = '_blank'
     // 触发点击事件，开始下载
     document.body.appendChild(a)
     a.click()
@@ -326,7 +336,7 @@ const handleDownload = (file: UploadFileInfo) => {
 }
 
 
-const onRemove = (options: { file: UploadFileInfo, fileList: Array<UploadFileInfo> })=>{
+const onRemove = (options: { file: UploadFileInfo, fileList: Array<UploadFileInfo> }) => {
   willRemoveAttachs.value.push(options.file.id)
 }
 
@@ -344,14 +354,14 @@ const handleShowModal = () => {
 watch(
   () => props.quotationFormData,
   async (newValue) => {
-    if(props.quotationState === 'create'){
+    if (props.quotationState === 'create') {
       formData.value = {
         ...newValue,
       }
-      detailData.value=[]
+      detailData.value = []
       fileListRef.value = []
       willRemoveAttachs.value = []
-    }else if(props.quotationState === 'edit'){
+    } else if (props.quotationState === 'edit') {
 
       formData.value = {
         ...newValue,
@@ -365,21 +375,27 @@ watch(
           updateTime: TimeUtils.formatTime(newValue.updateTime, 'YYYY-MM-DD')
         })
       }
-      if(formData.value.quotationId !== null && typeof formData.value.quotationId !=='undefined'){
+      if (formData.value.quotationId !== null && typeof formData.value.quotationId !== 'undefined') {
         // 子表信息
-        const {code: detailCode, data: detailDatas} = await CabinetRelatedAPI.getDetailDataByQuotationId(formData.value.quotationId)
+        const {
+          code: detailCode,
+          data: detailDatas
+        } = await CabinetRelatedAPI.getDetailDataByQuotationId(formData.value.quotationId)
         // 附件信息
-        const {code: attachCode, data: attachDatas} = await CabinetRelatedAPI.getAttachDataByQuotationId(formData.value.quotationId)
-        if(detailCode == 200 && attachCode == 200 ){
+        const {
+          code: attachCode,
+          data: attachDatas
+        } = await CabinetRelatedAPI.getAttachDataByQuotationId(formData.value.quotationId)
+        if (detailCode == 200 && attachCode == 200) {
           detailData.value = detailDatas
           fileList.value = attachDatas
-        }else{
+        } else {
           NMessage.error('数据读取错误')
         }
       }
       fileListRef.value = []
       willRemoveAttachs.value = []
-    }else {
+    } else {
       formData.value = {
         ...newValue,
         ...(newValue.quotationDate && {
@@ -393,6 +409,24 @@ watch(
         })
       }
 
+      if (formData.value.quotationId !== null && typeof formData.value.quotationId !== 'undefined') {
+        // 子表信息
+        const {
+          code: detailCode,
+          data: detailDatas
+        } = await CabinetRelatedAPI.getDetailDataByQuotationId(formData.value.quotationId)
+        // 附件信息
+        const {
+          code: attachCode,
+          data: attachDatas
+        } = await CabinetRelatedAPI.getAttachDataByQuotationId(formData.value.quotationId)
+        if (detailCode == 200 && attachCode == 200) {
+          detailData.value = detailDatas
+          fileList.value = attachDatas
+        } else {
+          NMessage.error('数据读取错误')
+        }
+      }
       fileListRef.value = []
       willRemoveAttachs.value = []
     }
@@ -414,7 +448,7 @@ watch(
       }
     })
   },
-  { deep: true }
+  {deep: true}
 )
 
 
@@ -430,15 +464,15 @@ watch(
     // 更新 formData.allTotalPrice
     formData.value.allTotalPrice = total
   },
-  { deep: true }
+  {deep: true}
 )
 
 
 const cabinetTotalPrice = computed({
   get() {
     let temPrice = 0
-    detailData.value.forEach(m=>{
-      if(m.detailType === '0'){
+    detailData.value.forEach(m => {
+      if (m.detailType === '0') {
         temPrice += m.priceAmount
       }
     })
@@ -450,8 +484,8 @@ const cabinetTotalPrice = computed({
 const electricalTotalPricePrice = computed({
   get() {
     let temPrice = 0
-    detailData.value.forEach(m=>{
-      if(m.detailType === '1'){
+    detailData.value.forEach(m => {
+      if (m.detailType === '1') {
         temPrice += m.priceAmount
       }
     })
@@ -602,7 +636,6 @@ defineExpose({
         </NFormItemGi>
 
 
-
         <NFormItemGi
           :span="8"
           path="quotationDate"
@@ -643,7 +676,6 @@ defineExpose({
       </n-divider>
 
 
-
       <div class="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between sm:space-y-0">
         <div class="flex w-full items-center !space-x-2 sm:w-fit " style="margin-top: -20px">
           <n-button secondary strong @click="addCabinetsDetailRow">
@@ -670,7 +702,7 @@ defineExpose({
 
 
           <n-gradient-text type="info" style="font-size: 16px">
-            橱柜类总计：{{cabinetTotalPrice}}元
+            橱柜类总计：{{ cabinetTotalPrice }}元
           </n-gradient-text>
 
           <!--          </n-divider>-->
@@ -684,7 +716,7 @@ defineExpose({
         <thead>
         <tr>
           <th style="width:15px;">
-            <n-checkbox @change="checkAllCabinetsDetail"  />
+            <n-checkbox @change="checkAllCabinetsDetail"/>
           </th>
           <th style="width:20px;">
             {{ t('TEMP.Cabinet.Quotation.serialNumber') }}
@@ -715,11 +747,11 @@ defineExpose({
         <tbody>
         <tr v-for="(n,i) in detailData.filter(m=>m.detailType==='0')" :key="i">
           <td>
-<!--            &#45;&#45;{{n.isChecked}}-->
+            <!--            &#45;&#45;{{n.isChecked}}-->
             <n-checkbox v-model:checked="n.isChecked"/>
           </td>
           <td>
-            {{i+1}}
+            {{ i + 1 }}
           </td>
           <td>
             <NInput
@@ -809,7 +841,6 @@ defineExpose({
       </NTable>
 
 
-
       <n-divider title-placement="left" style="margin-top: 10px">
         {{ t('TEMP.Cabinet.Quotation.kitchenwareHardware') }}
       </n-divider>
@@ -841,141 +872,141 @@ defineExpose({
 
 
           <n-gradient-text type="info" style="font-size: 16px">
-            厨具五金类总计：{{electricalTotalPricePrice}}元
+            厨具五金类总计：{{ electricalTotalPricePrice }}元
           </n-gradient-text>
 
-<!--          </n-divider>-->
+          <!--          </n-divider>-->
         </div>
 
 
       </div>
 
-        <NTable :bordered="false" :single-line="false" style="margin-top: 5px;" class="custom-table" size="small">
-          <thead>
-          <tr>
-            <th style="width:15px;">
-              <n-checkbox @change="checkAllKitchenwareHardwareDetail"/>
-            </th>
-            <th style="width:20px;">
-              {{ t('TEMP.Cabinet.Quotation.serialNumber') }}
-            </th>
-            <th>
-              {{ t('TEMP.Cabinet.Quotation.projectName') }}
-            </th>
-            <th>
-              {{ t('TEMP.Cabinet.Quotation.specificationModel') }}
-            </th>
-            <th>
-              {{ t('TEMP.Cabinet.Quotation.pricingQuantity') }}
-            </th>
-            <th>
-              {{ t('TEMP.Cabinet.Quotation.unitPrice') }}
-            </th>
-            <th>
-              {{ t('TEMP.Cabinet.Quotation.pricingCoefficient') }}
-            </th>
-            <th>
-              {{ t('TEMP.Cabinet.Quotation.priceAmount') }}
-            </th>
-            <th>
-              {{ t('TEMP.Cabinet.Quotation.remark') }}
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="(n,i) in detailData.filter(m=>m.detailType==='1')" :key="i">
-            <td>
-              <n-checkbox v-model:checked="n.isChecked"/>
-            </td>
-            <td>
-              {{i+1}}
-            </td>
-            <td>
-              <NInput
-                v-model:value="n.projectName"
-                :placeholder="t('TEMP.Cabinet.Quotation.projectName')"
-                clearable
-              />
-            </td>
-            <td>
-              <NInput
-                v-model:value="n.specificationModel"
-                :placeholder="t('TEMP.Cabinet.Quotation.specificationModel')"
-                clearable
-              />
-            </td>
-            <td>
-              <NInputNumber
-                v-model:value="n.pricingQuantity"
-                :placeholder="t('TEMP.Cabinet.Quotation.pricingQuantity')"
-                type="number"
-                show-count
-                clearable
-                :precision="2"
-                :show-button="false"
-                style="width: 100%"
-              >
-              </NInputNumber>
-            </td>
-            <td>
-              <NInputNumber
-                v-model:value="n.unitPrice"
-                :placeholder="t('TEMP.Cabinet.Quotation.unitPrice')"
-                type="number"
-                show-count
-                clearable
-                :parse="parse"
-                :format="format"
-                :show-button="false"
-                style="width: 100%"
-              >
-                <template #suffix>
-                  元
-                </template>
-              </NInputNumber>
-            </td>
-            <td>
-              <NInputNumber
-                v-model:value="n.pricingCoefficient"
-                :placeholder="t('TEMP.Cabinet.Quotation.pricingCoefficient')"
-                type="number"
-                show-count
-                clearable
-                :precision="2"
-                :show-button="false"
-                style="width: 100%"
-              >
-              </NInputNumber>
-            </td>
-            <td>
-              <NInputNumber
-                v-model:value="n.priceAmount"
-                :placeholder="t('TEMP.Cabinet.Quotation.priceAmount')"
-                type="number"
-                show-count
-                clearable
-                :parse="parse"
-                :format="format"
-                :show-button="false"
-                style="width: 100%"
-              >
-                <template #suffix>
-                  元
-                </template>
-              </NInputNumber>
-            </td>
-            <td>
-              <NInput
-                v-model:value="n.remark"
-                :placeholder="t('TEMP.Cabinet.Quotation.remark')"
-                clearable
-              />
-            </td>
+      <NTable :bordered="false" :single-line="false" style="margin-top: 5px;" class="custom-table" size="small">
+        <thead>
+        <tr>
+          <th style="width:15px;">
+            <n-checkbox @change="checkAllKitchenwareHardwareDetail"/>
+          </th>
+          <th style="width:20px;">
+            {{ t('TEMP.Cabinet.Quotation.serialNumber') }}
+          </th>
+          <th>
+            {{ t('TEMP.Cabinet.Quotation.projectName') }}
+          </th>
+          <th>
+            {{ t('TEMP.Cabinet.Quotation.specificationModel') }}
+          </th>
+          <th>
+            {{ t('TEMP.Cabinet.Quotation.pricingQuantity') }}
+          </th>
+          <th>
+            {{ t('TEMP.Cabinet.Quotation.unitPrice') }}
+          </th>
+          <th>
+            {{ t('TEMP.Cabinet.Quotation.pricingCoefficient') }}
+          </th>
+          <th>
+            {{ t('TEMP.Cabinet.Quotation.priceAmount') }}
+          </th>
+          <th>
+            {{ t('TEMP.Cabinet.Quotation.remark') }}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(n,i) in detailData.filter(m=>m.detailType==='1')" :key="i">
+          <td>
+            <n-checkbox v-model:checked="n.isChecked"/>
+          </td>
+          <td>
+            {{ i + 1 }}
+          </td>
+          <td>
+            <NInput
+              v-model:value="n.projectName"
+              :placeholder="t('TEMP.Cabinet.Quotation.projectName')"
+              clearable
+            />
+          </td>
+          <td>
+            <NInput
+              v-model:value="n.specificationModel"
+              :placeholder="t('TEMP.Cabinet.Quotation.specificationModel')"
+              clearable
+            />
+          </td>
+          <td>
+            <NInputNumber
+              v-model:value="n.pricingQuantity"
+              :placeholder="t('TEMP.Cabinet.Quotation.pricingQuantity')"
+              type="number"
+              show-count
+              clearable
+              :precision="2"
+              :show-button="false"
+              style="width: 100%"
+            >
+            </NInputNumber>
+          </td>
+          <td>
+            <NInputNumber
+              v-model:value="n.unitPrice"
+              :placeholder="t('TEMP.Cabinet.Quotation.unitPrice')"
+              type="number"
+              show-count
+              clearable
+              :parse="parse"
+              :format="format"
+              :show-button="false"
+              style="width: 100%"
+            >
+              <template #suffix>
+                元
+              </template>
+            </NInputNumber>
+          </td>
+          <td>
+            <NInputNumber
+              v-model:value="n.pricingCoefficient"
+              :placeholder="t('TEMP.Cabinet.Quotation.pricingCoefficient')"
+              type="number"
+              show-count
+              clearable
+              :precision="2"
+              :show-button="false"
+              style="width: 100%"
+            >
+            </NInputNumber>
+          </td>
+          <td>
+            <NInputNumber
+              v-model:value="n.priceAmount"
+              :placeholder="t('TEMP.Cabinet.Quotation.priceAmount')"
+              type="number"
+              show-count
+              clearable
+              :parse="parse"
+              :format="format"
+              :show-button="false"
+              style="width: 100%"
+            >
+              <template #suffix>
+                元
+              </template>
+            </NInputNumber>
+          </td>
+          <td>
+            <NInput
+              v-model:value="n.remark"
+              :placeholder="t('TEMP.Cabinet.Quotation.remark')"
+              clearable
+            />
+          </td>
 
-          </tr>
-          </tbody>
+        </tr>
+        </tbody>
 
-        </NTable>
+      </NTable>
       <n-divider title-placement="left" style="margin-top: 10px">
         {{ t('TEMP.Cabinet.Quotation.attachFiles') }}
       </n-divider>
@@ -990,7 +1021,7 @@ defineExpose({
         <n-upload-dragger>
           <div style="margin-bottom: 12px">
             <n-icon size="48" :depth="3">
-              <archive-icon />
+              <archive-icon/>
             </n-icon>
           </div>
           <n-text style="font-size: 16px">
@@ -1118,7 +1149,6 @@ defineExpose({
         </NFormItemGi>
 
 
-
         <NFormItemGi
           :span="8"
           path="quotationDate"
@@ -1159,7 +1189,6 @@ defineExpose({
       </n-divider>
 
 
-
       <div class="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between sm:space-y-0">
         <div class="flex w-full items-center !space-x-2 sm:w-fit " style="margin-top: -20px">
           <n-button secondary strong @click="addCabinetsDetailRow">
@@ -1186,7 +1215,7 @@ defineExpose({
 
 
           <n-gradient-text type="info" style="font-size: 16px">
-            橱柜类总计：{{cabinetTotalPrice}}元
+            橱柜类总计：{{ cabinetTotalPrice }}元
           </n-gradient-text>
 
           <!--          </n-divider>-->
@@ -1200,7 +1229,7 @@ defineExpose({
         <thead>
         <tr>
           <th style="width:15px;">
-            <n-checkbox @change="checkAllCabinetsDetail"  />
+            <n-checkbox @change="checkAllCabinetsDetail"/>
           </th>
           <th style="width:20px;">
             {{ t('TEMP.Cabinet.Quotation.serialNumber') }}
@@ -1235,7 +1264,7 @@ defineExpose({
             <n-checkbox v-model:checked="n.isChecked"/>
           </td>
           <td>
-            {{i+1}}
+            {{ i + 1 }}
           </td>
           <td>
             <NInput
@@ -1325,7 +1354,6 @@ defineExpose({
       </NTable>
 
 
-
       <n-divider title-placement="left" style="margin-top: 10px">
         {{ t('TEMP.Cabinet.Quotation.kitchenwareHardware') }}
       </n-divider>
@@ -1357,7 +1385,7 @@ defineExpose({
 
 
           <n-gradient-text type="info" style="font-size: 16px">
-            厨具五金类总计：{{electricalTotalPricePrice}}元
+            厨具五金类总计：{{ electricalTotalPricePrice }}元
           </n-gradient-text>
 
           <!--          </n-divider>-->
@@ -1404,7 +1432,7 @@ defineExpose({
             <n-checkbox v-model:checked="n.isChecked"/>
           </td>
           <td>
-            {{i+1}}
+            {{ i + 1 }}
           </td>
           <td>
             <NInput
@@ -1502,15 +1530,15 @@ defineExpose({
         directory-dnd
         :max="10"
         style="margin-top: -20px"
-        @change="uploadAvatarUrl"
         show-download-button
+        @change="uploadAvatarUrl"
         @remove="onRemove"
         @download="handleDownload"
       >
         <n-upload-dragger>
           <div style="margin-bottom: 12px">
             <n-icon size="48" :depth="3">
-              <archive-icon />
+              <archive-icon/>
             </n-icon>
           </div>
           <n-text style="font-size: 16px">
@@ -1620,7 +1648,6 @@ defineExpose({
         </NFormItemGi>
 
 
-
         <NFormItemGi
           :span="8"
           path="quotationDate"
@@ -1655,31 +1682,24 @@ defineExpose({
       </nGrid>
 
 
+      <div class="flex w-full items-center justify-between  sm:justify-end ">
+        <n-divider title-placement="left" style="margin-top: -10px">
+          {{ t('TEMP.Cabinet.Quotation.Cabinets') }}
+        </n-divider>
 
+        <n-gradient-text type="info" style="font-size: 16px;margin-top: -30px">
+          橱柜类总计：{{ cabinetTotalPrice }}元
+        </n-gradient-text>
 
-
-
-
-
-        <div class="flex w-full items-center justify-between  sm:justify-end ">
-          <n-divider title-placement="left" style="margin-top: -10px">
-            {{ t('TEMP.Cabinet.Quotation.Cabinets') }}
-          </n-divider>
-
-          <n-gradient-text type="info" style="font-size: 16px;margin-top: -30px">
-            橱柜类总计：{{cabinetTotalPrice}}元
-          </n-gradient-text>
-
-          <!--          </n-divider>-->
-        </div>
-
+        <!--          </n-divider>-->
+      </div>
 
 
       <NTable :bordered="false" :single-line="false" style="margin-top: -20px" class="custom-table" size="small">
         <thead>
         <tr>
           <th style="width:15px;">
-            <n-checkbox @change="checkAllCabinetsDetail"  />
+            <n-checkbox @change="checkAllCabinetsDetail"/>
           </th>
           <th style="width:20px;">
             {{ t('TEMP.Cabinet.Quotation.serialNumber') }}
@@ -1714,7 +1734,7 @@ defineExpose({
             <n-checkbox v-model:checked="n.isChecked"/>
           </td>
           <td>
-            {{i+1}}
+            {{ i + 1 }}
           </td>
           <td>
             <NInput
@@ -1732,7 +1752,7 @@ defineExpose({
             <NInputNumber
               v-model:value="n.pricingQuantity"
               type="number"
-              readonly
+              disabled
               :precision="2"
               :show-button="false"
               style="width: 100%"
@@ -1799,7 +1819,7 @@ defineExpose({
         </n-divider>
 
         <n-gradient-text type="info" style="font-size: 16px; margin-top: -10px">
-          厨具五金类总计：{{electricalTotalPricePrice}}元
+          厨具五金类总计：{{ electricalTotalPricePrice }}元
         </n-gradient-text>
         <!--          </n-divider>-->
       </div>
@@ -1842,7 +1862,7 @@ defineExpose({
             <n-checkbox v-model:checked="n.isChecked"/>
           </td>
           <td>
-            {{i+1}}
+            {{ i + 1 }}
           </td>
           <td>
             <NInput
@@ -1924,26 +1944,27 @@ defineExpose({
       </n-divider>
 
       <n-upload
+        v-model:file-list="fileList"
         multiple
-        directory-dnd
         :max="10"
-        style="margin-top: -20px"
-        @change="uploadAvatarUrl"
+        style="margin-top: -30px"
         disabled
+        show-download-button
+        @download="handleDownload"
       >
-        <n-upload-dragger>
-          <div style="margin-bottom: 12px">
-            <n-icon size="48" :depth="3">
-              <archive-icon />
-            </n-icon>
-          </div>
-          <n-text style="font-size: 16px">
-            点击或者拖动文件到该区域来上传
-          </n-text>
-          <n-p depth="3" style="margin: 8px 0 0 0">
-            请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
-          </n-p>
-        </n-upload-dragger>
+        <!--        <n-upload-dragger>-->
+        <!--          <div style="margin-bottom: 12px">-->
+        <!--            <n-icon size="48" :depth="3">-->
+        <!--              <archive-icon />-->
+        <!--            </n-icon>-->
+        <!--          </div>-->
+        <!--          <n-text style="font-size: 16px">-->
+        <!--            点击或者拖动文件到该区域来上传-->
+        <!--          </n-text>-->
+        <!--          <n-p depth="3" style="margin: 8px 0 0 0">-->
+        <!--            请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码-->
+        <!--          </n-p>-->
+        <!--        </n-upload-dragger>-->
       </n-upload>
 
     </NForm>
