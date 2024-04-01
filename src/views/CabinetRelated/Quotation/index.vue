@@ -1,17 +1,18 @@
 <script lang="ts">
 import {AddSharp, Filter as FilterIcon, Reload as ReloadIcon, TrashBinOutline} from '@vicons/ionicons5'
 import {NIcon, useDialog, useMessage} from 'naive-ui'
-import ViewIcon from '~icons/mdi/file-search-outline'
 
+import {CabinetRelatedAPI} from '@/api/cabinetRelated'
 import {BasePageModel} from '@/constants'
 import i18n from '@/i18n'
 import type {Notice} from '@/types/api/notice'
-
-import {QuotationFormModal} from './components'
-import SearchIcon from '~icons/line-md/search'
 import ResetIcon from '~icons/ic/round-refresh'
 import EditIcon from '~icons/ic/sharp-edit'
-import {CabinetRelatedAPI} from "@/api/cabinetRelated";
+import SearchIcon from '~icons/line-md/search'
+import ViewIcon from '~icons/mdi/file-search-outline'
+import FileExport from '~icons/tabler/FileExport'
+
+import {QuotationFormModal} from './components'
 
 const quotationFormModalRef = ref()
 const quotationFormData = ref({})
@@ -168,6 +169,7 @@ export default defineComponent({
       TrashBinOutline,
       ResetIcon,
       SearchIcon,
+      FileExport,
       loading: loadingRef,
       t,
       quotationFormModalRef,
@@ -221,7 +223,7 @@ export default defineComponent({
         const args = {ids: checkedRowKeysRef.value}
         dialog.warning({
           title: '警告',
-          content: "确定要删掉这些报价单吗",
+          content: '确定要删掉这些报价单吗',
           positiveText: '确定',
           negativeText: '取消',
           onPositiveClick: async () => {
@@ -239,6 +241,32 @@ export default defineComponent({
             window.$message.warning('取消操作')
           }
         })
+      },
+      handleExport(){
+      if (checkedRowKeysRef.value.length === 0) {
+        window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
+      } else if (checkedRowKeysRef.value.length > 1) {
+        window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
+      }else{
+        const temObj  = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
+        ExportAPI.getExportQuotation(temObj.quotationId).then(result => {
+
+          const blob = new Blob([result], {type: 'application/octet-stream'})
+          // 创建一个临时 URL
+          const url = window.URL.createObjectURL(blob)
+          // 创建一个下载链接
+          const a = document.createElement('a')
+          a.href = url
+          a.download = `${temObj.address}-报价单.docx` // 设置下载的文件名
+          a.target = '_blank'
+          // 触发点击事件，开始下载
+          document.body.appendChild(a)
+          a.click()
+          // 清理临时 URL
+          window.URL.revokeObjectURL(url)
+          window.$message.success(`导出成功：${temObj.address}-报价单.docx`)
+        })
+      }
       }
     }
   }
@@ -326,6 +354,15 @@ export default defineComponent({
             </template>
             <span>干掉它们！😈</span>
           </n-popover>
+
+          <n-button icon-placement="left" secondary strong @click="handleExport">
+            <template #icon>
+              <n-icon :component="FileExport">
+                <!--                <AddSharp-icon />-->
+              </n-icon>
+            </template>
+            {{ t('TEMP.Cabinet.Quotation.export') }}
+          </n-button>
 
 
           <NTooltip>

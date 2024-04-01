@@ -16,6 +16,7 @@ declare global {
   const DownloadAPI: typeof import('../src/api/download')['DownloadAPI']
   const EffectScope: typeof import('vue')['EffectScope']
   const ExcelUtils: typeof import('../src/utils/excel')['ExcelUtils']
+  const ExportAPI: typeof import('../src/api/export')['ExportAPI']
   const GitHubAuthUtils: typeof import('../src/utils/github')['GitHubAuthUtils']
   const GlobalEnvConfig: typeof import('@/constants')['GlobalEnvConfig']
   const GoogleAuthUtils: typeof import('../src/utils/google')['GoogleAuthUtils']
@@ -168,6 +169,7 @@ declare module 'vue' {
     readonly DownloadAPI: UnwrapRef<typeof import('../src/api/download')['DownloadAPI']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly ExcelUtils: UnwrapRef<typeof import('../src/utils/excel')['ExcelUtils']>
+    readonly ExportAPI: UnwrapRef<typeof import('../src/api/export')['ExportAPI']>
     readonly GitHubAuthUtils: UnwrapRef<typeof import('../src/utils/github')['GitHubAuthUtils']>
     readonly GlobalEnvConfig: UnwrapRef<typeof import('@/constants')['GlobalEnvConfig']>
     readonly GoogleAuthUtils: UnwrapRef<typeof import('../src/utils/google')['GoogleAuthUtils']>
@@ -309,6 +311,7 @@ declare module '@vue/runtime-core' {
     readonly DownloadAPI: UnwrapRef<typeof import('../src/api/download')['DownloadAPI']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly ExcelUtils: UnwrapRef<typeof import('../src/utils/excel')['ExcelUtils']>
+    readonly ExportAPI: UnwrapRef<typeof import('../src/api/export')['ExportAPI']>
     readonly GitHubAuthUtils: UnwrapRef<typeof import('../src/utils/github')['GitHubAuthUtils']>
     readonly GlobalEnvConfig: UnwrapRef<typeof import('@/constants')['GlobalEnvConfig']>
     readonly GoogleAuthUtils: UnwrapRef<typeof import('../src/utils/google')['GoogleAuthUtils']>

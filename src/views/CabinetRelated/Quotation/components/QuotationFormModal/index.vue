@@ -942,7 +942,7 @@ defineExpose({
               type="number"
               show-count
               clearable
-              :precision="2"
+              :precision="0"
               :show-button="false"
               style="width: 100%"
             >
@@ -1455,7 +1455,7 @@ defineExpose({
               type="number"
               show-count
               clearable
-              :precision="2"
+              :precision="0"
               :show-button="false"
               style="width: 100%"
             >
@@ -1881,7 +1881,7 @@ defineExpose({
               v-model:value="n.pricingQuantity"
               type="number"
               disabled
-              :precision="2"
+              :precision="0"
               :show-button="false"
               style="width: 100%"
             >
