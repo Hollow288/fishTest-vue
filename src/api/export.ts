@@ -9,5 +9,9 @@ export class ExportAPI {
   }
 
 
+  static getExportQuotationPdf(quotationId: string){
+    return httpRequest.get(`${this.EXPORT_API_PREFIX}/${quotationId}/quotation-pdf`, {}, {responseType: 'blob' })
+  }
+
 
 }
