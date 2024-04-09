@@ -47,6 +47,15 @@ export class CabinetRelatedAPI {
     return httpRequest.patch<ResponseResult>(`${this.CABINET_API_PREFIX}/delete-quotations`, {...quotationIds})
   }
 
+  static getPortFolioType(){
+    return httpRequest.get<ResponseResult>(`${this.CABINET_API_PREFIX}/port-folio-type`)
+  }
+
+
+  static editPortFolioType(formData:object){
+    return httpRequest.put<ResponseResult>(`${this.CABINET_API_PREFIX}/port-folio-type`,{...formData})
+  }
+
 
 
 }

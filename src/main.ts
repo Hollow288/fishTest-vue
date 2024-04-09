@@ -5,7 +5,7 @@ import { sendNotification } from '@tauri-apps/api/notification'
 import { MotionPlugin } from '@vueuse/motion'
 
 import router from '@/router'
-
+import { VueCropper } from 'vue-cropper'
 import App from './App.vue'
 
 const { APP_NAME, FAVICON_URL } = AppMetadata
@@ -26,6 +26,7 @@ app.use(router)
  * @see https://motion.vueuse.org/
  */
 app.use(MotionPlugin)
+app.use(VueCropper)
 app.mount('#app')
 
 // PC 端调用系统弹窗

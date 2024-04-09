@@ -10,14 +10,19 @@ import ResetIcon from '~icons/ic/round-refresh'
 import EditIcon from '~icons/ic/sharp-edit'
 import SearchIcon from '~icons/line-md/search'
 import ViewIcon from '~icons/mdi/file-search-outline'
+import CogIcon from '~icons/mdi/cog'
 import FileExport from '~icons/tabler/FileExport'
 
-import {QuotationFormModal} from './components'
+import {PortFolioFormModal,PortFolioTypeModal} from './components'
+import {PortFolioType} from "@/types/api/portFolioType";
 
-const quotationFormModalRef = ref()
-const quotationFormData = ref({})
-const quotationState = ref('')
+const portFolioFormModalRef = ref()
+const portFolioFormData = ref({})
+const portFolioState = ref('')
+const portFolioTypeModalRef = ref()
+const portFolioTypeFormData = ref({})
 const dataRef = ref<Notice[]>([])
+const generalOptions = ref<PortFolioType>([])
 const checkArray = ref([])
 
 const {t} = i18n.global
@@ -69,6 +74,10 @@ const queryParams = reactive({
   searchText: ''
 })
 
+const queryType = async () => {
+  const {data} = await CabinetRelatedAPI.getPortFolioType()
+  generalOptions.value = data
+}
 
 const queryList = () => {
 
@@ -91,7 +100,10 @@ const queryList = () => {
     paginationReactive.itemCount = total
     loadingRef.value = false
   }))
+  queryType()
 }
+
+
 
 
 const handleReset = () => {
@@ -104,7 +116,7 @@ const handleReset = () => {
 
 
 export default defineComponent({
-  components: {NIcon, QuotationFormModal, SearchIcon},
+  components: {NIcon, PortFolioFormModal, SearchIcon, PortFolioTypeModal},
   setup() {
 
 
@@ -162,6 +174,7 @@ export default defineComponent({
       queryList,
       handleReset,
       ViewIcon,
+      CogIcon,
       queryParams,
       FilterIcon,
       ReloadIcon,
@@ -172,12 +185,15 @@ export default defineComponent({
       FileExport,
       loading: loadingRef,
       t,
-      quotationFormModalRef,
-      quotationFormData,
-      quotationState,
+      portFolioFormModalRef,
+      portFolioFormData,
+      portFolioState,
+      portFolioTypeModalRef,
+      portFolioTypeFormData,
       AddSharp,
       dialog,
       pagination: paginationReactive,
+      generalOptions,
       rowKey(rowData) {
         return rowData.quotationId
       },
@@ -185,36 +201,36 @@ export default defineComponent({
         checkedRowKeysRef.value = rowKeys
       },
       showDropdown: showDropdownRef,
-      createNewQuotation() {
-        quotationState.value = 'create'
-        quotationFormData.value = {}
-        quotationFormModalRef.value.handleShowModal()
+      createNewPortFolio() {
+        portFolioState.value = 'create'
+        portFolioFormData.value = {}
+        portFolioFormModalRef.value.handleShowModal()
       },
-      editOneQuotation() {
+      editOnePortFolio() {
         if (checkedRowKeysRef.value.length === 0) {
           window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
         } else if (checkedRowKeysRef.value.length > 1) {
           window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
         } else {
-          quotationState.value = 'edit'
-          quotationFormData.value = {}
-          quotationFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
-          quotationFormModalRef.value.handleShowModal()
+          portFolioState.value = 'edit'
+          portFolioFormData.value = {}
+          portFolioFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
+          portFolioFormModalRef.value.handleShowModal()
         }
       },
-      viewOneQuotation() {
+      viewOnePortFolio() {
         if (checkedRowKeysRef.value.length === 0) {
           window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
         } else if (checkedRowKeysRef.value.length > 1) {
           window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
         } else {
-          quotationState.value = 'view'
-          quotationFormData.value = {}
-          quotationFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
-          quotationFormModalRef.value.handleShowModal()
+          portFolioState.value = 'view'
+          portFolioFormData.value = {}
+          portFolioFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
+          portFolioFormModalRef.value.handleShowModal()
         }
       },
-      deleteQuotations() {
+      deletePortFolios() {
         if (checkedRowKeysRef.value.length === 0) {
           window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
           return
@@ -242,57 +258,9 @@ export default defineComponent({
           }
         })
       },
-      handleExport(){
-      if (checkedRowKeysRef.value.length === 0) {
-        window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
-      } else if (checkedRowKeysRef.value.length > 1) {
-        window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
-      }else{
-        const temObj  = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
-        ExportAPI.getExportQuotation(temObj.quotationId).then(result => {
-
-          const blob = new Blob([result], {type: 'application/octet-stream'})
-          // 创建一个临时 URL
-          const url = window.URL.createObjectURL(blob)
-          // 创建一个下载链接
-          const a = document.createElement('a')
-          a.href = url
-          a.download = `${temObj.address}-报价单.docx` // 设置下载的文件名
-          a.target = '_blank'
-          // 触发点击事件，开始下载
-          document.body.appendChild(a)
-          a.click()
-          // 清理临时 URL
-          window.URL.revokeObjectURL(url)
-          window.$message.success(`导出成功：${temObj.address}-报价单.docx`)
-        })
-      }
-      },
-      handleExportPdf(){
-        if (checkedRowKeysRef.value.length === 0) {
-          window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
-        } else if (checkedRowKeysRef.value.length > 1) {
-          window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
-        }else{
-          const temObj  = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
-          ExportAPI.getExportQuotationPdf(temObj.quotationId).then(result => {
-
-            const blob = new Blob([result], {type: 'application/octet-stream'})
-            // 创建一个临时 URL
-            const url = window.URL.createObjectURL(blob)
-            // 创建一个下载链接
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `${temObj.address}-报价单.pdf` // 设置下载的文件名
-            a.target = '_blank'
-            // 触发点击事件，开始下载
-            document.body.appendChild(a)
-            a.click()
-            // 清理临时 URL
-            window.URL.revokeObjectURL(url)
-            window.$message.success(`导出成功：${temObj.address}-报价单.pdf`)
-          })
-        }
+      editType(){
+        portFolioTypeFormData.value = new Date()
+        portFolioTypeModalRef.value.handleShowModal()
       }
     }
   }
@@ -307,20 +275,29 @@ export default defineComponent({
       <div class="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between sm:space-y-0">
         <div class="flex flex-col items-center space-y-2 sm:flex-row sm:space-x-3 sm:space-y-0">
           <div class="flex w-full items-center !space-x-2 sm:w-fit ">
-            <NInput
+<!--            <NInput-->
+<!--              v-model:value="queryParams.searchText"-->
+<!--              class="sm:!w-[180px]"-->
+<!--              clearable-->
+<!--              :placeholder="t('TEMP.Cabinet.Quotation.customerNameOrAddress')"-->
+<!--              @keydown.enter="queryList"-->
+<!--            >-->
+<!--              <template #prefix>-->
+<!--                <NIcon-->
+<!--                  :component="SearchIcon"-->
+<!--                  class="mr-1"-->
+<!--                />-->
+<!--              </template>-->
+<!--            </NInput>-->
+            <!--              v-model:value="model.multipleSelectValue"-->
+            <NSelect
+              :placeholder="t('TEMP.Cabinet.PortfolioWeb.typeYouWant')"
               v-model:value="queryParams.searchText"
-              class="sm:!w-[180px]"
-              clearable
-              :placeholder="t('TEMP.Cabinet.Quotation.customerNameOrAddress')"
-              @keydown.enter="queryList"
-            >
-              <template #prefix>
-                <NIcon
-                  :component="SearchIcon"
-                  class="mr-1"
-                />
-              </template>
-            </NInput>
+              class="sm:!w-[400px]"
+              :options="generalOptions"
+              multiple
+              remote
+            />
 
             <n-button icon-placement="left" secondary strong round @click="queryList">
               <template #icon>
@@ -331,13 +308,22 @@ export default defineComponent({
               {{ t('COMMON.Search') }}
             </n-button>
 
+            <n-button icon-placement="left" secondary strong round @click="editType">
+              <template #icon>
+                <n-icon :component="CogIcon">
+                  <!--                <AddSharp-icon />-->
+                </n-icon>
+              </template>
+              {{ t('TEMP.Cabinet.PortfolioWeb.type') }}
+            </n-button>
+
 
           </div>
         </div>
 
         <div class="flex w-full items-center justify-between space-x-3 sm:justify-end ">
 
-          <n-button icon-placement="left" secondary strong @click="createNewQuotation">
+          <n-button icon-placement="left" secondary strong @click="createNewPortFolio">
             <template #icon>
               <n-icon :component="AddSharp">
                 <!--                <AddSharp-icon />-->
@@ -347,7 +333,7 @@ export default defineComponent({
           </n-button>
 
 
-          <n-button icon-placement="left" secondary strong @click="editOneQuotation">
+          <n-button icon-placement="left" secondary strong @click="editOnePortFolio">
             <template #icon>
               <n-icon :component="EditIcon">
                 <!--                <AddSharp-icon />-->
@@ -357,7 +343,7 @@ export default defineComponent({
           </n-button>
 
 
-          <n-button icon-placement="left" secondary strong @click="viewOneQuotation">
+          <n-button icon-placement="left" secondary strong @click="viewOnePortFolio">
             <template #icon>
               <n-icon :component="ViewIcon">
                 <!--                <AddSharp-icon />-->
@@ -369,7 +355,7 @@ export default defineComponent({
 
           <n-popover trigger="hover">
             <template #trigger>
-              <n-button icon-placement="left" secondary strong @click="deleteQuotations">
+              <n-button icon-placement="left" secondary strong @click="deletePortFolios">
                 <template #icon>
                   <n-icon :component="TrashBinOutline">
                     <!--                <AddSharp-icon />-->
@@ -380,25 +366,6 @@ export default defineComponent({
             </template>
             <span>干掉它们！😈</span>
           </n-popover>
-
-          <n-button icon-placement="left" secondary strong @click="handleExport">
-            <template #icon>
-              <n-icon :component="FileExport">
-                <!--                <AddSharp-icon />-->
-              </n-icon>
-            </template>
-            {{ t('TEMP.Cabinet.Quotation.export') }}
-          </n-button>
-
-<!--&lt;!&ndash;           Todo 导出PDF&ndash;&gt;-->
-<!--          <n-button icon-placement="left" secondary strong @click="handleExportPdf">-->
-<!--            <template #icon>-->
-<!--              <n-icon :component="FileExport">-->
-<!--                &lt;!&ndash;                <AddSharp-icon />&ndash;&gt;-->
-<!--              </n-icon>-->
-<!--            </template>-->
-<!--&lt;!&ndash;            {{ t('TEMP.Cabinet.Quotation.export') }}&ndash;&gt;pdf-->
-<!--          </n-button>-->
 
 
           <NTooltip>
@@ -436,10 +403,16 @@ export default defineComponent({
       @update:checked-row-keys="handleCheck"
     />
 
-    <QuotationFormModal
-      ref="quotationFormModalRef"
-      :quotation-state="quotationState"
-      :quotation-form-data="quotationFormData"
+    <PortFolioFormModal
+      ref="portFolioFormModalRef"
+      :port-folio-state="portFolioState"
+      :port-folio-form-data="portFolioFormData"
+      @save="queryList"
+    />
+
+    <PortFolioTypeModal
+      ref="portFolioTypeModalRef"
+      :port-folio-type-form-data="portFolioTypeFormData"
       @save="queryList"
     />
   </DataTableLayout>
