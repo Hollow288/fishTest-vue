@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import 'vue-cropper/dist/index.css'
+
 
 import type {FormInst, FormRules, FormValidationError} from 'naive-ui'
-import { VueCropper } from 'vue-cropper'
+import {NIcon, UploadFileInfo} from 'naive-ui'
 
+import {CabinetRelatedAPI} from '@/api/cabinetRelated'
 import type {MessageSchema} from '@/types'
 import type {CabinetQuotation} from '@/types/api/cabinetQuotation'
+import type {PortFolioType} from '@/types/api/portFolioType'
 import CreateIcon from '~icons/ic/sharp-add'
 import EditIcon from '~icons/ic/sharp-edit'
 import ViewIcon from '~icons/mdi/file-search-outline'
+import SettingsAdjust from '~icons/mdi/image-auto-adjust'
+import {PortFolio} from "@/types/api/cortFolio";
 
 export interface Props {
   portFolioFormData?: CabinetQuotation
@@ -16,26 +20,20 @@ export interface Props {
 }
 
 const props = defineProps<Props>()
+const generalOptions = ref<PortFolioType>([])
+const fileThumbnailRef = ref([])
+const filePanoramaRef = ref([])
+const formData = ref<PortFolio>({})
 
-const option =   {
-    img: 'https://avatars2.githubusercontent.com/u/15681693?s=460&v=4',
-    size: 1,
-    full: false,
-    outputType: 'png',
-    canMove: false,
-    fixedBox: false,
-    original: false,
-    canMoveBox: true,
-    autoCrop: true,
-    // 只有自动截图开启 宽度高度才生效
-    autoCropWidth: 160,
-    autoCropHeight: 150,
-    centerBox: true,
-    high: true,
-    max: 99999,
-    fixed: true,
-    fixedNumber: [1, 2],
-  }
+const uploadThumbnailUrl = (options: { fileList: UploadFileInfo[] }) => {
+  const files = options.fileList.map(item => item.file)
+  fileThumbnailRef.value = files
+}
+
+const uploadPanoramaUrl = (options: { fileList: UploadFileInfo[] }) => {
+  const files = options.fileList.map(item => item.file)
+  filePanoramaRef.value = files
+}
 
 const emit = defineEmits<{
   (e: 'save'): void
@@ -47,13 +45,18 @@ const NMessage = useMessage()
 const [submitLoading, submitLoadingDispatcher] = useLoading()
 
 const formRef = ref<FormInst | null>(null)
-const formData = ref<CabinetQuotation>({})
-
-
 
 const showModal = ref(false)
+const showAdjustModal = ref(false)
 
 
+const openAdjustModal = () => {
+  showAdjustModal.value = true
+}
+
+const renderIcon = () => h(NIcon, null, {
+    default: () => h(SettingsAdjust)
+  })
 
 const quotationRules: FormRules = {
   customerName: [
@@ -94,7 +97,7 @@ const handleSubmit = async () => {
   if (props.portFolioState === 'create') {
     try {
 
-
+       const {code,data} =  await CabinetRelatedAPI.addPortfolio(formData.value)
 
     } catch (err: any) {
       if (err.message) {
@@ -123,11 +126,11 @@ const handleSubmit = async () => {
 }
 
 
+
 const handleCancel = () => {
   showModal.value = false
   emit('save')
 }
-
 
 const actonTest = () => h(
   'div',
@@ -194,6 +197,8 @@ watch(
   () => props.portFolioFormData,
   async (newValue) => {
     if (props.portFolioState === 'create') {
+      const {data} = await CabinetRelatedAPI.getPortFolioType()
+      generalOptions.value = data
     } else if (props.portFolioState === 'edit') {
 
     } else {
@@ -220,7 +225,7 @@ defineExpose({
 <template>
   <NModal
     v-model:show="showModal"
-    class="!my-6 sm:!w-[1200px]"
+    class="!my-6 sm:!w-[800px]"
     preset="dialog"
     :title="portFolioState === 'create' ? t('TEMP.Cabinet.PortfolioWeb.create') : (portFolioState === 'edit' ? t('TEMP.PortfolioWeb.Quotation.edit') : (portFolioState === 'view' ? t('TEMP.Cabinet.PortfolioWeb.view') : t('TEMP.Cabinet.PortfolioWeb.view')))"
     :loading="submitLoading"
@@ -234,35 +239,85 @@ defineExpose({
       />
     </template>
 
-
-
-
-
     <NForm
       ref="formRef"
       :model="formData"
       :rules="quotationRules"
       label-width="auto"
       require-mark-placement="right-hanging"
-      class="flex flex-col sm:!h-[630px]"
       label-placement='left'
       style="overflow-y: auto;"
       label-align='right'
     >
-<!--      <div class="cropper">-->
-<!--        <VueCropper-->
-<!--          ref="cropper"-->
-<!--          :img="option.img"-->
-<!--          :output-size="option.size"-->
-<!--          :output-type="option.outputType"-->
-<!--        ></VueCropper>-->
-<!--      </div>-->
 
+      <nGrid :cols="24">
+        <NFormItemGi
+          :span="7"
+          :label="t('TEMP.Cabinet.PortfolioWeb.thumbnail')"
+        >
+            <n-upload
+              list-type="image-card"
+              max="1"
+              @change="uploadThumbnailUrl"
+            >
+              点击上传
+            </n-upload>
+        </NFormItemGi>
+        <n-gi span="5">
+          <n-button icon-placement="left" secondary  @click="openAdjustModal">
+            <template #icon>
+              <n-icon :component="SettingsAdjust">
+                <!--                <AddSharp-icon />-->
+              </n-icon>
+            </template>
+            {{ t('COMMON.SettingsAdjust') }}
+          </n-button>
+        </n-gi>
+
+        <NFormItemGi
+          :span="12"
+          :label="t('TEMP.Cabinet.PortfolioWeb.Panorama')"
+        >
+          <n-upload
+            list-type="image-card"
+            max="1"
+            @change="uploadPanoramaUrl"
+          >
+            点击上传
+          </n-upload>
+        </NFormItemGi>
+
+      </nGrid>
+
+
+
+      <nGrid :cols="24">
+        <NFormItemGi
+          :span="24"
+          :label="t('TEMP.Cabinet.PortfolioWeb.photoType')"
+        >
+          <n-select v-model:value="formData.photoTypes" multiple :options="generalOptions" />
+
+        </NFormItemGi>
+      </nGrid>
 
     </NForm>
 
 
+
   </NModal>
+
+  <NModal
+    title="裁剪图片"
+    :bordered="false"
+    size="huge"
+    preset="dialog"
+    aria-modal="true"
+    @change="uploadThumbnailUrl"
+    :icon="renderIcon">
+
+  </NModal>
+
 </template>
 
 <style scoped>
@@ -303,7 +358,7 @@ defineExpose({
 
 .cropper {
   width: 260px;
-  height: 260px;
+  height: 360px;
 }
 </style>
 

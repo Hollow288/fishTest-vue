@@ -57,5 +57,10 @@ export class CabinetRelatedAPI {
   }
 
 
+  static addPortfolio(formData:object){
+    return httpRequest.post<ResponseResult>(`${this.CABINET_API_PREFIX}/port-folio`, {...formData})
+  }
+
+
 
 }

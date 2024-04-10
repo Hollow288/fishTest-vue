@@ -250,7 +250,10 @@
       "type": "类别设置",
       "create": "创建",
       "edit": "修改",
-      "view": "查看"
+      "view": "查看",
+      "thumbnail": "缩略图",
+      "Panorama": "全景图",
+      "photoType": "图片分类"
     }
   }
 }
