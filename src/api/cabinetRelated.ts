@@ -1,6 +1,7 @@
 import type {BasePageModel} from '@/constants'
 import type {ResponseResult} from '@/types'
 import type {CabinetQuotation} from '@/types/api/cabinetQuotation'
+import {PageResponse} from "@/types";
 
 export class CabinetRelatedAPI {
   private static CABINET_API_PREFIX = `${GlobalEnvConfig.BASE_API_PREFIX}/cabinet`
@@ -9,6 +10,13 @@ export class CabinetRelatedAPI {
   // 分页菜单列表
   static listQuotation(params: BasePageModel) {
     return httpRequest.get<ResponseResult>(`${this.CABINET_API_PREFIX}/quotation`, {
+      ...params
+    })
+  }
+
+
+  static listPortfolioWeb(params: BasePageModel) {
+    return httpRequest.post<PageResponse>(`${this.CABINET_API_PREFIX}/portfolio-web`, {
       ...params
     })
   }
@@ -43,8 +51,12 @@ export class CabinetRelatedAPI {
   }
 
 
-  static delete(quotationIds: object) {
+  static deleteQuotations(quotationIds: object) {
     return httpRequest.patch<ResponseResult>(`${this.CABINET_API_PREFIX}/delete-quotations`, {...quotationIds})
+  }
+
+  static deletePortfolioWeb(quotationIds: object) {
+    return httpRequest.patch<ResponseResult>(`${this.CABINET_API_PREFIX}/delete-portfolio-web`, {...quotationIds})
   }
 
   static getPortFolioType(){

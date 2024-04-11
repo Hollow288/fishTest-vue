@@ -50,6 +50,18 @@ export class UploadAPI {
     })
   }
 
+  static uploadPortFolioThumbnailFile(data: any, folioId: any) {
+    return httpRequest.post<BaseResponse<{ path: string }>>(`${this.UPLOAD_API_PREFIX}/${folioId}/portfolio-thumbnail`, data, {
+      headers: this.headers
+    })
+  }
+
+  static uploadPortFolioPanoramaFile(data: any, folioId: any) {
+    return httpRequest.post<BaseResponse<{ path: string }>>(`${this.UPLOAD_API_PREFIX}/${folioId}/portfolio-panorama`, data, {
+      headers: this.headers
+    })
+  }
+
   /**
    * 批量上传文件
    * @param data 文件数据

@@ -6,15 +6,16 @@ import {CabinetRelatedAPI} from '@/api/cabinetRelated'
 import {BasePageModel} from '@/constants'
 import i18n from '@/i18n'
 import type {Notice} from '@/types/api/notice'
+import type {PortFolioType} from '@/types/api/portFolioType'
+import UserAvatarIcon from '~icons/carbon/user-avatar-filled-alt'
 import ResetIcon from '~icons/ic/round-refresh'
 import EditIcon from '~icons/ic/sharp-edit'
 import SearchIcon from '~icons/line-md/search'
-import ViewIcon from '~icons/mdi/file-search-outline'
 import CogIcon from '~icons/mdi/cog'
+import ViewIcon from '~icons/mdi/file-search-outline'
 import FileExport from '~icons/tabler/FileExport'
 
-import {PortFolioFormModal,PortFolioTypeModal} from './components'
-import {PortFolioType} from "@/types/api/portFolioType";
+import {PortFolioFormModal, PortFolioTypeModal} from './components'
 
 const portFolioFormModalRef = ref()
 const portFolioFormData = ref({})
@@ -71,7 +72,7 @@ const paginationReactive = reactive({
 
 
 const queryParams = reactive({
-  searchText: ''
+  searchText: []
 })
 
 const queryType = async () => {
@@ -89,12 +90,12 @@ const queryList = () => {
     searchText: queryParams.searchText
   })
 
-  CabinetRelatedAPI.listQuotation(params).then((result => {
+  CabinetRelatedAPI.listPortfolioWeb(params).then((result => {
     const {data, total} = result.data ?? {}
 
-    dataRef.value = data.map(cabinetQuotation =>
+    dataRef.value = data.map(PortFolioType =>
       ({
-        ...cabinetQuotation
+        ...PortFolioType
       })
     )
     paginationReactive.itemCount = total
@@ -104,10 +105,8 @@ const queryList = () => {
 }
 
 
-
-
 const handleReset = () => {
-  queryParams.searchText = ''
+  queryParams.searchText = []
   paginationReactive.page = 1
   paginationReactive.pageSize = 10
   paginationReactive.itemCount = 0
@@ -130,38 +129,114 @@ export default defineComponent({
       title: string;
       key: string;
       ellipsis: boolean
-    }, { width: number; title: () => any; key: string; ellipsis: boolean }, {
-      width: number;
-      title: () => any;
-      key: string
-    }, { width: number; title: () => any; key: string }, { width: number; title: () => any; key: string }, {
+    }, {
       width: number;
       title: () => any;
       align: string;
-      render: (row) => string;
+      render: (row) => VNode<RendererNode, RendererElement, { [p: string]: any }>;
       key: string;
       titleAlign: string
-    }, { width: number; title: () => any; key: string }] = [
+    }, {
+      width: number;
+      title: () => any;
+      align: string;
+      render: (row) => VNode<RendererNode, RendererElement, { [p: string]: any }>;
+      key: string;
+      titleAlign: string
+    }, {
+      width: number;
+      title: () => any;
+      render: (row) => VNode<RendererNode, RendererElement, { [p: string]: any }>[];
+      key: string
+    }, { width: number; title: () => any; align: string; render: (row) => string; key: string; titleAlign: string }] = [
       {
         type: 'selection',
         disabled(row) {
           return false
         }
       },
-      {key: 'quotationId', title: 'ID', width: 30, ellipsis: true},
-      {key: 'address', title: () => t('TEMP.Cabinet.Quotation.address'), width: 180, ellipsis: true},
-      {key: 'customerName', title: () => t('TEMP.Cabinet.Quotation.customerName'), width: 50},
-      {key: 'telephone', title: () => t('TEMP.Cabinet.Quotation.telephone'), width: 50},
-      {key: 'productName', title: () => t('TEMP.Cabinet.Quotation.productName'), width: 50},
+      {key: 'folioId', title: 'ID', width: 30, ellipsis: true},
       {
-        title: () => t('TEMP.Cabinet.Quotation.quotationDate'),
-        key: 'quotationDate',
+        title: () => t('TEMP.Cabinet.PortfolioWeb.thumbnailUrl'),
+        key: 'thumbnailUrl',
+        width: 55,
+        titleAlign: 'center',
+        align: 'center',
+        render: (row) =>
+          h(
+            'div',
+            {
+              class: 'flex align-center justify-center'
+            },
+            row.thumbnailUrl
+              ? h(NImage, {
+                src: row.thumbnailUrl,
+                lazy: true,
+                class: 'my-1',
+                width:'100'
+              })
+              : h(NIcon, {
+                size: '40',
+                depth: '3',
+                component: UserAvatarIcon
+              })
+          )
+      },
+      {
+        title: () => t('TEMP.Cabinet.PortfolioWeb.panoramaUrl'),
+        key: 'panoramaUrl',
+        width: 55,
+        titleAlign: 'center',
+        align: 'center',
+        render: (row) =>
+          h(
+            'div',
+            {
+              class: 'flex align-center justify-center'
+            },
+            row.panoramaUrl
+              ? h(NImage, {
+                src: row.panoramaUrl,
+                lazy: true,
+                class: 'my-1',
+                width:'100'
+              })
+              : h(NIcon, {
+                size: '40',
+                depth: '3',
+                component: UserAvatarIcon
+              })
+          )
+      },
+      {
+        title: () => t('TEMP.Cabinet.PortfolioWeb.photoTypes'),
+        key: 'photoTypes',
+        width: 200,
+        render: (row) => {
+          const tags = (row?.photoTypes ?? []).map((type, index) =>
+            h(
+              NTag,
+              {
+                class: '!mr-2',
+                type: ['default', 'warning', 'error', 'success', 'info'][index % 5],
+                bordered: false
+              },
+              {
+                default: () => type
+              }
+            )
+          )
+          return tags
+        }
+      },
+      {
+        title: () => t('TEMP.Cabinet.PortfolioWeb.createTime'),
+        key: 'createTime',
         width: 80,
         titleAlign: 'center',
         align: 'center',
-        render: (row) => (row.quotationDate ? TimeUtils.formatTime(row.quotationDate, 'YYYY/MM/DD') : '')
-      },
-      {key: 'allTotalPrice', title: () => t('TEMP.Cabinet.Quotation.allTotalPrice'), width: 50}
+        render: (row) => (row.createTime ? TimeUtils.formatTime(row.createTime, 'YYYY/MM/DD') : '')
+      }
     ]
 
 
@@ -195,7 +270,7 @@ export default defineComponent({
       pagination: paginationReactive,
       generalOptions,
       rowKey(rowData) {
-        return rowData.quotationId
+        return rowData.folioId
       },
       handleCheck(rowKeys) {
         checkedRowKeysRef.value = rowKeys
@@ -206,30 +281,18 @@ export default defineComponent({
         portFolioFormData.value = {}
         portFolioFormModalRef.value.handleShowModal()
       },
-      editOnePortFolio() {
-        if (checkedRowKeysRef.value.length === 0) {
-          window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
-        } else if (checkedRowKeysRef.value.length > 1) {
-          window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
-        } else {
-          portFolioState.value = 'edit'
-          portFolioFormData.value = {}
-          portFolioFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
-          portFolioFormModalRef.value.handleShowModal()
-        }
-      },
-      viewOnePortFolio() {
-        if (checkedRowKeysRef.value.length === 0) {
-          window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
-        } else if (checkedRowKeysRef.value.length > 1) {
-          window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
-        } else {
-          portFolioState.value = 'view'
-          portFolioFormData.value = {}
-          portFolioFormData.value = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
-          portFolioFormModalRef.value.handleShowModal()
-        }
-      },
+      // editOnePortFolio() {
+      //   if (checkedRowKeysRef.value.length === 0) {
+      //     window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
+      //   } else if (checkedRowKeysRef.value.length > 1) {
+      //     window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
+      //   } else {
+      //     portFolioState.value = 'edit'
+      //     portFolioFormData.value = {}
+      //     portFolioFormData.value = dataRef.value.filter(m => m.folioId === checkedRowKeysRef.value[0])[0]
+      //     portFolioFormModalRef.value.handleShowModal()
+      //   }
+      // },
       deletePortFolios() {
         if (checkedRowKeysRef.value.length === 0) {
           window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
@@ -239,11 +302,11 @@ export default defineComponent({
         const args = {ids: checkedRowKeysRef.value}
         dialog.warning({
           title: '警告',
-          content: '确定要删掉这些报价单吗',
+          content: '确定要删掉这些图片吗',
           positiveText: '确定',
           negativeText: '取消',
           onPositiveClick: async () => {
-            const {code, message} = await CabinetRelatedAPI.delete(args)
+            const {code, message} = await CabinetRelatedAPI.deletePortfolioWeb(args)
             if (code == '200') {
               queryList()
               checkArray.value = []
@@ -258,7 +321,7 @@ export default defineComponent({
           }
         })
       },
-      editType(){
+      editType() {
         portFolioTypeFormData.value = new Date()
         portFolioTypeModalRef.value.handleShowModal()
       }
@@ -275,24 +338,24 @@ export default defineComponent({
       <div class="flex flex-col items-center space-y-2 sm:flex-row sm:justify-between sm:space-y-0">
         <div class="flex flex-col items-center space-y-2 sm:flex-row sm:space-x-3 sm:space-y-0">
           <div class="flex w-full items-center !space-x-2 sm:w-fit ">
-<!--            <NInput-->
-<!--              v-model:value="queryParams.searchText"-->
-<!--              class="sm:!w-[180px]"-->
-<!--              clearable-->
-<!--              :placeholder="t('TEMP.Cabinet.Quotation.customerNameOrAddress')"-->
-<!--              @keydown.enter="queryList"-->
-<!--            >-->
-<!--              <template #prefix>-->
-<!--                <NIcon-->
-<!--                  :component="SearchIcon"-->
-<!--                  class="mr-1"-->
-<!--                />-->
-<!--              </template>-->
-<!--            </NInput>-->
+            <!--            <NInput-->
+            <!--              v-model:value="queryParams.searchText"-->
+            <!--              class="sm:!w-[180px]"-->
+            <!--              clearable-->
+            <!--              :placeholder="t('TEMP.Cabinet.Quotation.customerNameOrAddress')"-->
+            <!--              @keydown.enter="queryList"-->
+            <!--            >-->
+            <!--              <template #prefix>-->
+            <!--                <NIcon-->
+            <!--                  :component="SearchIcon"-->
+            <!--                  class="mr-1"-->
+            <!--                />-->
+            <!--              </template>-->
+            <!--            </NInput>-->
             <!--              v-model:value="model.multipleSelectValue"-->
             <NSelect
-              :placeholder="t('TEMP.Cabinet.PortfolioWeb.typeYouWant')"
               v-model:value="queryParams.searchText"
+              :placeholder="t('TEMP.Cabinet.PortfolioWeb.typeYouWant')"
               class="sm:!w-[400px]"
               :options="generalOptions"
               multiple
@@ -333,24 +396,14 @@ export default defineComponent({
           </n-button>
 
 
-          <n-button icon-placement="left" secondary strong @click="editOnePortFolio">
-            <template #icon>
-              <n-icon :component="EditIcon">
-                <!--                <AddSharp-icon />-->
-              </n-icon>
-            </template>
-            {{ t('COMMON.Edit') }}
-          </n-button>
-
-
-          <n-button icon-placement="left" secondary strong @click="viewOnePortFolio">
-            <template #icon>
-              <n-icon :component="ViewIcon">
-                <!--                <AddSharp-icon />-->
-              </n-icon>
-            </template>
-            {{ t('TEMP.Cabinet.Quotation.view') }}
-          </n-button>
+<!--          <n-button icon-placement="left" secondary strong @click="editOnePortFolio">-->
+<!--            <template #icon>-->
+<!--              <n-icon :component="EditIcon">-->
+<!--                &lt;!&ndash;                <AddSharp-icon />&ndash;&gt;-->
+<!--              </n-icon>-->
+<!--            </template>-->
+<!--            {{ t('COMMON.Edit') }}-->
+<!--          </n-button>-->
 
 
           <n-popover trigger="hover">

@@ -253,7 +253,11 @@
       "view": "查看",
       "thumbnail": "缩略图",
       "Panorama": "全景图",
-      "photoType": "图片分类"
+      "photoType": "图片分类",
+      "thumbnailUrl": "缩略图",
+      "panoramaUrl": "全景图",
+      "photoTypes": "分类",
+      "createTime": "创建时间"
     }
   }
 }

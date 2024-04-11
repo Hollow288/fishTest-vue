@@ -227,7 +227,7 @@ export default defineComponent({
           positiveText: '确定',
           negativeText: '取消',
           onPositiveClick: async () => {
-            const {code, message} = await CabinetRelatedAPI.delete(args)
+            const {code, message} = await CabinetRelatedAPI.deleteQuotations(args)
             if (code == '200') {
               queryList()
               checkArray.value = []
