@@ -46,7 +46,7 @@ class Request {
   // Axios 配置
   private readonly config: AxiosRequestConfig = {
     baseURL: '/fish-api',
-    timeout: 30000,
+    timeout: 300000,
     withCredentials: true,
     headers: {
       'Content-Type': 'application/json;charset=utf-8'

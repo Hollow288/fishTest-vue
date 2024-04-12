@@ -257,7 +257,15 @@
       "thumbnailUrl": "缩略图",
       "panoramaUrl": "全景图",
       "photoTypes": "分类",
-      "createTime": "创建时间"
+      "createTime": "创建时间",
+      "operation": "操作",
+      "Preview": "预览",
+      "Left": "向左旋转",
+      "magnify": "放大",
+      "shrink": "缩小",
+      "Right": "向右旋转",
+      "Confirm": "确认",
+      "Cancel": "取消"
     }
   }
 }

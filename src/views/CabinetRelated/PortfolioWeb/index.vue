@@ -7,7 +7,7 @@ import {BasePageModel} from '@/constants'
 import i18n from '@/i18n'
 import type {Notice} from '@/types/api/notice'
 import type {PortFolioType} from '@/types/api/portFolioType'
-import UserAvatarIcon from '~icons/carbon/user-avatar-filled-alt'
+import ImageOutlineIcon from '~icons/mdi/image-remove-outline'
 import ResetIcon from '~icons/ic/round-refresh'
 import EditIcon from '~icons/ic/sharp-edit'
 import SearchIcon from '~icons/line-md/search'
@@ -178,7 +178,7 @@ export default defineComponent({
               : h(NIcon, {
                 size: '40',
                 depth: '3',
-                component: UserAvatarIcon
+                component: ImageOutlineIcon
               })
           )
       },
@@ -204,7 +204,7 @@ export default defineComponent({
               : h(NIcon, {
                 size: '40',
                 depth: '3',
-                component: UserAvatarIcon
+                component: ImageOutlineIcon
               })
           )
       },
@@ -253,6 +253,7 @@ export default defineComponent({
       queryParams,
       FilterIcon,
       ReloadIcon,
+      ImageOutlineIcon,
       EditIcon,
       TrashBinOutline,
       ResetIcon,
@@ -470,3 +471,23 @@ export default defineComponent({
     />
   </DataTableLayout>
 </template>
+
+<style>
+  .n-image-preview-toolbar {
+    z-index: 1;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: var(--n-toolbar-border-radius);
+    height: 48px;
+    bottom: 40px;
+    padding: 0 12px;
+    background: var(--n-toolbar-color);
+    box-shadow: var(--n-toolbar-box-shadow);
+    color: var(--n-toolbar-icon-color);
+    transition: color .3s var(--n-bezier);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+</style>
