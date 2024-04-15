@@ -74,5 +74,14 @@ export class CabinetRelatedAPI {
   }
 
 
+  static addNewsInformation(formData:object){
+    return httpRequest.post<ResponseResult>(`${this.CABINET_API_PREFIX}/news-information`, {...formData})
+  }
+
+  static newsInformationList(params: BasePageModel) {
+    return httpRequest.get<PageResponse>(`${this.CABINET_API_PREFIX}/news-information-list`, {
+      ...params
+    })
+  }
 
 }

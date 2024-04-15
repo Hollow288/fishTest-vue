@@ -62,6 +62,13 @@ export class UploadAPI {
     })
   }
 
+
+  static uploadNewsInformationFile(data: any, newsId: any) {
+    return httpRequest.post<BaseResponse<{ path: string }>>(`${this.UPLOAD_API_PREFIX}/${newsId}/news-information`, data, {
+      headers: this.headers
+    })
+  }
+
   /**
    * 批量上传文件
    * @param data 文件数据

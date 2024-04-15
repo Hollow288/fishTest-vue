@@ -266,6 +266,14 @@
       "Right": "向右旋转",
       "Confirm": "确认",
       "Cancel": "取消"
+    },
+    "NewsInformation": {
+      "create": "新增新闻",
+      "edit": "修改新闻",
+      "newsTitle": "新闻标题",
+      "newsDate": "日期",
+      "newsIntroduction": "新闻简介",
+      "newsCover": "新闻封面"
     }
   }
 }
