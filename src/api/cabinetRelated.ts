@@ -84,4 +84,14 @@ export class CabinetRelatedAPI {
     })
   }
 
+
+  static editNewsInformation(formData:object){
+    return httpRequest.put<ResponseResult>(`${this.CABINET_API_PREFIX}/news-information`,{...formData})
+  }
+
+
+  static deleteNewsInformation(newsIds: object) {
+    return httpRequest.patch<ResponseResult>(`${this.CABINET_API_PREFIX}/delete-news-information`, {...newsIds})
+  }
+
 }

@@ -2,15 +2,16 @@
 import {AddSharp,Filter as FilterIcon, Reload as ReloadIcon, TrashBinOutline} from '@vicons/ionicons5'
 import {NIcon, useDialog,useMessage} from 'naive-ui'
 
+import {CabinetRelatedAPI} from '@/api/cabinetRelated'
 import {BasePageModel} from '@/constants'
 import i18n from '@/i18n'
-import type {Notice} from '@/types/api/notice'
-
-import {NewsInformationFormModal} from './components'
-import SearchIcon from '~icons/line-md/search'
+import type {NewsInformation} from '@/types/api/newsInformation'
 import ResetIcon from '~icons/ic/round-refresh'
 import EditIcon from '~icons/ic/sharp-edit'
-import {NewsInformation} from "@/types/api/newsInformation";
+import SearchIcon from '~icons/line-md/search'
+import ImageOutlineIcon from '~icons/mdi/image-remove-outline'
+
+import {NewsInformationFormModal} from './components'
 
 
 
@@ -19,7 +20,7 @@ import {NewsInformation} from "@/types/api/newsInformation";
 const newsInformationFormModalRef = ref()
 const newsInformationFormData = ref({})
 const isNewsInformationEdit = ref(true)
-const dataRef = ref<Notice[]>([])
+const dataRef = ref<NewsInformation[]>([])
 const checkArray = ref([])
 
 const {t} = i18n.global
@@ -129,6 +130,13 @@ const handleReset = () => {
       title: () => any;
       key: string;
       ellipsis: { tooltip: boolean }
+    }, {
+      width: number;
+      title: () => any;
+      align: string;
+      render: (row) => VNode<RendererNode, RendererElement, { [p: string]: any }>;
+      key: string;
+      titleAlign: string
     }, { width: number; title: () => any; align: string; render: (row) => string; key: string; titleAlign: string }] = [
       {
         type: 'selection',
@@ -139,6 +147,32 @@ const handleReset = () => {
       {key: 'newsId', title: 'ID', width: 30,ellipsis: true},
       {key: 'newsTitle', title: () => t('TEMP.Cabinet.NewsInformation.newsTitle'),width: 50, ellipsis: {tooltip: true}},
       {key: 'newsIntroduction', title: () => t('TEMP.Cabinet.NewsInformation.newsIntroduction'),width: 200, ellipsis: {tooltip: true}},
+      {
+        title: () => t('TEMP.Cabinet.NewsInformation.newsCover'),
+        key: 'newsCover',
+        width: 55,
+        titleAlign: 'center',
+        align: 'center',
+        render: (row) =>
+          h(
+            'div',
+            {
+              class: 'flex align-center justify-center'
+            },
+            row.newsCover
+              ? h(NImage, {
+                src: row.newsCover,
+                lazy: true,
+                class: 'my-1',
+                width:'100'
+              })
+              : h(NIcon, {
+                size: '40',
+                depth: '3',
+                component: ImageOutlineIcon
+              })
+          )
+      },
       {
         title: () => t('TEMP.Cabinet.NewsInformation.newsDate'),
         key: 'newsDate',
@@ -180,12 +214,12 @@ const handleReset = () => {
         checkedRowKeysRef.value = rowKeys
       },
       showDropdown: showDropdownRef,
-      createNewNotice(){
+      createNewsInformation(){
         isNewsInformationEdit.value = false
         newsInformationFormData.value = {}
         newsInformationFormModalRef.value.handleShowModal()
       },
-      editOneNotice(){
+      editNewsInformation(){
         if(checkedRowKeysRef.value.length === 0){
           window.$message.warning(()=>t('VALIDATION.ChooseOneDetail'))
         }else if(checkedRowKeysRef.value.length > 1){
@@ -193,32 +227,26 @@ const handleReset = () => {
         }else {
           isNewsInformationEdit.value = true
           newsInformationFormData.value = {}
-          newsInformationFormData.value = dataRef.value.filter(m => m.noticeId === checkedRowKeysRef.value[0])[0]
-          if(newsInformationFormData.value.releaseDate != null){
-            window.$message.warning(()=>t('VALIDATION.OnlyAllowUnpublished'))
-            return
-          }
+          newsInformationFormData.value = dataRef.value.filter(m => m.newsId === checkedRowKeysRef.value[0])[0]
           newsInformationFormModalRef.value.handleShowModal()
         }
       },
-      deleteNotices(){
+      deleteNewsInformation(){
         if(checkedRowKeysRef.value.length === 0){
           window.$message.warning(()=>t('VALIDATION.ChooseOneDetail'))
           return
         }
-
         const args = {ids:checkedRowKeysRef.value}
         dialog.warning({
           title: '警告',
-          content: "偷偷删掉,没看到此条通知的可能就看不到了",
+          content: '确定要删除这条新闻资讯吗？',
           positiveText: '确定',
           negativeText: '取消',
           onPositiveClick: async () => {
-            const {code, message} = await NoticeAPI.delete(args)
+            const {code, message} = await CabinetRelatedAPI.deleteNewsInformation(args)
             if(code == '200'){
               queryList()
               checkArray.value = []
-              console.log(checkedRowKeysRef.value)
               window.$message.success(message)
             }else{
               window.$message.error(message)
@@ -273,7 +301,7 @@ const handleReset = () => {
 
         <div class="flex w-full items-center justify-between space-x-3 sm:justify-end ">
 
-          <n-button icon-placement="left" secondary strong @click="createNewNotice">
+          <n-button icon-placement="left" secondary strong @click="createNewsInformation">
             <template #icon>
               <n-icon :component="AddSharp">
                 <!--                <AddSharp-icon />-->
@@ -283,7 +311,7 @@ const handleReset = () => {
           </n-button>
 
 
-          <n-button icon-placement="left" secondary strong @click="editOneNotice">
+          <n-button icon-placement="left" secondary strong @click="editNewsInformation">
             <template #icon>
               <n-icon :component="EditIcon">
                 <!--                <AddSharp-icon />-->
@@ -295,7 +323,7 @@ const handleReset = () => {
 
           <n-popover trigger="hover">
             <template #trigger>
-              <n-button icon-placement="left" secondary strong @click="deleteNotices">
+              <n-button icon-placement="left" secondary strong @click="deleteNewsInformation">
                 <template #icon>
                   <n-icon :component="TrashBinOutline">
                     <!--                <AddSharp-icon />-->
@@ -351,3 +379,23 @@ const handleReset = () => {
     />
   </DataTableLayout>
 </template>
+
+<style>
+.n-image-preview-toolbar {
+  z-index: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: var(--n-toolbar-border-radius);
+  height: 48px;
+  bottom: 40px;
+  padding: 0 12px;
+  background: var(--n-toolbar-color);
+  box-shadow: var(--n-toolbar-box-shadow);
+  color: var(--n-toolbar-icon-color);
+  transition: color .3s var(--n-bezier);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+</style>

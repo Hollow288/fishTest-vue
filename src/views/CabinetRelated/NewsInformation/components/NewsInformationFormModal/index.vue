@@ -3,17 +3,19 @@
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
-import type {UploadFileInfo} from 'naive-ui'
+import type {FormInst, FormValidationError,UploadFileInfo} from 'naive-ui'
 import {onBeforeUnmount,ref, shallowRef} from 'vue'
 
+import {CabinetRelatedAPI} from '@/api/cabinetRelated'
+import type {MessageSchema} from '@/types'
 import type {NewsInformation} from '@/types/api/newsInformation'
 import CreateIcon from '~icons/ic/sharp-add'
 import EditIcon from '~icons/ic/sharp-edit'
-import {FormInst, FormValidationError} from "naive-ui";
 
 const {t} = useI18n<{ message: MessageSchema }>()
 const formRef = ref<FormInst | null>(null)
 const [submitLoading, submitLoadingDispatcher] = useLoading()
+const fileList = ref<UploadFileInfo[]>([])
 export interface Props {
   newsInformationFormData?: NewsInformation
   isEdit: boolean
@@ -30,6 +32,9 @@ const emit = defineEmits<{
 }>()
 
 const showModal = ref(false)
+
+// 是否修改了附件
+const isEditNewsCover = ref(false)
 
 const handleShowModal = () => {
   showModal.value = true
@@ -127,6 +132,10 @@ const beforeUpload = async (data: {
   return true
 }
 
+const onRemove = (options: { file: UploadFileInfo, fileList: Array<UploadFileInfo> }) => {
+  isEditNewsCover.value = true
+  fileList.value = []
+}
 
 const handleSubmit = async () => {
   try {
@@ -148,18 +157,33 @@ const handleSubmit = async () => {
   if (props.isEdit) {
     try {
 
-      // const {
-      //   code: createCode,
-      //   message: createMessage
-      // } = await CabinetRelatedAPI.createQuotation(formData.value)
-      //
-      //  if (createCode == 200) {
-      //   NMessage.success(createMessage!)
-      //   showModal.value = false
-      //   emit('save')
-      // } else {
-      //   NMessage.error('服务器异常')
-      // }
+      formData.value.newsText = valueHtml.value
+      const {
+        code: updateCode,
+        message: updateMessage
+      } = await CabinetRelatedAPI.editNewsInformation(formData.value)
+      if(updateCode == 200){
+        if(isEditNewsCover.value){
+          const fileData = new FormData()
+          fileRef.value.filter(file => file !== null).forEach(file => {
+            fileData.append('file', file)
+          })
+          const {code: uploadCode} = await UploadAPI.uploadNewsInformationFile(fileData, formData.value.newsId)
+          if(uploadCode == 200){
+            NMessage.success(updateMessage!)
+            showModal.value = false
+            emit('save')
+          }else{
+            NMessage.error('服务器异常')
+          }
+        }else{
+          NMessage.success(updateMessage!)
+          showModal.value = false
+          emit('save')
+        }
+      }else {
+        NMessage.error('服务器异常')
+      }
 
     } catch (err: any) {
       if (err.message) {
@@ -203,6 +227,30 @@ const handleSubmit = async () => {
   submitLoadingDispatcher.loaded()
   return true
 }
+
+watch(
+  () => props.newsInformationFormData,
+  async (newValue) => {
+    if (props.isEdit) {
+      formData.value = {
+        ...newValue
+      }
+      valueHtml.value = newValue.newsText
+      isEditNewsCover.value = false
+      fileList.value = [
+        {
+          url:newValue.newsCover,
+          status: 'finished'
+        }
+      ]
+    }else{
+      formData.value = {}
+      valueHtml.value = ''
+      isEditNewsCover.value = false
+    }
+  },
+  {immediate: true,}
+)
 </script>
 
 <template>
@@ -222,6 +270,82 @@ const handleSubmit = async () => {
     </template>
 
     <NForm
+      v-if="isEdit"
+      ref="formRef"
+      :model="formData"
+      label-width="auto"
+      require-mark-placement="right-hanging"
+      label-placement='left'
+      class="flex flex-col"
+      style="overflow-y: auto;"
+      label-align='right'
+    >
+
+      <nGrid :cols="24">
+        <NFormItemGi
+          :span="15"
+          :label="t('TEMP.Cabinet.NewsInformation.newsTitle')"
+        >
+          <NInput
+            v-model:value="formData.newsTitle"
+            :placeholder="t('TEMP.Cabinet.NewsInformation.newsTitle')"
+            maxlength="15"
+            show-count
+            clearable>
+
+          </NInput>
+
+        </NFormItemGi>
+
+        <NFormItemGi
+          :span="5"
+          :label="t('TEMP.Cabinet.NewsInformation.newsDate')"
+        >
+          <n-date-picker v-model:formatted-value="formData.newsDate" type="date" />
+
+        </NFormItemGi>
+
+        <NFormItemGi
+          :span="4"
+          :label="t('TEMP.Cabinet.NewsInformation.newsCover')"
+        >
+          <n-upload
+            v-model:file-list="fileList"
+            list-type="image-card"
+            max="1"
+            @change="uploadUrl"
+            @remove="onRemove"
+            @before-upload="beforeUpload"
+          >
+
+            点击上传
+          </n-upload>
+
+        </NFormItemGi>
+
+
+      </nGrid>
+
+      <nGrid :cols="24">
+        <NFormItemGi
+          :span="24"
+          :label="t('TEMP.Cabinet.NewsInformation.newsIntroduction')"
+        >
+          <NInput
+            v-model:value="formData.newsIntroduction"
+            :placeholder="t('TEMP.Cabinet.NewsInformation.newsIntroduction')"
+            maxlength="30"
+            show-count
+            clearable>
+
+          </NInput>
+
+        </NFormItemGi>
+      </nGrid>
+
+    </NForm>
+    <NForm
+      v-else
       ref="formRef"
       :model="formData"
       label-width="auto"
