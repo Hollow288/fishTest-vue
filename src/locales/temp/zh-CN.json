@@ -274,6 +274,13 @@
       "newsDate": "日期",
       "newsIntroduction": "新闻简介",
       "newsCover": "新闻封面"
+    },
+    "MessageBoard": {
+      "name": "姓名",
+      "email": "邮箱",
+      "phone": "电话",
+      "message": "留言内容",
+      "messageDate": "留言日期"
     }
   }
 }

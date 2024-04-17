@@ -1574,7 +1574,7 @@ defineExpose({
         >
           <NInput
             v-model:value="formData.customerName"
-            disabled
+            readonly
           />
 
         </NFormItemGi>
@@ -1587,7 +1587,7 @@ defineExpose({
         >
           <NInput
             v-model:value="formData.address"
-            disabled
+            readonly
           />
 
         </NFormItemGi>
@@ -1602,7 +1602,7 @@ defineExpose({
         >
           <NInput
             v-model:value="formData.productName"
-            disabled
+            readonly
           />
 
         </NFormItemGi>
@@ -1614,7 +1614,7 @@ defineExpose({
         >
           <NInput
             v-model:value="formData.cabinetBody"
-            disabled
+            readonly
           />
 
         </NFormItemGi>
@@ -1626,7 +1626,7 @@ defineExpose({
         >
           <NInput
             v-model:value="formData.color"
-            disabled
+            readonly
           />
 
         </NFormItemGi>
@@ -1642,7 +1642,7 @@ defineExpose({
         >
           <NInput
             v-model:value="formData.telephone"
-            disabled
+            readonly
           />
 
         </NFormItemGi>
@@ -1654,7 +1654,10 @@ defineExpose({
           :label="t('TEMP.Cabinet.Quotation.quotationDate')"
         >
 
-          <n-date-picker v-model:formatted-value="formData.quotationDate" type="date" style="width: 100%" disabled/>
+          <NInput
+            v-model:value="formData.quotationDate"
+            readonly
+          />
 
         </NFormItemGi>
 
@@ -1667,7 +1670,7 @@ defineExpose({
           <nInputNumber
             v-model:value="formData.allTotalPrice"
             type="number"
-            disabled
+            readonly
             :parse="parse"
             :format="format"
             :show-button="false"
@@ -1739,20 +1742,20 @@ defineExpose({
           <td>
             <NInput
               v-model:value="n.projectName"
-              disabled
+              readonly
             />
           </td>
           <td>
             <NInput
               v-model:value="n.specificationModel"
-              disabled
+              readonly
             />
           </td>
           <td>
             <NInputNumber
               v-model:value="n.pricingQuantity"
               type="number"
-              disabled
+              readonly
               :precision="2"
               :show-button="false"
               style="width: 100%"
@@ -1762,7 +1765,7 @@ defineExpose({
           <td>
             <NInputNumber
               v-model:value="n.unitPrice"
-              disabled
+              readonly
               type="number"
               :parse="parse"
               :format="format"
@@ -1778,7 +1781,7 @@ defineExpose({
             <NInputNumber
               v-model:value="n.pricingCoefficient"
               type="number"
-              disabled
+              readonly
               :precision="2"
               :show-button="false"
               style="width: 100%"
@@ -1789,7 +1792,7 @@ defineExpose({
             <NInputNumber
               v-model:value="n.priceAmount"
               type="number"
-              disabled
+              readonly
               :parse="parse"
               :format="format"
               :show-button="false"
@@ -1803,7 +1806,7 @@ defineExpose({
           <td>
             <NInput
               v-model:value="n.remark"
-              disabled
+              readonly
             />
           </td>
 
@@ -1873,14 +1876,14 @@ defineExpose({
           <td>
             <NInput
               v-model:value="n.specificationModel"
-              disabled
+              readonly
             />
           </td>
           <td>
             <NInputNumber
               v-model:value="n.pricingQuantity"
               type="number"
-              disabled
+              readonly
               :precision="0"
               :show-button="false"
               style="width: 100%"
@@ -1891,7 +1894,7 @@ defineExpose({
             <NInputNumber
               v-model:value="n.unitPrice"
               type="number"
-              disabled
+              readonly
               :parse="parse"
               :format="format"
               :show-button="false"
@@ -1906,7 +1909,7 @@ defineExpose({
             <NInputNumber
               v-model:value="n.pricingCoefficient"
               type="number"
-              disabled
+              readonly
               :precision="2"
               :show-button="false"
               style="width: 100%"
@@ -1917,7 +1920,7 @@ defineExpose({
             <NInputNumber
               v-model:value="n.priceAmount"
               type="number"
-              disabled
+              readonly
               :parse="parse"
               :format="format"
               :show-button="false"
@@ -1931,7 +1934,7 @@ defineExpose({
           <td>
             <NInput
               v-model:value="n.remark"
-              disabled
+              readonly
             />
           </td>
 

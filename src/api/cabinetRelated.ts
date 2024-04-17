@@ -1,7 +1,6 @@
 import type {BasePageModel} from '@/constants'
-import type {ResponseResult} from '@/types'
+import type {PageResponse,ResponseResult} from '@/types'
 import type {CabinetQuotation} from '@/types/api/cabinetQuotation'
-import {PageResponse} from "@/types";
 
 export class CabinetRelatedAPI {
   private static CABINET_API_PREFIX = `${GlobalEnvConfig.BASE_API_PREFIX}/cabinet`
@@ -92,6 +91,18 @@ export class CabinetRelatedAPI {
 
   static deleteNewsInformation(newsIds: object) {
     return httpRequest.patch<ResponseResult>(`${this.CABINET_API_PREFIX}/delete-news-information`, {...newsIds})
+  }
+
+
+  static messageBoardList(params: BasePageModel) {
+    return httpRequest.get<PageResponse>(`${this.CABINET_API_PREFIX}/message-board-list`, {
+      ...params
+    })
+  }
+
+
+  static deleteMessageBoard(messageIds: object) {
+    return httpRequest.patch<ResponseResult>(`${this.CABINET_API_PREFIX}/delete-message-board`, {...messageIds})
   }
 
 }

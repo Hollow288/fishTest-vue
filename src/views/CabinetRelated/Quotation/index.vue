@@ -5,7 +5,7 @@ import {NIcon, useDialog, useMessage} from 'naive-ui'
 import {CabinetRelatedAPI} from '@/api/cabinetRelated'
 import {BasePageModel} from '@/constants'
 import i18n from '@/i18n'
-import type {Notice} from '@/types/api/notice'
+import type {CabinetQuotation} from '@/types/api/cabinetQuotation'
 import ResetIcon from '~icons/ic/round-refresh'
 import EditIcon from '~icons/ic/sharp-edit'
 import SearchIcon from '~icons/line-md/search'
@@ -17,7 +17,7 @@ import {QuotationFormModal} from './components'
 const quotationFormModalRef = ref()
 const quotationFormData = ref({})
 const quotationState = ref('')
-const dataRef = ref<Notice[]>([])
+const dataRef = ref<CabinetQuotation[]>([])
 const checkArray = ref([])
 
 const {t} = i18n.global
@@ -293,7 +293,15 @@ export default defineComponent({
             window.$message.success(`导出成功：${temObj.address}-报价单.pdf`)
           })
         }
-      }
+      },
+      rowProps: (row: CabinetQuotation) => ({
+        style: 'cursor: pointer;',
+        onDblclick: () => {
+          quotationState.value = 'view'
+          quotationFormData.value = row
+          quotationFormModalRef.value.handleShowModal()
+        }
+      })
     }
   }
 })
@@ -423,6 +431,7 @@ export default defineComponent({
     <!--如果是后端分页,这里一定要加上remote!-->
     <n-data-table
       v-model:checked-row-keys="checkArray"
+      :row-props="rowProps"
       :row-key="rowKey"
       :remote="true"
       :columns="columns"

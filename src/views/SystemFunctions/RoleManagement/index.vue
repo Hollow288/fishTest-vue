@@ -1,19 +1,18 @@
 <script lang="ts">
+import {AddSharp,TrashBinOutline} from '@vicons/ionicons5'
 import {NIcon, useDialog, useMessage} from 'naive-ui'
 
 import {BasePageModel} from '@/constants'
-import EditIcon from '~icons/ic/sharp-edit'
 import i18n from '@/i18n'
-import type {Menu} from '@/types/api/menu'
 import type {Role} from '@/types/api/role'
 import CheckIcon from '~icons/ic/baseline-check'
 import ResetIcon from '~icons/ic/round-refresh'
+import EditIcon from '~icons/ic/sharp-edit'
 import SearchIcon from '~icons/line-md/search'
 
-import {RoleFormModal,UserRoleModal,MenuRoleModal} from './components'
-import {AddSharp,TrashBinOutline} from '@vicons/ionicons5';
+import {MenuRoleModal,RoleFormModal,UserRoleModal} from './components'
 
-const dataRef = ref<Menu[]>([])
+const dataRef = ref<Role[]>([])
 const roleFormData = ref({})
 const userRoleData = ref({})
 const menuRoleData = ref({})
@@ -194,7 +193,7 @@ export default defineComponent({
     ]
 
     onMounted(() => {
-      console.log("fat的挂载被调用")
+      console.log('fat的挂载被调用')
       queryList()
     }
 )
