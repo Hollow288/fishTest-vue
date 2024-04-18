@@ -21,8 +21,17 @@ const secondLevelPath = ref()
 const handleSelect = (key: string) => router.push({ name: key })
 
 
+const removeNullChildren = (obj)=> {
+  if (obj.children === null) {
+    delete obj.children;
+  } else if (Array.isArray(obj.children)) {
+    obj.children.forEach(child => removeNullChildren(child));
+  }
+}
+
 watchEffect(async () => {
   firstLevelOptions.value = await menuOptions()
+  firstLevelOptions.value.forEach(n=>removeNullChildren(n))
 })
 
 watch(
@@ -40,7 +49,6 @@ watch(
       secondLevelOptions.value = []
       return
     }
-
     // 获取按照 / 分割的路由路径
     const routePath = route.fullPath.split('/').filter((path) => path !== '')
 
@@ -60,6 +68,11 @@ watch(
 
     // 设置二级菜单的选项
     secondLevelOptions.value = firstLevelOption.children
+
+    secondLevelOptions.value.forEach(option => {
+      // 删除对象中的 "children" 属性
+      delete option.children
+    })
     // 获取二级菜单
     const secondLevelOption = firstLevelOption.children.find(
       (option) => option.key === routePath[1]
