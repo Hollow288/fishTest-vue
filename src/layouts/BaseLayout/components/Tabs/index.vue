@@ -173,7 +173,7 @@ const setReplace = (index: number) => {
       >
         {{ typeof tagItem.label === 'function' ? tagItem.label() : tagItem.label }}
         <template #icon>
-          <NIcon :component="tagItem.icon" />
+          <NIcon :component="tagItem.icon" :size="16"/>
         </template>
       </NTag>
     </div>
