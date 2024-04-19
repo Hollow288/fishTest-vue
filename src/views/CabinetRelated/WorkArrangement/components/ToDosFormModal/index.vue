@@ -222,7 +222,7 @@ watch(
       label-width="auto"
       require-mark-placement="right-hanging"
       label-placement='left'
-      style="overflow-y: auto;"
+      style="overflow-y: auto;max-height: 450px;"
       label-align='right'
     >
 
@@ -283,3 +283,39 @@ watch(
   </NModal>
 </template>
 
+
+<style scoped>
+
+.custom-table {
+  max-height: 200px; /* 设置最大高度 */
+  overflow-y: auto; /* 垂直方向出现滚动条 */
+}
+
+.custom-table thead th {
+  position: sticky;
+  top: 0; /* 固定在顶部 */
+  z-index: 1; /* 提升层级，防止被内容覆盖 */
+}
+
+
+/* 设置滚动条的宽度和颜色 */
+::-webkit-scrollbar {
+  width: 8px; /* 宽度 */
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* 轨道背景色 */
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(85, 85, 85, 0.4); /* 滑块颜色 */
+  border-radius: 6px; /* 滑块圆角 */
+}
+
+/* 滚动条滑块悬停样式 */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(85, 85, 85, 0.3); /* 悬停时滑块颜色 */
+}
+</style>
