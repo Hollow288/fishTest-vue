@@ -1,0 +1,90 @@
+<script lang="ts">
+import { addDays} from 'date-fns/esm'
+import { useMessage } from 'naive-ui'
+import {defineComponent, ref} from 'vue'
+import {ToDosFormModal} from './components'
+
+const toDosFormModalRef = ref()
+const toDosData = ref({})
+const thisYear = ref(0)
+const thisMonth  = ref(0)
+const thisDate = ref(0)
+
+const queryList = () => {
+
+  // CabinetRelatedAPI.listQuotation(params).then((result => {
+  //   const {data, total} = result.data ?? {}
+  //
+  //   dataRef.value = data.map(cabinetQuotation =>
+  //     ({
+  //       ...cabinetQuotation
+  //     })
+  //   )
+  //
+  // }))
+}
+export default defineComponent({
+  components: {
+    ToDosFormModal
+  },
+  setup () {
+
+    const message = useMessage()
+    return {
+      thisYear,
+      thisMonth,
+      thisDate,
+      toDosFormModalRef,
+      toDosData,
+      queryList,
+      value: ref(addDays(Date.now(), 1).valueOf()),
+      handleUpdateValue (
+        timestamp: number,
+        { year, month, date }: { year: number; month: number; date: number }
+      ) {
+
+        message.success(`${year}-${month}-${date}`)
+        thisYear.value = year
+        thisMonth.value = month
+        thisDate.value = date
+        toDosFormModalRef.value.handleShowModal()
+      }
+    }
+  }
+})
+</script>
+
+
+<template>
+  <main class="flex h-[calc(100%-144px)] flex-col">
+    <n-card class="flex h-full">
+      <n-calendar
+        v-model:value="value"
+        style="height:100%"
+        #="{ year, month, date }"
+        @update:value="handleUpdateValue"
+      >
+        <div v-if="date==18" :style="{ height: 'calc(100% - 15px)', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }">
+            <div :style="{height: '100%',display: 'flex', flexDirection: 'column', justifyContent: 'center'}">
+
+              <span style="display: block; width: 100%;color: orange;">{{year}}-{{month}}-{{date}}</span>
+              <span style="display: block; width: 100%;color: orange;">代办事项</span>
+
+            </div>
+
+        </div>
+
+      </n-calendar>
+    </n-card>
+  </main>
+
+  <ToDosFormModal
+    ref="toDosFormModalRef"
+    :year="thisYear"
+    :month="thisMonth"
+    :date="thisDate"
+    @save="queryList"
+  />
+
+</template>
+

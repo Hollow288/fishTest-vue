@@ -29,6 +29,7 @@ import {CompassOutline,
   NewspaperOutline,
   IdCardOutline,
   ImagesOutline,
+  CalendarNumberOutline,
   AtOutline} from '@vicons/ionicons5'
 
 
@@ -36,6 +37,7 @@ const icons = {
   CompassOutline,
   ImagesOutline,
   CubeOutline,
+  CalendarNumberOutline,
   IdCardOutline,
   PeopleOutline,
   Menu,

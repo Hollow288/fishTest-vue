@@ -281,6 +281,11 @@
       "phone": "电话",
       "message": "留言内容",
       "messageDate": "留言日期"
+    },
+    "WorkArrangement": {
+      "ToDos": "待办事项",
+      "OrganizationOfWork": "工作安排",
+      "ArrangePeople": "工作人员"
     }
   }
 }
