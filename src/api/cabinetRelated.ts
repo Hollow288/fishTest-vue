@@ -105,4 +105,9 @@ export class CabinetRelatedAPI {
     return httpRequest.patch<ResponseResult>(`${this.CABINET_API_PREFIX}/delete-message-board`, {...messageIds})
   }
 
+
+  static editOrganizationWork(args:object){
+    return httpRequest.post<ResponseResult>(`${this.CABINET_API_PREFIX}/edit-organization-work`, {...args})
+  }
+
 }

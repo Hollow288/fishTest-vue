@@ -180,6 +180,9 @@ const handleSubmit = async () => {
     return true
   }
   submitLoadingDispatcher.loading()
+  const args = {date: {year:props.year,month:props.month,date:props.date},data:customValue.value}
+
+  const { message, code } = await CabinetRelatedAPI.editOrganizationWork(args)
 
 
   submitLoadingDispatcher.loaded()
