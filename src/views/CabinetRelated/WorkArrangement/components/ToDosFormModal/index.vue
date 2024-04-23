@@ -1,12 +1,11 @@
 <script setup lang="ts">
 
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
-
+import {cloneDeep} from 'lodash-es'
 import {BagOutline,PersonCircleOutline} from '@vicons/ionicons5'
 import type {FormInst, FormValidationError,SelectRenderLabel, SelectRenderTag} from 'naive-ui'
 
 import type {MessageSchema,UserRole} from '@/types'
-import type {NewsInformation} from '@/types/api/newsInformation'
 import EditIcon from '~icons/ic/sharp-edit'
 
 const {t} = useI18n<{ message: MessageSchema }>()
@@ -125,7 +124,6 @@ defineExpose({
   handleShowModal
 })
 
-const formData = ref<NewsInformation>({})
 
 
 const actonTest = () => h(
@@ -180,10 +178,26 @@ const handleSubmit = async () => {
     return true
   }
   submitLoadingDispatcher.loading()
-  const args = {date: {year:props.year,month:props.month,date:props.date},data:customValue.value}
 
-  const { message, code } = await CabinetRelatedAPI.editOrganizationWork(args)
-
+  try {
+    const temData = cloneDeep(customValue.value)
+    temData.forEach(n => {
+      n.userIds = n.userIds.join(',')
+    })
+    const args = {date: {year: props.year, month: props.month, date: props.date}, data: temData}
+    const {message, code} = await CabinetRelatedAPI.editOrganizationWork(args)
+    if (code == 200) {
+      NMessage.success(message!)
+      showModal.value = false
+      emit('save')
+    } else {
+      NMessage.error(message!)
+    }
+  } catch (err: any) {
+    if (err.message) {
+      NMessage.error(err.message)
+    }
+  }
 
   submitLoadingDispatcher.loaded()
   return true

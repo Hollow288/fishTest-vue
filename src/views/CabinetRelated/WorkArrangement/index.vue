@@ -76,15 +76,15 @@ export default defineComponent({
 
       </n-calendar>
     </n-card>
-  </main>
 
-  <ToDosFormModal
-    ref="toDosFormModalRef"
-    :year="thisYear"
-    :month="thisMonth"
-    :date="thisDate"
-    @save="queryList"
-  />
+    <ToDosFormModal
+      ref="toDosFormModalRef"
+      :year="thisYear"
+      :month="thisMonth"
+      :date="thisDate"
+      @save="queryList"
+    />
+  </main>
 
 </template>
 
