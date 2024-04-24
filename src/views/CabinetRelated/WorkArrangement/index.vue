@@ -9,11 +9,12 @@ const toDosData = ref({})
 const thisYear = ref(0)
 const thisMonth  = ref(0)
 const thisDate = ref(0)
+const toDosList = ref([])
 
 const queryList = (year,month) => {
 
   CabinetRelatedAPI.listTodos(year,month).then((result => {
-
+    toDosList.value = result.data
   }))
 }
 export default defineComponent({
@@ -43,9 +44,7 @@ export default defineComponent({
         toDosFormModalRef.value.handleShowModal()
       },
       isHaveToDos( year, month, date){
-        if(year == 2024 && month == 4 && date==24){
-          return true
-        }
+        return toDosList.value.find((item) => item.year === year && item.month === month && item.date === date)
       },
       updateTodos(info: { year: number, month: number }){
         queryList(info.year,info.month)
