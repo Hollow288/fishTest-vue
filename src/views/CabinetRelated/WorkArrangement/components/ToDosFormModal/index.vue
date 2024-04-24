@@ -206,9 +206,21 @@ const handleSubmit = async () => {
 
 watch(
   () => props,
-  async (newValue) => {
-    const {data} = await UserAPI.allUserRole()
-    options.value = data
+  async (newValue:Props) => {
+    customValue.value = []
+    const {data:dataInfo} = await CabinetRelatedAPI.getInfoByYearMonthDate(newValue.year,newValue.month,newValue.date)
+    const {data:userData} = await UserAPI.allUserRole()
+    options.value = userData
+    dataInfo.forEach(n=>{
+      const temObj =
+      {
+        agencyMatters: '',
+        userIds:[]
+      }
+      temObj.agencyMatters = n.agencyMatters
+      temObj.userIds = n.arrangePeople.split(",")
+      customValue.value.push(temObj)
+    })
     console.log(newValue.year)
     console.log(newValue.month)
     console.log(newValue.date)

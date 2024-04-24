@@ -10,18 +10,11 @@ const thisYear = ref(0)
 const thisMonth  = ref(0)
 const thisDate = ref(0)
 
-const queryList = () => {
+const queryList = (year,month) => {
 
-  // CabinetRelatedAPI.listQuotation(params).then((result => {
-  //   const {data, total} = result.data ?? {}
-  //
-  //   dataRef.value = data.map(cabinetQuotation =>
-  //     ({
-  //       ...cabinetQuotation
-  //     })
-  //   )
-  //
-  // }))
+  CabinetRelatedAPI.listTodos(year,month).then((result => {
+
+  }))
 }
 export default defineComponent({
   components: {
@@ -48,6 +41,14 @@ export default defineComponent({
         thisMonth.value = month
         thisDate.value = date
         toDosFormModalRef.value.handleShowModal()
+      },
+      isHaveToDos( year, month, date){
+        if(year == 2024 && month == 4 && date==24){
+          return true
+        }
+      },
+      updateTodos(info: { year: number, month: number }){
+        queryList(info.year,info.month)
       }
     }
   }
@@ -62,9 +63,10 @@ export default defineComponent({
         v-model:value="value"
         style="height:100%"
         #="{ year, month, date }"
+        :on-panel-change="updateTodos"
         @update:value="handleUpdateValue"
       >
-        <div v-if="date==18" :style="{ height: 'calc(100% - 15px)', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }">
+        <div v-if="isHaveToDos(year,month,date)" :style="{ height: 'calc(100% - 15px)', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }">
             <div :style="{height: '100%',display: 'flex', flexDirection: 'column', justifyContent: 'center'}">
 
               <span style="display: block; width: 100%;color: orange;">{{year}}-{{month}}-{{date}}</span>
@@ -82,7 +84,7 @@ export default defineComponent({
       :year="thisYear"
       :month="thisMonth"
       :date="thisDate"
-      @save="queryList"
+      @save="queryList(thisYear,thisMonth)"
     />
   </main>
 

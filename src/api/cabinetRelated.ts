@@ -110,4 +110,21 @@ export class CabinetRelatedAPI {
     return httpRequest.post<ResponseResult>(`${this.CABINET_API_PREFIX}/edit-organization-work`, {...args})
   }
 
+
+  static getInfoByYearMonthDate(year:object,month:object,date:object) {
+    return httpRequest.get<PageResponse>(`${this.CABINET_API_PREFIX}/info-schedule`, {
+      year,
+      month,
+      date
+    })
+  }
+
+
+  static listTodos(year:object,month:object) {
+    return httpRequest.get<PageResponse>(`${this.CABINET_API_PREFIX}/list-todos`, {
+      year,
+      month
+    })
+  }
+
 }
