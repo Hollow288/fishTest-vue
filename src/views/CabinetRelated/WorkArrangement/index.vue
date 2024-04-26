@@ -37,7 +37,7 @@ export default defineComponent({
         { year, month, date }: { year: number; month: number; date: number }
       ) {
 
-        message.success(`${year}-${month}-${date}`)
+        // message.success(`${year}-${month}-${date}`)
         thisYear.value = year
         thisMonth.value = month
         thisDate.value = date
@@ -50,6 +50,9 @@ export default defineComponent({
         queryList(info.year,info.month)
       }
     }
+  },
+  mounted(){
+    queryList(new Date().getFullYear(),new Date().getMonth()+1)
   }
 })
 </script>
