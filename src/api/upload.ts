@@ -69,6 +69,13 @@ export class UploadAPI {
     })
   }
 
+
+  static uploadOrderStatusFile(data: any, orderId: any) {
+    return httpRequest.post<BaseResponse<{ path: string }>>(`${this.UPLOAD_API_PREFIX}/${orderId}/order-status`, data, {
+      headers: this.headers
+    })
+  }
+
   /**
    * 批量上传文件
    * @param data 文件数据

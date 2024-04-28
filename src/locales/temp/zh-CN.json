@@ -241,7 +241,8 @@
       "kitchenwareHardware":"厨具五金类",
       "attachFiles": "附件相关",
       "cabinetBody": "柜体",
-      "color": "颜色"
+      "color": "颜色",
+      "autoOrderStatus": "生成订单状态"
     },
     "PortfolioWeb": {
       "typeYouWant": "在这里选择想要查看的类别",
@@ -286,6 +287,22 @@
       "ToDos": "待办事项",
       "OrganizationOfWork": "工作安排",
       "ArrangePeople": "工作人员"
+    },
+    "OrderStatus": {
+      "customerName": "客户姓名",
+      "address": "地址",
+      "telephone": "电话",
+      "productName": "产品名称",
+      "allTotalPrice": "总价",
+      "paidPrice": "已付款金额",
+      "unPaidPrice": "未付款金额",
+      "remark": "备注",
+      "createTime": "创建日期",
+      "addressAndName": "地址/客户姓名",
+      "create": "创建/修改",
+      "view": "查看",
+      "thisPaidPrice": "本次付款金额"
+
     }
   }
 }

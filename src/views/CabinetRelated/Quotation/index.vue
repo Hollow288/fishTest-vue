@@ -1,5 +1,5 @@
 <script lang="ts">
-import {AddSharp, Filter as FilterIcon, Reload as ReloadIcon, TrashBinOutline} from '@vicons/ionicons5'
+import {AddSharp, Filter as FilterIcon, Reload as ReloadIcon, TrashBinOutline, CartOutline} from '@vicons/ionicons5'
 import {NIcon, useDialog, useMessage} from 'naive-ui'
 
 import {CabinetRelatedAPI} from '@/api/cabinetRelated'
@@ -108,7 +108,7 @@ export default defineComponent({
   setup() {
 
 
-    window.$message = useMessage()
+    const messages = useMessage()
 
     const dialog = useDialog()
 
@@ -167,6 +167,7 @@ export default defineComponent({
       ReloadIcon,
       EditIcon,
       TrashBinOutline,
+      CartOutline,
       ResetIcon,
       SearchIcon,
       FileExport,
@@ -192,9 +193,9 @@ export default defineComponent({
       },
       editOneQuotation() {
         if (checkedRowKeysRef.value.length === 0) {
-          window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
+          messages.warning(() => t('VALIDATION.ChooseOneDetail'))
         } else if (checkedRowKeysRef.value.length > 1) {
-          window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
+          messages.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
         } else {
           quotationState.value = 'edit'
           quotationFormData.value = {}
@@ -204,9 +205,9 @@ export default defineComponent({
       },
       viewOneQuotation() {
         if (checkedRowKeysRef.value.length === 0) {
-          window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
+          messages.warning(() => t('VALIDATION.ChooseOneDetail'))
         } else if (checkedRowKeysRef.value.length > 1) {
-          window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
+          messages.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
         } else {
           quotationState.value = 'view'
           quotationFormData.value = {}
@@ -216,7 +217,7 @@ export default defineComponent({
       },
       deleteQuotations() {
         if (checkedRowKeysRef.value.length === 0) {
-          window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
+          messages.warning(() => t('VALIDATION.ChooseOneDetail'))
           return
         }
 
@@ -231,22 +232,22 @@ export default defineComponent({
             if (code == '200') {
               queryList()
               checkArray.value = []
-              window.$message.success(message)
+              messages.success(message)
             } else {
-              window.$message.error(message)
+              messages.error(message)
             }
 
           },
           onNegativeClick: () => {
-            window.$message.warning('取消操作')
+            messages.warning('取消操作')
           }
         })
       },
       handleExport(){
       if (checkedRowKeysRef.value.length === 0) {
-        window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
+        messages.warning(() => t('VALIDATION.ChooseOneDetail'))
       } else if (checkedRowKeysRef.value.length > 1) {
-        window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
+        messages.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
       }else{
         const temObj  = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
         ExportAPI.getExportQuotation(temObj.quotationId).then(result => {
@@ -264,15 +265,15 @@ export default defineComponent({
           a.click()
           // 清理临时 URL
           window.URL.revokeObjectURL(url)
-          window.$message.success(`导出成功：${temObj.address}-报价单.docx`)
+          messages.success(`导出成功：${temObj.address}-报价单.docx`)
         })
       }
       },
       handleExportPdf(){
         if (checkedRowKeysRef.value.length === 0) {
-          window.$message.warning(() => t('VALIDATION.ChooseOneDetail'))
+          messages.warning(() => t('VALIDATION.ChooseOneDetail'))
         } else if (checkedRowKeysRef.value.length > 1) {
-          window.$message.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
+          messages.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
         }else{
           const temObj  = dataRef.value.filter(m => m.quotationId === checkedRowKeysRef.value[0])[0]
           ExportAPI.getExportQuotationPdf(temObj.quotationId).then(result => {
@@ -290,7 +291,7 @@ export default defineComponent({
             a.click()
             // 清理临时 URL
             window.URL.revokeObjectURL(url)
-            window.$message.success(`导出成功：${temObj.address}-报价单.pdf`)
+            messages.success(`导出成功：${temObj.address}-报价单.pdf`)
           })
         }
       },
@@ -301,7 +302,27 @@ export default defineComponent({
           quotationFormData.value = row
           quotationFormModalRef.value.handleShowModal()
         }
-      })
+      }),
+      autoOrderStatus(){
+        if (checkedRowKeysRef.value.length === 0) {
+          messages.warning(() => t('VALIDATION.ChooseOneDetail'))
+        } else if (checkedRowKeysRef.value.length > 1) {
+          messages.warning(() => t('VALIDATION.OnlyAllowOneDetail'))
+        } else {
+          const quotationId = {id: checkedRowKeysRef.value[0]}
+          CabinetRelatedAPI.autoOrderStatus(quotationId).then(result=>{
+            if(result.code == 200){
+              if(result.message === '该报价单已经生成订单状态'){
+                messages.warning(result.message)
+              }else{
+                messages.success(result.message)
+              }
+            }else{
+              messages.warning(result.message)
+            }
+          })
+        }
+      }
     }
   }
 })
@@ -407,6 +428,16 @@ export default defineComponent({
 <!--            </template>-->
 <!--&lt;!&ndash;            {{ t('TEMP.Cabinet.Quotation.export') }}&ndash;&gt;pdf-->
 <!--          </n-button>-->
+
+
+          <n-button icon-placement="left" secondary strong @click="autoOrderStatus">
+            <template #icon>
+              <n-icon :component="CartOutline">
+                <!--                <AddSharp-icon />-->
+              </n-icon>
+            </template>
+            {{ t('TEMP.Cabinet.Quotation.autoOrderStatus') }}
+          </n-button>
 
 
           <NTooltip>

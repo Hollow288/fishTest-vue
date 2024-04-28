@@ -33,11 +33,13 @@ import {CompassOutline,
   IdCardOutline,
   ImagesOutline,
   CalendarNumberOutline,
+  CartOutline,
   AtOutline} from '@vicons/ionicons5'
 
 
 const icons = {
   CompassOutline,
+  CartOutline,
   CalendarNumberOutline,
   CubeOutline,
   IdCardOutline,

@@ -13,5 +13,11 @@ export class DownloadAPI {
   }
 
 
+  static getDownloadOrderStatus(orderId: string){
+    return httpRequest.get(`${this.DOWNLOAD_API_PREFIX}/${orderId}/order-status`, {}, {responseType: 'blob' })
+
+  }
+
+
 
 }
