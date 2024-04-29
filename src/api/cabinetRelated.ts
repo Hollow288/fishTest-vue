@@ -157,4 +157,13 @@ export class CabinetRelatedAPI {
   static removeOrderStatusAttachs(attachIds: object){
     return httpRequest.put<ResponseResult>(`${this.CABINET_API_PREFIX}/remove-order-status-attach`, {...attachIds})
   }
+
+  static deleteOrderStatusByIds(orderIds: object) {
+    return httpRequest.patch<ResponseResult>(`${this.CABINET_API_PREFIX}/delete-order-status`, {...orderIds})
+  }
+
+
+  static addArrivedPrice(checkData: object,orderId: string){
+    return httpRequest.put<ResponseResult>(`${this.CABINET_API_PREFIX}/${orderId}/add-arrived-price`, {...checkData})
+  }
 }

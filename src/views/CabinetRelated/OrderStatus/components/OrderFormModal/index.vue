@@ -34,22 +34,72 @@ const showModal = ref(false)
 const fileListRef = ref([])
 
 
-const noticeRules: FormRules = {
-  userIds: [
-    {
-      required: true,
-      type: 'array',
-      trigger: ['change'],
-      message: () => t('TEMP.Validation.userIds'),
-      renderMessage: () => t('TEMP.Validation.userIds')
-    }
-  ],
-  message: [
+const orderRules = {
+  customerName: [
     {
       required: true,
       trigger: ['blur', 'input'],
-      message: () => t('TEMP.Validation.message'),
-      renderMessage: () => t('TEMP.Validation.message')
+      message: () => t('TEMP.Validation.customerName'),
+      renderMessage: () => t('TEMP.Validation.customerName')
+    }
+  ],
+  telephone: [
+    {
+      required: true,
+      trigger: ['blur', 'input'],
+      message: () => t('TEMP.Validation.telephone'),
+      renderMessage: () => t('TEMP.Validation.telephone')
+    }
+  ],
+  allTotalPrice: [
+    {
+      required: true,
+      validator: (rule, value, callback) => {
+        if(typeof value === 'undefined' || value === null || value === ''){
+          callback(new Error(t('TEMP.Validation.allTotalPrice')))
+          return
+        }
+        if(value < 0){
+          callback(new Error(t('TEMP.Validation.amountNegative')))
+          return
+        }
+        callback()
+      },
+      trigger: ['blur', 'input']
+    }
+  ],
+  paidPrice: [
+    {
+      required: true,
+      validator: (rule, value, callback) => {
+        if(typeof value === 'undefined' || value === null || value === ''){
+          callback(new Error(t('TEMP.Validation.paidPrice')))
+          return
+        }
+        if(value < 0){
+          callback(new Error(t('TEMP.Validation.amountNegative')))
+          return
+        }
+        callback()
+      },
+      trigger: ['blur', 'input']
+    }
+  ],
+  unPaidPrice: [
+    {
+      required: true,
+      validator: (rule, value, callback) => {
+        if(typeof value === 'undefined' || value === null || value === ''){
+          callback(new Error(t('TEMP.Validation.unPaidPrice')))
+          return
+        }
+        if(value < 0){
+          callback(new Error(t('TEMP.Validation.amountNegative')))
+          return
+        }
+        callback()
+      },
+      trigger: ['blur', 'input']
     }
   ]
 }
@@ -140,7 +190,7 @@ const handleSubmit = async () => {
         fileListRef.value.filter(file => file !== null).forEach(file => {
           fileData.append('file', file)
         })
-        const {code: uploadCode} = await UploadAPI.uploadOrderStatusFile(fileData, formData.value.quotationId)
+        const {code: uploadCode} = await UploadAPI.uploadOrderStatusFile(fileData, formData.value.orderId)
       }
       if (updateCode == 200 && removeCode == 200) {
         NMessage.success(updateMessage!)
@@ -171,7 +221,22 @@ const actonTest = () => h(
   'div',
   {
     class: 'space-x-3 flex justify-center'
-  },
+  }, props.isEdit === 'view' ?
+  [
+    h(
+      NButton,
+      {
+        type: 'default',
+        size: 'small',
+        onClick: () => {
+          handleCancel()
+        }
+      },
+      {
+        default: () => t('TEMP.NoticeManagement.Cancel')
+      }
+    )
+  ] :
   [
     h(
       NButton,
@@ -251,6 +316,7 @@ watch(
   () => props.orderFormData,
   async (newValue) => {
     if (props.isEdit === 'create') {
+      formData.value = {}
       fileListRef.value = []
       willRemoveAttachs.value = []
     }else if(props.isEdit === 'edit'){
@@ -266,10 +332,40 @@ watch(
       } else {
         NMessage.error('数据读取错误')
       }
+      fileListRef.value = []
+      willRemoveAttachs.value = []
+    }else {
+      formData.value = {
+        ...newValue
+      }
+      const {
+        code: attachCode,
+        data: attachDatas
+      } = await CabinetRelatedAPI.getAttachDataByOrderId(formData.value.orderId)
+      if (attachCode == 200) {
+        fileList.value = attachDatas
+      } else {
+        NMessage.error('数据读取错误')
+      }
+      fileListRef.value = []
+      willRemoveAttachs.value = []
     }
   },
   {deep: true}
 )
+
+watch(() => formData.value.paidPrice, (newValue, oldValue) => {
+  if(typeof newValue !== 'undefined' &&  !isNaN(newValue) && newValue !== oldValue ) {
+    formData.value.unPaidPrice = formData.value.allTotalPrice - newValue
+  }
+})
+
+watch(() => formData.value.unPaidPrice, (newValue, oldValue) => {
+  if(typeof newValue !== 'undefined' &&  !isNaN(newValue) && newValue !== oldValue) {
+    formData.value.paidPrice = formData.value.allTotalPrice - newValue
+  }
+})
+
 
 defineExpose({
   handleShowModal
@@ -296,7 +392,7 @@ defineExpose({
       v-if="isEdit === 'create'"
       ref="formRef"
       :model="formData"
-      :rules="noticeRules"
+      :rules="orderRules"
       label-width="auto"
       require-mark-placement="right-hanging"
       class="flex flex-col"
@@ -469,7 +565,7 @@ defineExpose({
       v-else-if="isEdit === 'edit'"
       ref="formRef"
       :model="formData"
-      :rules="noticeRules"
+      :rules="orderRules"
       label-width="auto"
       require-mark-placement="right-hanging"
       class="flex flex-col"
@@ -638,6 +734,168 @@ defineExpose({
             请不要上传敏感数据，比如你的银行卡号和密码，信用卡号有效期和安全码
           </n-p>
         </n-upload-dragger>
+      </n-upload>
+
+    </NForm>
+
+    <NForm
+      v-else
+      ref="formRef"
+      :model="formData"
+      :rules="orderRules"
+      label-width="auto"
+      require-mark-placement="right-hanging"
+      class="flex flex-col"
+      label-placement="left"
+    >
+      <nGrid :cols="24">
+        <NFormItemGi
+          :span="8"
+          path="customerName"
+          :label="t('TEMP.Cabinet.OrderStatus.customerName')"
+        >
+          <NInput
+            v-model:value="formData.customerName"
+            :placeholder="t('TEMP.Cabinet.OrderStatus.customerName')"
+            readonly
+          />
+        </NFormItemGi>
+        <NFormItemGi
+          :span="16"
+          path="address"
+          :label="t('TEMP.Cabinet.OrderStatus.address')"
+        >
+          <NInput
+            v-model:value="formData.address"
+            :placeholder="t('TEMP.Cabinet.OrderStatus.address')"
+            readonly
+          />
+        </NFormItemGi>
+      </nGrid>
+
+      <nGrid :cols="24">
+        <NFormItemGi
+          :span="8"
+          path="telephone"
+          :label="t('TEMP.Cabinet.OrderStatus.telephone')"
+        >
+          <NInput
+            v-model:value="formData.telephone"
+            :placeholder="t('TEMP.Cabinet.OrderStatus.telephone')"
+            readonly
+          />
+        </NFormItemGi>
+        <NFormItemGi
+          :span="8"
+          path="productName"
+          :label="t('TEMP.Cabinet.OrderStatus.productName')"
+        >
+          <NInput
+            v-model:value="formData.productName"
+            :placeholder="t('TEMP.Cabinet.OrderStatus.productName')"
+            readonly
+          />
+        </NFormItemGi>
+        <NFormItemGi
+          :span="8"
+          path="allTotalPrice"
+          :label="t('TEMP.Cabinet.OrderStatus.allTotalPrice')"
+        >
+          <nInputNumber
+            v-model:value="formData.allTotalPrice"
+            :placeholder="t('TEMP.Cabinet.OrderStatus.allTotalPrice')"
+            type="number"
+            show-count
+            readonly
+            :parse="parse"
+            :format="format"
+            :show-button="false"
+            style="width: 100%"
+          >
+            <template #suffix>
+              元
+            </template>
+          </nInputNumber>
+        </NFormItemGi>
+      </nGrid>
+
+      <nGrid :cols="24">
+        <NFormItemGi
+          :span="8"
+          path="paidPrice"
+          :label="t('TEMP.Cabinet.OrderStatus.paidPrice')"
+        >
+          <nInputNumber
+            v-model:value="formData.paidPrice"
+            :placeholder="t('TEMP.Cabinet.OrderStatus.paidPrice')"
+            type="number"
+            show-count
+            readonly
+            :parse="parse"
+            :format="format"
+            :show-button="false"
+            style="width: 100%"
+          >
+            <template #suffix>
+              元
+            </template>
+          </nInputNumber>
+        </NFormItemGi>
+        <NFormItemGi
+          :span="8"
+          path="unPaidPrice"
+          :label="t('TEMP.Cabinet.OrderStatus.unPaidPrice')"
+        >
+          <nInputNumber
+            v-model:value="formData.unPaidPrice"
+            :placeholder="t('TEMP.Cabinet.OrderStatus.unPaidPrice')"
+            type="number"
+            show-count
+            readonly
+            :parse="parse"
+            :format="format"
+            :show-button="false"
+            style="width: 100%"
+          >
+            <template #suffix>
+              元
+            </template>
+          </nInputNumber>
+        </NFormItemGi>
+      </nGrid>
+
+      <nGrid :cols="24">
+        <NFormItemGi
+          :span="24"
+          path="remark"
+          :label="t('TEMP.Cabinet.OrderStatus.remark')"
+        >
+          <NInput
+            v-model:value="formData.remark"
+            :placeholder="t('TEMP.Cabinet.OrderStatus.remark')"
+            readonly
+            type="textarea"
+            :autosize="{
+              minRows: 3,
+              maxRows: 5
+             }"
+          />
+        </NFormItemGi>
+      </nGrid>
+
+      <n-divider title-placement="left" style="margin-top: -10px">
+        {{ t('TEMP.Cabinet.Quotation.attachFiles') }}
+      </n-divider>
+
+      <n-upload
+        v-model:file-list="fileList"
+        multiple
+        :max="10"
+        style="margin-top: -30px"
+        disabled
+        show-download-button
+        @download="handleDownload"
+      >
       </n-upload>
 
     </NForm>
