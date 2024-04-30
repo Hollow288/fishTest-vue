@@ -41,8 +41,9 @@ const initializeRouter = async () => {
       }else{
         next()
       }
+    }else{
+      next()
     }
-    next()
   })
 
   router.afterEach((to) => {
