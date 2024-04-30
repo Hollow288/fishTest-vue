@@ -1,5 +1,4 @@
 import type { BaseResponse, LoginModel, SignupModel, UserTokenResponse } from '@/types'
-import bcrypt from 'bcryptjs'
 import type {ResponseResult} from '@/types'
 
 // 登录类型
@@ -72,5 +71,12 @@ export class AuthAPI {
    */
   static  logout(){
     return  httpRequest.post<ResponseResult>('user/logout')
+  }
+
+
+  static hasRoleToInterface(userId:string,toPath:object){
+    return  httpRequest.post<ResponseResult>(`user/${userId}/has-role-interface`,{
+      ...toPath
+    })
   }
 }

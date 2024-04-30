@@ -211,10 +211,8 @@ class Request {
           //   this.handleUnauthorized()
           //   break
           case StatusCode.FORBIDDEN:
-            // NMessage.error(errorMessage)
-            // router.replace('/403')
-            // this.handleUnauthorized()
             NMessage.error("服务端错误!")
+            router.replace('/error-pages/403')
             break
           case StatusCode.INTERNAL_SERVER_ERROR:
             NMessage.error("服务端错误!")
@@ -222,7 +220,7 @@ class Request {
           case StatusCode.BAD_GATEWAY:
           case StatusCode.GATEWAY_TIMEOUT:
             // NMessage.error(errorMessage)
-            router.replace('/500')
+            router.replace('/error-pages/500')
             break
           default:
         }
@@ -230,7 +228,7 @@ class Request {
         if (!window.navigator.onLine) {
           // NMessage.error(t('COMMON.NETWORK.ERROR'))
           NMessage.error("网络连接超时!")
-          router.replace('/404')
+          router.replace('/error-pages/404')
         }
 
         // 处理返回的数据和状态码

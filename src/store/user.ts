@@ -1,6 +1,6 @@
-import { acceptHMRUpdate } from 'pinia'
+import {acceptHMRUpdate} from 'pinia'
 
-import type { User } from '@/types'
+import type {User} from '@/types'
 
 export const useUserStore = defineStore('user', () => {
   /**
@@ -20,8 +20,11 @@ export const useUserStore = defineStore('user', () => {
    * @param data 用户数据
    */
   const setUser = (data: User) => {
-    user.value = { ...user.value, ...data }
+    user.value = {...user.value, ...data}
   }
+
+
+  const getUser = (): User => user.value
 
   /**
    * 清空当前用户数据
@@ -34,8 +37,11 @@ export const useUserStore = defineStore('user', () => {
     user,
     hasData,
     setUser,
+    getUser,
     clearUser
   }
+}, {
+  persist: true,
 })
 
 /**

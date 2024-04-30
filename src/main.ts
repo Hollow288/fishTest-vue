@@ -7,6 +7,8 @@ import { MotionPlugin } from '@vueuse/motion'
 import router from '@/router'
 import App from './App.vue'
 
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
 const { APP_NAME, FAVICON_URL } = AppMetadata
 
 // 初始化 Vue 应用前执行脚本
@@ -16,6 +18,8 @@ BrowserUtils.resolveNaiveStyle() // 解决 Naive UI 样式冲突问题
 
 const app = createApp(App)
 const pinia = createPinia()
+
+pinia.use(piniaPluginPersistedstate)
 
 app.use(i18n)
 app.use(pinia)
