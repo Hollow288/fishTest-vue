@@ -33,7 +33,7 @@ const initializeRouter = async () => {
       // debugger
       const {userId} = userStore.getUser()
       // Todo 为什么这里刷新界面就是undefined 而正常跳转就正常  :因为刷新界面后清空了store  https://prazdevs.github.io/pinia-plugin-persistedstate/zh/
-      if(typeof userId !== 'undefined'){
+      if(typeof userId !== 'undefined' && to.path !== '/user-info' && to.path !== '/change-password' ){
         AuthAPI.hasRoleToInterface(userId, {toPath:to.path}).then(result=>{
           if(result.message === '认证成功'){
             next()
