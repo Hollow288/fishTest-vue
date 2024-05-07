@@ -26,6 +26,8 @@ export interface User {
   verified?: boolean
   enabled?: boolean
   createdAt?: string
+  githubId?:string
+  githubUrl?:string
   roles?: string[]
   authTypes?: string[]
 }

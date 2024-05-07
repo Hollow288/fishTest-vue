@@ -10,6 +10,8 @@ import FemaleIcon from '~icons/mdi/gender-female'
 import MaleIcon from '~icons/mdi/gender-male'
 import PhoneIcon from '~icons/mdi/phone'
 import AddressIcon from '~icons/mdi/store-plus-outline'
+import {LogoGithub} from "@vicons/ionicons5";
+import {NIcon} from "naive-ui";
 
 const { t } = useI18n<{ message: MessageSchema }>()
 
@@ -71,6 +73,52 @@ const rules: FormRules = {
   ]
 }
 const computedUserInfo = computed(() => userStore.user)
+
+
+const bandingWithGitHub = () => {
+
+  const authURL = GitHubAuthUtils.getAuthUrl()
+  // 打开授权子窗口
+  GitHubAuthUtils.openAuthWindow(authURL)
+  // 添加新窗口关闭事件监听器
+  const messageEventListener = (event: MessageEvent) => {
+    // 确保消息来自 GitHub 授权子窗口
+    if (event.origin !== window.location.origin) {
+      return
+    }
+    // 接收到数据移除监听器
+    window.removeEventListener('message', messageEventListener)
+    // 处理从新窗口传递过来的 GitHub 访问令牌
+    const githubAuthCode = event.data
+    AuthAPI.bindWithGitHub(githubAuthCode)
+      .then((res) => {
+        const { code,message,data } = res
+        if(code == 200){
+          if (data.gender != null) {
+            data.gender = parseInt(data.gender, 10)
+          }
+          data.birthDate = data.birthDate && TimeUtils.formatTime(data.birthDate, 'YYYY-MM-DD')
+          userStore.setUser(data)
+          formData.value = data
+          NMessage.success(message!)
+        }else{
+          NMessage.error(message!)
+        }
+      })
+      .catch((err) => {
+        if (err.message) {
+          NMessage.error(err.message)
+        }
+      })
+  }
+
+  // 父窗口监听子窗口传递过来的消息
+  window.addEventListener('message', messageEventListener)
+}
+
+const goToWithGitHub = ()=>{
+  window.open(formData.value.githubUrl, '_blank')
+}
 
 const handleValidateButtonClick = () => {
   formRef.value!.validate(async (errors) => {
@@ -259,6 +307,29 @@ onMounted(() =>
               />
             </template>
           </NUpload>
+
+
+          <div v-if="formData.githubId == null || formData.githubId == ''">
+            <n-button icon-placement="left" secondary strong @click="bandingWithGitHub">
+              <template #icon>
+                <n-icon :component="LogoGithub">
+                </n-icon>
+              </template>
+              {{ t('COMMON.bindGithub') }}
+            </n-button>
+          </div>
+
+          <div v-else>
+            <n-button icon-placement="left" secondary strong @click="goToWithGitHub" >
+              <template #icon>
+                <n-icon :component="LogoGithub">
+                </n-icon>
+              </template>
+              {{ t('COMMON.AlreadyGithub') }}
+            </n-button>
+          </div>
+
+
         </NFormItem>
         <NFormItem
           path="name"

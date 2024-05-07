@@ -41,20 +41,22 @@ const loginWithGitHub = () => {
 
     AuthAPI.loginWithGitHub(githubAuthCode)
       .then((res) => {
-        const { data, message } = res
-        const { accessToken, refreshToken, user } = data ?? {}
-        AuthUtils.setAccessToken(accessToken)
-        AuthUtils.setRefreshToken(refreshToken)
-        userStore.setUser(user)
-        if (message) {
-          NMessage.success(message)
+        const { code, data, message } = res
+        if(code == 200){
+          const { refresh_token, access_token, user } = data ?? {}
+          AuthUtils.setAccessToken(access_token)
+          AuthUtils.setRefreshToken(refresh_token)
+          userStore.setUser(user)
+          NMessage.success(message!)
+          if (redirectUrl.value) {
+            router.replace(redirectUrl.value)
+          } else {
+            router.replace('/')
+          }
+        }else{
+          NMessage.error(message!)
         }
 
-        if (redirectUrl.value) {
-          router.replace(redirectUrl.value)
-        } else {
-          router.replace('/')
-        }
       })
       .catch((err) => {
         if (err.message) {

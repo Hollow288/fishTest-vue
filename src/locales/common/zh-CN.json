@@ -86,5 +86,7 @@
   "OnlyMenu": "仅菜单",
   "Docs": "文档",
   "Insert": "新增",
-  "SettingsAdjust": "调整"
+  "SettingsAdjust": "调整",
+  "bindGithub": "绑定Github",
+  "AlreadyGithub": "已绑定"
 }

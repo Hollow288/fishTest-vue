@@ -55,6 +55,14 @@ export class AuthAPI {
     )
   }
 
+
+  static bindWithGitHub(code: string) {
+    return httpRequest.post<BaseResponse>(
+      `${this.AUTH_API_PREFIX}/bind/github`,
+      { code }
+    )
+  }
+
   /**
    * Google 登录
    */
@@ -70,12 +78,12 @@ export class AuthAPI {
    * 登出
    */
   static  logout(){
-    return  httpRequest.post<ResponseResult>('user/logout')
+    return  httpRequest.post<ResponseResult>(`${this.AUTH_API_PREFIX}/logout`)
   }
 
 
   static hasRoleToInterface(userId:string,toPath:object){
-    return  httpRequest.post<ResponseResult>(`user/${userId}/has-role-interface`,{
+    return  httpRequest.post<ResponseResult>(`${this.AUTH_API_PREFIX}/${userId}/has-role-interface`,{
       ...toPath
     })
   }

@@ -23,7 +23,12 @@ const initializeRouter = async () => {
     if (to.path !== from.path) {
       NProgress.start()
     }
-    if(to.path !== '/' && to.path !== '/login'){
+    if(to.path !== '/'
+      && to.path !== '/login'
+      && to.path !== '/error-pages/403'
+      && to.path !== '/error-pages/404'
+      && to.path !== '/error-pages/418'
+      && to.path !== '/error-pages/500'){
       const userStore = useUserStore()
       // debugger
       const {userId} = userStore.getUser()
