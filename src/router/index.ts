@@ -1,11 +1,11 @@
 import NProgress from 'nprogress'
 import {createRouter, createWebHistory} from 'vue-router'
 
+import {AuthAPI} from '@/api/auth'
 import { useUserStore } from '@/store/user'
 
 import { processRouteTag } from './processor'
 import { routes } from './routes'
-import {AuthAPI} from "@/api/auth";
 
 NProgress.configure({ showSpinner: false })
 

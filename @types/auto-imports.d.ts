@@ -116,6 +116,7 @@ declare global {
   const useCssVars: typeof import('vue')['useCssVars']
   const useDebounceFn: typeof import('@vueuse/core')['useDebounceFn']
   const useDialog: typeof import('naive-ui')['useDialog']
+  const useDragModal: typeof import('../src/utils/common')['useDragModal']
   const useEventListener: typeof import('@vueuse/core')['useEventListener']
   const useFullscreen: typeof import('@vueuse/core')['useFullscreen']
   const useI18n: typeof import('vue-i18n')['useI18n']
@@ -268,6 +269,7 @@ declare module 'vue' {
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useDebounceFn: UnwrapRef<typeof import('@vueuse/core')['useDebounceFn']>
     readonly useDialog: UnwrapRef<typeof import('naive-ui')['useDialog']>
+    readonly useDragModal: UnwrapRef<typeof import('../src/utils/common')['useDragModal']>
     readonly useEventListener: UnwrapRef<typeof import('@vueuse/core')['useEventListener']>
     readonly useFullscreen: UnwrapRef<typeof import('@vueuse/core')['useFullscreen']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
@@ -410,6 +412,7 @@ declare module '@vue/runtime-core' {
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useDebounceFn: UnwrapRef<typeof import('@vueuse/core')['useDebounceFn']>
     readonly useDialog: UnwrapRef<typeof import('naive-ui')['useDialog']>
+    readonly useDragModal: UnwrapRef<typeof import('../src/utils/common')['useDragModal']>
     readonly useEventListener: UnwrapRef<typeof import('@vueuse/core')['useEventListener']>
     readonly useFullscreen: UnwrapRef<typeof import('@vueuse/core')['useFullscreen']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>

@@ -3,6 +3,7 @@ import type {FormInst} from 'naive-ui'
 
 import type {MessageSchema } from '@/types'
 import type {MessageBoard} from '@/types/api/messageBoard'
+import { useDragModal } from '@/utils/common'
 import EditIcon from '~icons/ic/sharp-edit'
 
 export interface Props {
@@ -50,6 +51,9 @@ watch(
   { immediate: true }
 )
 
+
+
+
 defineExpose({
   handleShowModal
 })
@@ -63,6 +67,7 @@ defineExpose({
     :title="t('TEMP.NoticeManagement.EditNotice')"
     :negative-text="t('COMMON.Cancel')"
     @negative-click="handleCancel"
+    @after-enter="useDragModal($event,'.n-dialog__title')"
   >
     <template #icon>
       <NIcon

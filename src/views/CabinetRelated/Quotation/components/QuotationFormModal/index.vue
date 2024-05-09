@@ -9,6 +9,7 @@ import type {FormInst, FormRules, FormValidationError,UploadFileInfo} from 'naiv
 import type {MessageSchema} from '@/types'
 import type {CabinetQuotation} from '@/types/api/cabinetQuotation'
 import type {CabinetQuotationDetail} from '@/types/api/cabinetQuotationDetail'
+import {useDragModal} from '@/utils/common'
 import CreateIcon from '~icons/ic/sharp-add'
 import EditIcon from '~icons/ic/sharp-edit'
 import ViewIcon from '~icons/mdi/file-search-outline'
@@ -36,9 +37,9 @@ const [submitLoading, submitLoadingDispatcher] = useLoading()
 const formRef = ref<FormInst | null>(null)
 const formData = ref<CabinetQuotation>({})
 // const detail = ref<CabinetQuotationDetail>({})
-const detailData = ref<CabinetQuotationDetail>([])
+const detailData = ref<CabinetQuotationDetail[]>([])
 const fileList = ref<UploadFileInfo[]>([])
-const willRemoveAttachs = ref<string>([])
+const willRemoveAttachs = ref<string[]>([])
 const showModal = ref(false)
 
 const emptyCabinetQuotationDetail: {
@@ -515,6 +516,7 @@ defineExpose({
     :loading="submitLoading"
     :action="actonTest"
     :mask-closable="false"
+    @after-enter="useDragModal($event,'.n-dialog__title')"
   >
     <template #icon>
       <NIcon
