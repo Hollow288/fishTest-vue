@@ -1,7 +1,8 @@
 <script lang="ts">
-import { addDays} from 'date-fns/esm'
-import { useMessage } from 'naive-ui'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {addDays} from 'date-fns/esm'
 import {defineComponent, ref} from 'vue'
+
 import {ToDosFormModal} from './components'
 
 const toDosFormModalRef = ref()
@@ -23,7 +24,6 @@ export default defineComponent({
   },
   setup () {
 
-    const message = useMessage()
     return {
       thisYear,
       thisMonth,
@@ -31,7 +31,7 @@ export default defineComponent({
       toDosFormModalRef,
       toDosData,
       queryList,
-      value: ref(addDays(Date.now(), 1).valueOf()),
+      value: ref(addDays(Date.now(), 0).valueOf()),
       handleUpdateValue (
         timestamp: number,
         { year, month, date }: { year: number; month: number; date: number }
