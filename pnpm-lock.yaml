@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@dolphin-admin/utils':
-    specifier: ^0.0.23
-    version: 0.0.23
   '@tanstack/vue-query':
     specifier: ^5.14.1
     version: 5.14.1(vue@3.3.12)
@@ -1125,12 +1122,6 @@ packages:
       gradient-string: 2.0.2
       vite: 4.5.1(@types/node@20.10.4)(sass@1.69.5)
     dev: true
-
-  /@dolphin-admin/utils@0.0.23:
-    resolution: {integrity: sha512-/xaeN/KX5+r8m1KmPty8PS353hAO+zh+iqEbbH0+XS6bnrsHwAQoZJLBlRBfCbp4d6bjayTFkIzxYjG16RHP0w==}
-    dependencies:
-      dayjs: 1.11.10
-    dev: false
 
   /@emotion/hash@0.8.0:
     resolution: {integrity: sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==}

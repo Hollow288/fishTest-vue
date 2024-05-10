@@ -1,4 +1,4 @@
-import { Lang } from '@dolphin-admin/utils'
+import { Lang } from '@/enums/lang'
 import { dateEnUS, dateZhCN, enUS, zhCN } from 'naive-ui'
 import { acceptHMRUpdate } from 'pinia'
 

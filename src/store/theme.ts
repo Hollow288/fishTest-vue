@@ -1,9 +1,9 @@
-import { Theme } from '@dolphin-admin/utils'
 import type { GlobalThemeOverrides } from 'naive-ui'
 import { darkTheme, lightTheme } from 'naive-ui'
 import { acceptHMRUpdate } from 'pinia'
 
 import { BuiltInFont, darkThemeOverridesPresets, lightThemeOverridesPresets } from '@/constants'
+import { Theme } from '@/enums'
 
 export const useThemeStore = defineStore('theme', () => {
   /**

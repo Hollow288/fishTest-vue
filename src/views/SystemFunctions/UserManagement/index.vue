@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type {Lang} from '@dolphin-admin/utils'
+import type {Lang} from '@/enums/lang'
 import { CashOutline as CashIcon,PersonAdd } from '@vicons/ionicons5'
 import type {
   DataTableBaseColumn,

@@ -1,6 +1,6 @@
-import type { Lang } from '@dolphin-admin/utils'
 import { createI18n } from 'vue-i18n'
 
+import type { Lang } from '@/enums/lang'
 import type { MessageSchema } from '@/types'
 
 const i18n = createI18n<[MessageSchema], Lang, false>({

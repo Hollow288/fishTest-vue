@@ -1,6 +1,5 @@
-import type { Lang } from '@dolphin-admin/utils'
-
 import type { BasePageModel } from '@/constants'
+import type { Lang } from '@/enums/lang'
 import type { PageResponse, UserTraffic } from '@/types'
 
 export class UserTrafficAPI {

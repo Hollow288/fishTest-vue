@@ -1,5 +1,7 @@
 export * from './api'
+export * from './browser'
 export * from './i18n'
 export * from './tab'
+export * from './time'
 export * from './typeFc'
 export * from './userTraffic'

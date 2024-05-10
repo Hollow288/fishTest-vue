@@ -1,5 +1,4 @@
 <script lang="ts">
-// import type {Lang} from '@dolphin-admin/utils'
 import {Filter as FilterIcon, Reload as ReloadIcon, AddSharp} from '@vicons/ionicons5'
 import type {DataTableColumns, DropdownOption} from 'naive-ui'
 import {NIcon, useMessage, useDialog} from 'naive-ui'

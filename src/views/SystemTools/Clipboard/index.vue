@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Lang } from '@dolphin-admin/utils'
+import { Lang } from '@/enums/lang'
 
 import type { MessageSchema } from '@/types'
 

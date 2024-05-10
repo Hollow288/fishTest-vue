@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Lang } from '@dolphin-admin/utils'
+import type { Lang } from '@/enums/lang'
 
 import bitOceanSrc from '@/assets/images/bit_ocean.png'
 import type { MessageSchema } from '@/types'

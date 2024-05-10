@@ -1,6 +1,7 @@
-import { Lang } from '@dolphin-admin/utils'
 import type { NDateLocale, NLocale } from 'naive-ui'
 import { dateEnUS, dateZhCN, enUS, zhCN } from 'naive-ui'
+
+import { Lang } from '@/enums/lang'
 
 export class NaiveUtils {
   /**

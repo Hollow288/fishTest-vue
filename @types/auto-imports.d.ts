@@ -7,9 +7,9 @@ export {}
 declare global {
   const AppMetadata: typeof import('@/constants')['AppMetadata']
   const AuthAPI: typeof import('../src/api/auth')['AuthAPI']
-  const AuthUtils: typeof import('@dolphin-admin/utils')['AuthUtils']
+  const AuthUtils: typeof import('../src/utils/auth')['AuthUtils']
   const BasePageModel: typeof import('@/constants')['BasePageModel']
-  const BrowserUtils: typeof import('@dolphin-admin/utils')['BrowserUtils']
+  const BrowserUtils: typeof import('../src/utils/browser')['BrowserUtils']
   const CabinetRelatedAPI: typeof import('../src/api/cabinetRelated')['CabinetRelatedAPI']
   const CommonAPI: typeof import('../src/api/common')['CommonAPI']
   const CommonUtils: typeof import('../src/utils/common')['CommonUtils']
@@ -20,7 +20,7 @@ declare global {
   const GitHubAuthUtils: typeof import('../src/utils/github')['GitHubAuthUtils']
   const GlobalEnvConfig: typeof import('@/constants')['GlobalEnvConfig']
   const GoogleAuthUtils: typeof import('../src/utils/google')['GoogleAuthUtils']
-  const LangUtils: typeof import('@dolphin-admin/utils')['LangUtils']
+  const LangUtils: typeof import('../src/utils/lang')['LangUtils']
   const MenuAPI: typeof import('../src/api/menu')['MenuAPI']
   const NAvatar: typeof import('naive-ui')['NAvatar']
   const NBadge: typeof import('naive-ui')['NBadge']
@@ -44,8 +44,8 @@ declare global {
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
   const SiteUtils: typeof import('../src/utils/site')['SiteUtils']
-  const ThemeUtils: typeof import('@dolphin-admin/utils')['ThemeUtils']
-  const TimeUtils: typeof import('@dolphin-admin/utils')['TimeUtils']
+  const ThemeUtils: typeof import('../src/utils/theme')['ThemeUtils']
+  const TimeUtils: typeof import('../src/utils/time')['TimeUtils']
   const UploadAPI: typeof import('../src/api/upload')['UploadAPI']
   const UserAPI: typeof import('../src/api/user')['UserAPI']
   const UserTrafficAPI: typeof import('../src/api/user-traffic')['UserTrafficAPI']
@@ -161,9 +161,9 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly AppMetadata: UnwrapRef<typeof import('@/constants')['AppMetadata']>
     readonly AuthAPI: UnwrapRef<typeof import('../src/api/auth')['AuthAPI']>
-    readonly AuthUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['AuthUtils']>
+    readonly AuthUtils: UnwrapRef<typeof import('../src/utils/auth')['AuthUtils']>
     readonly BasePageModel: UnwrapRef<typeof import('@/constants')['BasePageModel']>
-    readonly BrowserUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['BrowserUtils']>
+    readonly BrowserUtils: UnwrapRef<typeof import('../src/utils/browser')['BrowserUtils']>
     readonly CabinetRelatedAPI: UnwrapRef<typeof import('../src/api/cabinetRelated')['CabinetRelatedAPI']>
     readonly CommonAPI: UnwrapRef<typeof import('../src/api/common')['CommonAPI']>
     readonly CommonUtils: UnwrapRef<typeof import('../src/utils/common')['CommonUtils']>
@@ -174,7 +174,7 @@ declare module 'vue' {
     readonly GitHubAuthUtils: UnwrapRef<typeof import('../src/utils/github')['GitHubAuthUtils']>
     readonly GlobalEnvConfig: UnwrapRef<typeof import('@/constants')['GlobalEnvConfig']>
     readonly GoogleAuthUtils: UnwrapRef<typeof import('../src/utils/google')['GoogleAuthUtils']>
-    readonly LangUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['LangUtils']>
+    readonly LangUtils: UnwrapRef<typeof import('../src/utils/lang')['LangUtils']>
     readonly MenuAPI: UnwrapRef<typeof import('../src/api/menu')['MenuAPI']>
     readonly NAvatar: UnwrapRef<typeof import('naive-ui')['NAvatar']>
     readonly NBadge: UnwrapRef<typeof import('naive-ui')['NBadge']>
@@ -197,8 +197,8 @@ declare module 'vue' {
     readonly RouterLink: UnwrapRef<typeof import('vue-router')['RouterLink']>
     readonly RouterView: UnwrapRef<typeof import('vue-router')['RouterView']>
     readonly SiteUtils: UnwrapRef<typeof import('../src/utils/site')['SiteUtils']>
-    readonly ThemeUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['ThemeUtils']>
-    readonly TimeUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['TimeUtils']>
+    readonly ThemeUtils: UnwrapRef<typeof import('../src/utils/theme')['ThemeUtils']>
+    readonly TimeUtils: UnwrapRef<typeof import('../src/utils/time')['TimeUtils']>
     readonly UploadAPI: UnwrapRef<typeof import('../src/api/upload')['UploadAPI']>
     readonly UserAPI: UnwrapRef<typeof import('../src/api/user')['UserAPI']>
     readonly UserTrafficAPI: UnwrapRef<typeof import('../src/api/user-traffic')['UserTrafficAPI']>
@@ -304,9 +304,9 @@ declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     readonly AppMetadata: UnwrapRef<typeof import('@/constants')['AppMetadata']>
     readonly AuthAPI: UnwrapRef<typeof import('../src/api/auth')['AuthAPI']>
-    readonly AuthUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['AuthUtils']>
+    readonly AuthUtils: UnwrapRef<typeof import('../src/utils/auth')['AuthUtils']>
     readonly BasePageModel: UnwrapRef<typeof import('@/constants')['BasePageModel']>
-    readonly BrowserUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['BrowserUtils']>
+    readonly BrowserUtils: UnwrapRef<typeof import('../src/utils/browser')['BrowserUtils']>
     readonly CabinetRelatedAPI: UnwrapRef<typeof import('../src/api/cabinetRelated')['CabinetRelatedAPI']>
     readonly CommonAPI: UnwrapRef<typeof import('../src/api/common')['CommonAPI']>
     readonly CommonUtils: UnwrapRef<typeof import('../src/utils/common')['CommonUtils']>
@@ -317,7 +317,7 @@ declare module '@vue/runtime-core' {
     readonly GitHubAuthUtils: UnwrapRef<typeof import('../src/utils/github')['GitHubAuthUtils']>
     readonly GlobalEnvConfig: UnwrapRef<typeof import('@/constants')['GlobalEnvConfig']>
     readonly GoogleAuthUtils: UnwrapRef<typeof import('../src/utils/google')['GoogleAuthUtils']>
-    readonly LangUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['LangUtils']>
+    readonly LangUtils: UnwrapRef<typeof import('../src/utils/lang')['LangUtils']>
     readonly MenuAPI: UnwrapRef<typeof import('../src/api/menu')['MenuAPI']>
     readonly NAvatar: UnwrapRef<typeof import('naive-ui')['NAvatar']>
     readonly NBadge: UnwrapRef<typeof import('naive-ui')['NBadge']>
@@ -340,8 +340,8 @@ declare module '@vue/runtime-core' {
     readonly RouterLink: UnwrapRef<typeof import('vue-router')['RouterLink']>
     readonly RouterView: UnwrapRef<typeof import('vue-router')['RouterView']>
     readonly SiteUtils: UnwrapRef<typeof import('../src/utils/site')['SiteUtils']>
-    readonly ThemeUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['ThemeUtils']>
-    readonly TimeUtils: UnwrapRef<typeof import('@dolphin-admin/utils')['TimeUtils']>
+    readonly ThemeUtils: UnwrapRef<typeof import('../src/utils/theme')['ThemeUtils']>
+    readonly TimeUtils: UnwrapRef<typeof import('../src/utils/time')['TimeUtils']>
     readonly UploadAPI: UnwrapRef<typeof import('../src/api/upload')['UploadAPI']>
     readonly UserAPI: UnwrapRef<typeof import('../src/api/user')['UserAPI']>
     readonly UserTrafficAPI: UnwrapRef<typeof import('../src/api/user-traffic')['UserTrafficAPI']>

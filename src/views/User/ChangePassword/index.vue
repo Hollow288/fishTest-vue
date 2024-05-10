@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Lang } from '@dolphin-admin/utils'
+import type { Lang } from '@/enums/lang'
 import type {FormInst, FormItemRule, FormRules, FormValidationError} from 'naive-ui'
 
 import type { MessageSchema } from '@/types'
