@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import {LogoGithub} from '@vicons/ionicons5'
 import type {FormInst, FormRules, UploadFileInfo, UploadInst} from 'naive-ui'
+import {NIcon} from 'naive-ui'
 
 import type { MessageSchema, User } from '@/types'
 import UserAvatarIcon from '~icons/carbon/user-avatar-filled-alt'
@@ -10,8 +12,6 @@ import FemaleIcon from '~icons/mdi/gender-female'
 import MaleIcon from '~icons/mdi/gender-male'
 import PhoneIcon from '~icons/mdi/phone'
 import AddressIcon from '~icons/mdi/store-plus-outline'
-import {LogoGithub} from "@vicons/ionicons5";
-import {NIcon} from "naive-ui";
 
 const { t } = useI18n<{ message: MessageSchema }>()
 

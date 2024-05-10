@@ -64,19 +64,22 @@ export default defineComponent({
       <n-calendar
         v-model:value="value"
         style="height:100%"
-        #="{ year, month, date }"
         :on-panel-change="updateTodos"
         @update:value="handleUpdateValue"
       >
-        <div v-if="isHaveToDos(year,month,date)" :style="{ height: 'calc(100% - 15px)', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }">
+        <template #default="{ year, month, date }">
+          <div v-if="isHaveToDos(year, month, date)" :style="{ height: 'calc(100% - 15px)', textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center' }">
             <div :style="{height: '100%',display: 'flex', flexDirection: 'column', justifyContent: 'center'}">
-
               <span style="display: block; width: 100%;color: orange;">{{year}}-{{month}}-{{date}}</span>
               <span style="display: block; width: 100%;color: orange;">代办事项</span>
-
             </div>
+          </div>
+        </template>
 
-        </div>
+        <template #header="{ year, month }">
+          <!-- 这里是第二个插槽的内容 -->
+          {{ year }}年{{ month }}月
+        </template>
 
       </n-calendar>
     </n-card>
