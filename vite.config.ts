@@ -1,8 +1,6 @@
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
 
-import { dolphinAdminPresets } from '@dolphin-admin/auto-import'
-import { BootstrapAnimation } from '@dolphin-admin/bootstrap-animation'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -129,8 +127,7 @@ export default defineConfig(({ mode }) => {
           {
             from: '@/i18n',
             imports: [['default', 'i18n']]
-          },
-          ...dolphinAdminPresets
+          }
         ],
         dirs: ['src/api/**', 'src/hooks/**', 'src/store/**', 'src/utils/**'],
         vueTemplate: true // 支持在 Vue 模版中使用
@@ -158,7 +155,6 @@ export default defineConfig(({ mode }) => {
         deleteOriginFile: true // 源文件压缩后是否删除
       }),
       visualizer({ open: false, gzipSize: true }),
-      BootstrapAnimation(),
       progress()
     ],
     resolve: {
