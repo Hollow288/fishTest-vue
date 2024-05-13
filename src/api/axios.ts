@@ -88,7 +88,6 @@ class Request {
               this.isRefreshing = true
               try {
                 const response = (await AuthAPI.refresh(currentRefreshToken)) ?? {}
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 const { refresh_token, access_token} = response.data ?? {}
                 if(refresh_token && access_token){
                   AuthUtils.setAccessToken(access_token)

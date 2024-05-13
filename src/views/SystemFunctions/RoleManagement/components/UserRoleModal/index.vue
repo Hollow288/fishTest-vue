@@ -189,7 +189,6 @@ const handleCancel = () => {
  * @todo 重构
  * 使用参数传递的方式，不要用 defineExpose 暴露方法给父组件
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const handleShowModal = () => {
   showModal.value = true
   emit('save')

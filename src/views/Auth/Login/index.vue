@@ -76,7 +76,6 @@ const login = async () => {
     .then((res) => {
       // debugger
       if(res.code === StatusCode.SUCCESS) {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         const { access_token, refresh_token, user } = res.data ?? {}
         AuthUtils.setAccessToken(access_token)
         AuthUtils.setRefreshToken(refresh_token)

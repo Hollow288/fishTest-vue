@@ -1,5 +1,5 @@
 <script lang="ts">
-// eslint-disable-next-line import/no-extraneous-dependencies
+
 import {addDays} from 'date-fns/esm'
 import {defineComponent, ref} from 'vue'
 

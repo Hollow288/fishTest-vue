@@ -38,7 +38,6 @@ const initializeRouter = async () => {
           if(result.message === '认证成功'){
             next()
           }else{
-            // eslint-disable-next-line no-param-reassign
             to.path = '/error-pages/403'
             next()
           }

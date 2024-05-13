@@ -458,7 +458,7 @@ watch(
   (newDetailData) => {
     // 计算所有行的 priceAmount 的综合
     let total = 0
-    // eslint-disable-next-line no-restricted-syntax
+
     for (const item of newDetailData) {
       total += item.priceAmount || 0
     }

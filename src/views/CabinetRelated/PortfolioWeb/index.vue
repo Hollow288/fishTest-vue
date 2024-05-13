@@ -58,13 +58,11 @@ const paginationReactive = reactive({
   ],
   onChange: (page: number) => {
     paginationReactive.page = page
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     queryList()
   },
   onUpdatePageSize: (pageSize: number) => {
     paginationReactive.pageSize = pageSize
     paginationReactive.page = 1
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     queryList()
   },
   prefix: (info) => t('COMMON.TotalPage', {totalPage: info.itemCount})
