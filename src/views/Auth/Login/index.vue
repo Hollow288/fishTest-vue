@@ -217,7 +217,7 @@ onMounted(() => {
 
     <div class="flex w-full flex-1 items-center space-x-2">
       <NButton
-        class="!w-[calc(50%-4px)]"
+        class="!w-[calc(100%)]"
         type="primary"
         :disabled="submitLoading"
         :loading="submitType === 'BASIC' && submitLoading"
@@ -225,16 +225,16 @@ onMounted(() => {
       >
         {{ t('TEMP.Login.Login') }}
       </NButton>
-      <NButton
-        class="!w-[calc(50%-4px)]"
-        secondary
-        type="primary"
-        :disabled="submitLoading"
-        :loading="submitType === 'ADMIN' && submitLoading"
-        @click="loginAsAdmin"
-      >
-        {{ t('TEMP.Login.AsAdmin') }}
-      </NButton>
+<!--      <NButton-->
+<!--        class="!w-[calc(50%-4px)]"-->
+<!--        secondary-->
+<!--        type="primary"-->
+<!--        :disabled="submitLoading"-->
+<!--        :loading="submitType === 'ADMIN' && submitLoading"-->
+<!--        @click="loginAsAdmin"-->
+<!--      >-->
+<!--        {{ t('TEMP.Login.AsAdmin') }}-->
+<!--      </NButton>-->
     </div>
 
     <div class="flex items-center space-x-1 text-xs">

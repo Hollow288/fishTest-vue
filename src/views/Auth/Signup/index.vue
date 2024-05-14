@@ -69,27 +69,29 @@ const signup = async () => {
 
   submitLoadingDispatcher.loading()
 
-  AuthAPI.signup(formData)
-    .then((res) => {
-      const { data, message } = res
-      const { accessToken, refreshToken } = data ?? {}
-      AuthUtils.setAccessToken(accessToken)
-      AuthUtils.setRefreshToken(refreshToken)
-      if (message) {
-        NMessage.success(message)
-      }
-      router.replace('/')
-    })
-    .catch((err) => {
-      if (err.message) {
-        NMessage.error(err.message)
-      }
-      submitLoadingDispatcher.loaded()
-    })
-    .finally(() => {
-      formData.passWord = ''
-      formData.confirmPassword = ''
-    })
+  // AuthAPI.signup(formData)
+  //   .then((res) => {
+  //     const { data, message } = res
+  //     const { accessToken, refreshToken } = data ?? {}
+  //     AuthUtils.setAccessToken(accessToken)
+  //     AuthUtils.setRefreshToken(refreshToken)
+  //     if (message) {
+  //       NMessage.success(message)
+  //     }
+  //     router.replace('/')
+  //   })
+  //   .catch((err) => {
+  //     if (err.message) {
+  //       NMessage.error(err.message)
+  //     }
+  //     submitLoadingDispatcher.loaded()
+  //   })
+  //   .finally(() => {
+  //     formData.passWord = ''
+  //     formData.confirmPassword = ''
+  //   })
+  NMessage.warning("暂不支持手动注册"!)
+  submitLoadingDispatcher.loaded()
 }
 </script>
 
@@ -101,7 +103,7 @@ const signup = async () => {
     class="absolute inset-0 m-auto flex h-fit w-[340px] max-w-[85%] flex-col space-y-4 rounded-lg bg-default-light px-4 py-8 shadow-md transition-colors dark:bg-default-dark sm:w-[260px] md:w-[340px]"
   >
     <div class="text-center text-lg font-semibold">
-      {{ t('TEMP.Menu.Signup') }}
+      {{ t('TEMP.Login.Signup') }}
     </div>
 
     <NFormItem
