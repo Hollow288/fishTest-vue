@@ -1,11 +1,11 @@
 [package]
-name = "dolphin-admin-vue"
+name = "fishTest-vue"
 version = "0.0.1"
-description = "Dolphin Admin Vue"
+description = "Fish Test Vue"
 authors = ["Bruce Song"]
 license = "MIT"
 repository = ""
-default-run = "dolphin-admin-vue"
+default-run = "fishTest-vue"
 edition = "2021"
 rust-version = "1.60"
 

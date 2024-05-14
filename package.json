@@ -1,6 +1,6 @@
 {
-  "name": "dolphin-admin-vue",
-  "description": "🐬 Dolphin Admin Vue is an open source, lightweight, out-of-the-box, elegant and exquisite, internationalized backend management template based on Vue 3 + TypeScript + Vite + Naive UI + TailwindCSS.",
+  "name": "fishTest-vue",
+  "description": "🐬 Fish Test Vue is an open source, lightweight, out-of-the-box, elegant and exquisite, internationalized backend management template based on Vue 3 + TypeScript + Vite + Naive UI + TailwindCSS.",
   "author": "Bruce Song <recall4056@gmail.com> (https://github.com/recallwei/)",
   "contributors": [
     "Bruce Song <recall4056@gmail.com> (https://github.com/recallwei/)",
@@ -8,10 +8,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bit-ocean-studio/dolphin-admin-vue"
+    "url": "https://github.com/Hollow288/fishTest-vue"
   },
   "bugs": {
-    "url": "https://github.com/bit-ocean-studio/dolphin-admin-vue/issues"
+    "url": "https://github.com/Hollow288/fishTest-vue/issues"
   },
   "scripts": {
     "dev": "vite",

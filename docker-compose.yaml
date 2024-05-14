@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   web:
-    container_name: dolphin-admin-vue-web
+    container_name: fishTest-vue-web
     build:
       context: .
       dockerfile: Dockerfile

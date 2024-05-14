@@ -11,12 +11,12 @@
  * - `DISCORD_URL`: Discord 地址
  */
 export const AppMetadata = Object.freeze({
-  APP_NAME: 'Dolphin Admin Vue',
-  VERSION: '0.0.3',
+  APP_NAME: 'Fish Test Vue',
+  VERSION: '0.0.1',
   FAVICON_URL: '/favicon.ico',
-  TEAM_NAME: 'Bit Ocean',
-  TEAM_GITHUB_URL: 'https://github.com/bit-ocean-studio',
-  REPO_GITHUB_URL: 'https://github.com/bit-ocean-studio/dolphin-admin-vue',
-  DOCS_URL: 'https://dolphin-admin-docs.bit-ocean.studio',
-  DISCORD_URL: 'https://discord.gg/NfPAGuz7Em'
+  TEAM_NAME: 'Hollow',
+  TEAM_GITHUB_URL: 'https://github.com/Hollow288',
+  REPO_GITHUB_URL: 'https://github.com/Hollow288/fishTest-vue',
+  DOCS_URL: '',
+  DISCORD_URL: ''
 })
