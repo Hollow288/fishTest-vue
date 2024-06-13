@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type {FormInst, FormRules, FormValidationError} from 'naive-ui'
+import Vcode from 'vue3-puzzle-vcode'
 
 import {StatusCode} from '@/constants'
 import type { MessageSchema } from '@/types'
@@ -14,6 +15,8 @@ const router = useRouter()
 const userStore = useUserStore()
 const NMessage = useMessage()
 
+const isShow = ref(false)
+
 const [submitLoading, submitLoadingDispatcher] = useLoading(false)
 
 const submitType = ref<'BASIC' | 'ADMIN'>('BASIC')
@@ -26,6 +29,20 @@ const formRef = ref<FormInst | null>(null)
 const rememberPassword = ref(false)
 
 const redirectUrl = computed(() => route.query.redirect as string)
+
+const success = (msg) => {
+  isShow.value = false
+  submitType.value = 'BASIC'
+  login()
+}
+
+const fail = () => {
+  // console.log('验证失败')
+}
+
+const close = () => {
+  isShow.value = false
+}
 
 const rules: FormRules = {
   userName: [
@@ -120,8 +137,9 @@ const login = async () => {
  * 基础登录
  */
 const loginAsBasic = () => {
-  submitType.value = 'BASIC'
-  login()
+  // submitType.value = 'BASIC'
+  // login()
+  isShow.value = true
 }
 
 /**
@@ -197,6 +215,8 @@ onMounted(() => {
       />
     </NFormItem>
 
+
+
     <div class="text-grey-300 flex items-center justify-between text-xs font-light">
       <NCheckbox
         v-model:checked="rememberPassword"
@@ -259,6 +279,9 @@ onMounted(() => {
       <GoogleLogin />
     </div>
   </NForm>
+
+  <Vcode :show="isShow" @success="success" @close="close" @fail="fail"
+  ></Vcode>
 </template>
 
 <style scoped lang="scss">

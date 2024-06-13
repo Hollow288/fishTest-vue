@@ -68,6 +68,9 @@ dependencies:
   vue-router:
     specifier: ^4.2.5
     version: 4.2.5(vue@3.3.12)
+  vue3-puzzle-vcode:
+    specifier: ^1.1.7
+    version: 1.1.7
   xlsx:
     specifier: https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz
     version: '@cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz'
@@ -7306,6 +7309,10 @@ packages:
       semver: 7.5.4
       typescript: 5.3.3
     dev: true
+
+  /vue3-puzzle-vcode@1.1.7:
+    resolution: {integrity: sha512-mW780dz7HKjrElnE60CeYSeHGidKBKHoMjTDYfqF21330rTkFOsfDK1FQKZ22MktgMtTEoS/imfpEDlM1cxY/g==}
+    dev: false
 
   /vue@3.3.12(typescript@5.3.3):
     resolution: {integrity: sha512-jYNv2QmET2OTHsFzfWHMnqgCfqL4zfo97QwofdET+GBRCHhSCHuMTTvNIgeSn0/xF3JRT5OGah6MDwUFN7MPlg==}
