@@ -19,9 +19,14 @@ WORKDIR /app
 # 将本地的 package.json 和 pnpm-lock.yaml 复制到容器中
 COPY package.json pnpm-lock.yaml ./
 
-# 安装 pnpm 并使用它安装依赖
-RUN npm install -g pnpm \
-  && pnpm install
+# 安装 pnpm
+RUN npm install -g pnpm
+
+# 执行 approve-builds 来批准构建脚本
+RUN pnpm approve-builds
+
+# 安装依赖
+RUN pnpm install
 
 # 将项目文件复制到容器中
 COPY . .
