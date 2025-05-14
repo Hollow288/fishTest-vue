@@ -76,11 +76,19 @@ const icons = {
 
 const { t } = i18n.global
 
+const modules = import.meta.glob([
+  '@/views/**/*.vue',
+  '@/layouts/**/*.vue',
+  '@/pages/**/*.vue'
+])
+
+debugger
+
 function convertMenuToRoute(menu: Router): RouteRecordRaw {
   const route: RouteRecordRaw = {
     path: menu.path,
     name: menu.name,
-    component: menu.component ? () => import(menu.component) : undefined,
+    component: modules[`/src${menu.component}/index.vue`],
     meta: {
       title: () => t(menu.title),
       icon: icons[menu.icon],
