@@ -1,6 +1,6 @@
 <script lang="ts">
 
-import {addDays} from 'date-fns/esm'
+import {addDays} from 'date-fns'
 import {defineComponent, ref} from 'vue'
 
 import {ToDosFormModal} from './components'
