@@ -16,17 +16,18 @@ ENV VITE_APP_BASE_URL=${VITE_APP_BASE_URL}
 # 设置工作目录
 WORKDIR /app
 
-# 将本地的 package.json 和 package-lock.json 复制到容器中
-COPY package*.json ./
+# 将本地的 package.json 和 pnpm-lock.yaml 复制到容器中
+COPY package.json pnpm-lock.yaml ./
 
-# 安装依赖
-RUN npm install
+# 安装 pnpm 并使用它安装依赖
+RUN npm install -g pnpm \
+  && pnpm install
 
 # 将项目文件复制到容器中
 COPY . .
 
 # 打包 Vue 项目
-RUN npm run build
+RUN pnpm run build
 
 # 使用一个轻量级的 nginx 镜像来作为运行环境
 FROM nginx:alpine
