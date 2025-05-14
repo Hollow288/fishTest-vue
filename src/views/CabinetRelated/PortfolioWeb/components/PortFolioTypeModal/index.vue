@@ -162,7 +162,7 @@ defineExpose({
       :model="formData"
       label-width="auto"
       require-mark-placement="right-hanging"
-      class="flex flex-col sm:!h-[80px]"
+      class="flex flex-col sm:!h-[120px]"
       label-placement='left'
       style="overflow-y: auto;"
       label-align='right'

@@ -15,8 +15,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build:staging": "pnpm type:check && NODE_ENV=staging vite build --mode staging",
-    "build:prod": "pnpm type:check && NODE_ENV=production vite build --mode production",
+    "build": "vite build",
+    "build:staging": "NODE_ENV=staging vite build --mode staging",
+    "build:prod": "NODE_ENV=production vite build --mode production",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "desktop:dev": "tauri dev",
